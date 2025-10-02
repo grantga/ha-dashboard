@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import useLocalStorage from './hooks/useLocalStorage';
 import { useHass } from "@hakit/core";
 import {
   AppBar,
@@ -24,9 +25,6 @@ import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 const drawerWidth = 240;
 const miniDrawerWidth = 64;
 
-const headerHeight = 64; // matches Toolbar default
-const itemHeight = 48; // height for each ListItem
-
 const roomConfig = [
   { key: 'home', label: 'Home', path: '/', icon: <HomeIcon /> },
   { key: 'basement', label: 'Basement', path: '/basement', icon: <MeetingRoomIcon /> },
@@ -36,7 +34,7 @@ const roomConfig = [
 function Dashboard() {
   useHass();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useLocalStorage<boolean>('ha:drawerOpen', true);
 
   // entityCount is available via Home Assistant if needed in pages
 
@@ -71,19 +69,6 @@ function Dashboard() {
       </Toolbar>
       <Divider />
       <List sx={{ position: 'relative' }}>
-        {/* animated indicator */}
-        <Box
-          sx={{
-            position: 'absolute',
-            left: 0,
-            top: `calc(${headerHeight}px + ${activeIndex} * ${itemHeight}px)`,
-            width: drawerOpen ? '6px' : '0px',
-            height: `${itemHeight}px`,
-            bgcolor: 'primary.main',
-            borderRadius: '0 4px 4px 0',
-            transition: 'top 200ms, width 200ms',
-          }}
-        />
         {roomConfig.map((rc, idx) => (
           <ListItemButton
             key={rc.key}
@@ -93,7 +78,7 @@ function Dashboard() {
               navigate(rc.path);
             }}
             sx={{
-              minHeight: itemHeight,
+              minHeight: 48,
               justifyContent: drawerOpen ? 'initial' : 'center',
               px: 2.5,
             }}
