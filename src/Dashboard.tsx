@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useHass } from "@hakit/core";
-import { TimeCard } from '@hakit/components';
 import {
   AppBar,
   Toolbar,
@@ -10,122 +9,174 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  ListItemIcon,
   Box,
   Divider,
-  Button,
-  Stack,
   Container,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import HomeIcon from '@mui/icons-material/Home';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import { useNavigate, Outlet, useLocation } from 'react-router-dom';
 
-const rooms = ['Whole House', 'Basement', 'Music'];
-const modes = ['Overview', 'Control'];
+const drawerWidth = 240;
+const miniDrawerWidth = 64;
+
+const headerHeight = 64; // matches Toolbar default
+const itemHeight = 48; // height for each ListItem
+
+const roomConfig = [
+  { key: 'home', label: 'Home', path: '/', icon: <HomeIcon /> },
+  { key: 'basement', label: 'Basement', path: '/basement', icon: <MeetingRoomIcon /> },
+  { key: 'living-room', label: 'Living Room', path: '/living-room', icon: <MeetingRoomIcon /> },
+];
 
 function Dashboard() {
-  const { getAllEntities } = useHass();
+  useHass();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState<string>(rooms[0]);
-  const [selectedMode, setSelectedMode] = useState<string>(modes[0]);
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
-  const entityCount = Object.keys(getAllEntities()).length;
+  // entityCount is available via Home Assistant if needed in pages
+
+  const navigate = useNavigate();
+
+  const handleDrawerToggle = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+
+  const location = useLocation();
+
+  const getActiveIndex = (path: string) => {
+    const idx = roomConfig.findIndex((r) => r.path !== '/' ? path.startsWith(r.path) : path === '/' );
+    return idx >= 0 ? idx : 0;
+  };
+
+  const activeIndex = getActiveIndex(location.pathname);
 
   const drawer = (
-    <Box sx={{ width: 250 }} role="presentation">
-      <Box sx={{ p: 2 }}>
-        <Typography variant="h6">Rooms</Typography>
-      </Box>
+  <Box sx={{ position: 'relative' }}>
+      {/* use Toolbar to match AppBar height exactly */}
+      <Toolbar sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: drawerOpen ? 'space-between' : 'center',
+        px: drawerOpen ? 2 : 1,
+      }}>
+        {drawerOpen && <Typography noWrap variant="h6">Seattle House</Typography>}
+        <IconButton onClick={handleDrawerToggle}>
+          {drawerOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+        </IconButton>
+      </Toolbar>
       <Divider />
-      <List>
-        {rooms.map((r) => (
+      <List sx={{ position: 'relative' }}>
+        {/* animated indicator */}
+        <Box
+          sx={{
+            position: 'absolute',
+            left: 0,
+            top: `calc(${headerHeight}px + ${activeIndex} * ${itemHeight}px)`,
+            width: drawerOpen ? '6px' : '0px',
+            height: `${itemHeight}px`,
+            bgcolor: 'primary.main',
+            borderRadius: '0 4px 4px 0',
+            transition: 'top 200ms, width 200ms',
+          }}
+        />
+        {roomConfig.map((rc, idx) => (
           <ListItemButton
-            key={r}
-            selected={r === selectedRoom}
+            key={rc.key}
+            selected={idx === activeIndex}
             onClick={() => {
-              setSelectedRoom(r);
               setMobileOpen(false);
+              navigate(rc.path);
+            }}
+            sx={{
+              minHeight: itemHeight,
+              justifyContent: drawerOpen ? 'initial' : 'center',
+              px: 2.5,
             }}
           >
-            <ListItemText primary={r} />
+            <ListItemIcon
+              sx={{
+                minWidth: 0,
+                mr: drawerOpen ? 3 : 'auto',
+                justifyContent: 'center',
+              }}
+            >
+              {rc.icon}
+            </ListItemIcon>
+            {drawerOpen && <ListItemText primary={rc.label} />}
           </ListItemButton>
         ))}
       </List>
-      <Divider />
-      <Box sx={{ p: 2 }}>
-        <Typography variant="subtitle1">Mode</Typography>
-        <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-          {modes.map((m) => (
-            <Button
-              key={m}
-              variant={m === selectedMode ? 'contained' : 'outlined'}
-              onClick={() => setSelectedMode(m)}
-            >
-              {m}
-            </Button>
-          ))}
-        </Stack>
-      </Box>
     </Box>
   );
 
   return (
-    <Box sx={{ display: 'flex', height: '100%' }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            edge="start"
-            onClick={() => setMobileOpen(true)}
-            sx={{ mr: 2, display: { sm: 'none' } }}
-            aria-label="open drawer"
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {selectedRoom} — {selectedMode}
-          </Typography>
-        </Toolbar>
-      </AppBar>
-
-      <Box component="nav" sx={{ width: { sm: 250 }, flexShrink: { sm: 0 } }} aria-label="rooms">
+    <Box sx={{ display: 'flex', height: '100vh', width: '100%' }}>
+      <Box 
+        component="nav" 
+        sx={{ 
+          width: { sm: drawerOpen ? drawerWidth : miniDrawerWidth }, 
+          flexShrink: { sm: 0 },
+          transition: 'width 0.2s',
+        }} 
+        aria-label="rooms"
+      >
         <Drawer
           variant="temporary"
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
           ModalProps={{ keepMounted: true }}
-          sx={{ display: { xs: 'block', sm: 'none' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 } }}
+          sx={{ 
+            display: { xs: 'block', sm: 'none' }, 
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth } 
+          }}
         >
           {drawer}
         </Drawer>
 
         <Drawer
           variant="permanent"
-          open
-          sx={{ display: { xs: 'none', sm: 'block' }, '& .MuiDrawer-paper': { boxSizing: 'border-box', width: 250 } }}
+          open={drawerOpen}
+          sx={{ 
+            display: { xs: 'none', sm: 'block' }, 
+            '& .MuiDrawer-paper': { 
+              boxSizing: 'border-box', 
+              width: drawerOpen ? drawerWidth : miniDrawerWidth,
+              transition: 'width 0.2s',
+              overflowX: 'hidden',
+            } 
+          }}
         >
           {drawer}
         </Drawer>
       </Box>
 
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Container maxWidth="lg">
-          <Typography variant="h5" gutterBottom>
-            {selectedRoom} — {selectedMode}
-          </Typography>
-
-          <Typography sx={{ color: 'text.secondary', mb: 2 }}>
-            The time below will update automatically from Home Assistant.
-          </Typography>
-
-          <Box sx={{ maxWidth: 420 }}>
-            {/* TimeCard is provided by @hakit/components — use it directly */}
-            {/* If the imported path fails at runtime, fallback rendering is simple text. */}
-            {/* @ts-ignore */}
-            <TimeCard />
-          </Box>
-
-          <Typography sx={{ mt: 3 }}>
-            You have <strong>{entityCount}</strong> entities to start automating with! Have fun!
-          </Typography>
+      <Box component="main" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        <AppBar  position="static" elevation={0} sx={{ bgcolor: 'background.paper', color: 'text.primary', borderBottom: 1, borderColor: 'divider' }}>
+          <Toolbar>
+            <IconButton
+              color="inherit"
+              edge="start"
+              onClick={() => setMobileOpen(true)}
+              sx={{ mr: 2, display: { sm: 'none' } }}
+              aria-label="open drawer"
+            >
+              <MenuIcon />
+            </IconButton>
+            <Typography variant="h6" component="div">
+              {roomConfig[activeIndex].label}
+            </Typography>
+          </Toolbar>
+        </AppBar>
+        
+        <Container maxWidth="lg" sx={{ mt: 3, mb: 3 }}>
+          {/* render child route pages here */}
+          <Outlet />
+        
         </Container>
       </Box>
     </Box>
