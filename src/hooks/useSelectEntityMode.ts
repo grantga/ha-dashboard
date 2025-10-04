@@ -45,13 +45,16 @@ export default function useSelectEntityMode(entityId: string): UseSelectEntityMo
     const setValue = useCallback(
         async (key: string) => {
             const option = pickOptionForKey(key);
-            setLoadingValue(option);
-            try {
-                await selectService.select_option({ target: entityId, serviceData: { option } });
-            } catch {
+            //send if it changed
+            if (option !== value) {
+                setLoadingValue(option);
+                try {
+                    await selectService.select_option({ target: entityId, serviceData: { option } });
+                } catch {
+                }
             }
         },
-        [entityId, pickOptionForKey, selectService]
+        [entityId, value, pickOptionForKey, selectService]
     );
 
     return {
