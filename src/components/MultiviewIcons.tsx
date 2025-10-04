@@ -85,6 +85,16 @@ export function IconQuadB() {
   );
 }
 
+export function TVIcon({ size = 36 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden>
+      <rect x="2" y="4" width="20" height="12" rx="1" stroke="currentColor" fill="none" strokeWidth="1.5" />
+      <path d="M8 20h8" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path d="M12 16v4" stroke="currentColor" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export default {
   IconSingle,
   IconPIP,
@@ -94,4 +104,5 @@ export default {
   IconTripleB,
   IconQuadA,
   IconQuadB,
+  TVIcon,
 };
