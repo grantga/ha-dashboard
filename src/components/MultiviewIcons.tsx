@@ -84,12 +84,26 @@ export function IconQuadB() {
   );
 }
 
-export function TVIcon({ size = 36 }: { size?: number }) {
+
+
+export function XboxIcon({ width = 80, height = 50 }: { width?: number; height?: number }) {
   return (
-    <svg width={size} height={size} viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg' aria-hidden>
-      <rect x='2' y='4' width='20' height='12' rx='1' stroke='currentColor' fill='none' strokeWidth='1.5' />
-      <path d='M8 20h8' stroke='currentColor' strokeWidth='1.5' fill='none' strokeLinecap='round' />
-      <path d='M12 16v4' stroke='currentColor' strokeWidth='1.5' fill='none' strokeLinecap='round' />
+    <svg width={width} height={height} viewBox='0 0 80 50' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+      <defs>
+        <linearGradient id='xbGrad' x1='0' x2='1'>
+          <stop offset='0%' stopColor='#16A216' />
+          <stop offset='100%' stopColor='#0E6F0E' />
+        </linearGradient>
+      </defs>
+      <rect x='2' y='2' width='76' height='46' rx='6' fill='url(#xbGrad)' />
+      {/* stylized controller silhouette */}
+      <g transform='translate(40,25)'>
+        <path d='M-22,0 C-18,-10 -8,-12 0,-8 C8,-12 18,-10 22,0 C18,8 10,10 0,6 C-10,10 -18,8 -22,0 Z' fill='rgba(255,255,255,0.95)' opacity='0.12' />
+        <circle cx='-6' cy='-2' r='3.6' fill='#fff' />
+        <circle cx='8' cy='-4' r='2.8' fill='#fff' />
+        {/* central abstract mark */}
+        <path d='M-8,6 C-4,2 4,2 8,6' stroke='#fff' strokeWidth='2' strokeLinecap='round' fill='none' opacity='0.9' />
+      </g>
     </svg>
   );
 }
@@ -103,5 +117,5 @@ export default {
   IconTripleB,
   IconQuadA,
   IconQuadB,
-  TVIcon,
+  XboxIcon,
 };
