@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import { Box } from '@mui/material';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
@@ -22,9 +22,11 @@ export default function BasementPage() {
     }
 
     return (
-        <Container sx={{ maxWidth: 400 }} >
-            <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
-            <MultiViewLayout mode={detailedMode} loading={loadingAny} />
-        </Container>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ maxWidth: 600, width: '100%' }}>
+                <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
+                <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+            </Box>
+        </Box>
     );
 }

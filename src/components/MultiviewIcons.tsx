@@ -1,6 +1,6 @@
 export function IconSingle() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
     </svg>
   );
@@ -8,7 +8,7 @@ export function IconSingle() {
 
 export function IconPIP() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* small inset box lower-right (single rectangle) */}
       <rect x='29' y='14' width='14' height='9' stroke='currentColor' strokeWidth='2' fill='none' />
@@ -18,7 +18,7 @@ export function IconPIP() {
 
 export function IconPBP() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* center vertical divider - two equal panels */}
       <line x1='24' y1='4' x2='24' y2='24' stroke='currentColor' strokeWidth='2' />
@@ -28,7 +28,7 @@ export function IconPBP() {
 
 export function IconPBPAlt() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* vertical divider - left large, right narrow */}
       <line x1='33' y1='4' x2='33' y2='24' stroke='currentColor' strokeWidth='2' />
@@ -38,7 +38,7 @@ export function IconPBPAlt() {
 
 export function IconTripleA() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* left large, right split into 2 stacked */}
       <line x1='26' y1='4' x2='26' y2='24' stroke='currentColor' strokeWidth='2' />
@@ -49,7 +49,7 @@ export function IconTripleA() {
 
 export function IconTripleB() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* right large, left split into 2 stacked */}
       {/* vertical divider moved closer to right so left stacked panels are smaller */}
@@ -62,7 +62,7 @@ export function IconTripleB() {
 
 export function IconQuadA() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* 2x2 grid - equal quadrants */}
       <line x1='24' y1='4' x2='24' y2='24' stroke='currentColor' strokeWidth='2' />
@@ -73,7 +73,7 @@ export function IconQuadA() {
 
 export function IconQuadB() {
   return (
-    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* left large, right column split into 3 stacked */}
       {/* vertical moved right to close the two small right-side rectangles */}
@@ -88,7 +88,7 @@ export function IconQuadB() {
 
 export function XboxIcon({ width = 80, height = 50 }: { width?: number; height?: number }) {
   return (
-    <svg width={width} height={height} viewBox='0 0 80 50' xmlns='http://www.w3.org/2000/svg' aria-hidden>
+    <svg width={width} height={height} viewBox='0 0 80 50' xmlns='http://www.w3.org/2000/svg'>
       <defs>
         <linearGradient id='xbGrad' x1='0' x2='1'>
           <stop offset='0%' stopColor='#16A216' />
