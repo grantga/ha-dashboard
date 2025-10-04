@@ -55,20 +55,28 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
   );
 
   function setSelectedMode(v: any) {
-    setMode(v);
+    if (v === "Single") {
+      setMode("Single");
+    }
     if (v === "PBP2") {
-      setPbpMode("Mode 2");
+      setMode("PBP");
+      setPbpMode("PBP mode 2");
     } else if (v === "PBP") {
-      setPbpMode("Mode 1");
+      setMode("PBP");
+      setPbpMode("PBP mode 1");
     }
     if (v === "Triple2") {
-      setTripleMode("Mode 2");
+      setMode("Triple");
+      setTripleMode("Triple mode 2");
     } else if (v === "Triple") {
-      setTripleMode("Mode 1");
+      setMode("Triple");
+      setTripleMode("Triple mode 1");
     }
     if (v === "Quad2") {
+      setMode("Quad");
       setQuadMode("Mode 2");
     } else if (v === "Quad") {
+      setMode("Quad");
       setQuadMode("Mode 1");
     }
   }
