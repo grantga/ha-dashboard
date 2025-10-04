@@ -20,8 +20,8 @@ export function IconPBP() {
   return (
     <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
-      {/* center vertical divider - two equal panels */}
-      <line x1='24' y1='4' x2='24' y2='24' stroke='currentColor' strokeWidth='2' />
+  {/* center vertical divider - two equal panels */}
+  <line x1='24' y1='2' x2='24' y2='26' stroke='currentColor' strokeWidth='2' />
     </svg>
   );
 }
@@ -30,8 +30,8 @@ export function IconPBPAlt() {
   return (
     <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
-      {/* vertical divider - left large, right narrow */}
-      <line x1='33' y1='4' x2='33' y2='24' stroke='currentColor' strokeWidth='2' />
+  {/* vertical divider - left large, right narrow */}
+  <line x1='33' y1='2' x2='33' y2='26' stroke='currentColor' strokeWidth='2' />
     </svg>
   );
 }
@@ -41,7 +41,7 @@ export function IconTripleA() {
     <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* left large, right split into 2 stacked */}
-      <line x1='26' y1='4' x2='26' y2='24' stroke='currentColor' strokeWidth='2' />
+  <line x1='26' y1='2' x2='26' y2='26' stroke='currentColor' strokeWidth='2' />
       <line x1='26' y1='14' x2='46' y2='14' stroke='currentColor' strokeWidth='2' />
     </svg>
   );
@@ -53,7 +53,7 @@ export function IconTripleB() {
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* right large, left split into 2 stacked */}
       {/* vertical divider moved closer to right so left stacked panels are smaller */}
-      <line x1='34' y1='4' x2='34' y2='24' stroke='currentColor' strokeWidth='2' />
+  <line x1='34' y1='2' x2='34' y2='26' stroke='currentColor' strokeWidth='2' />
       {/* split the right area into two stacked rectangles */}
       <line x1='34' y1='14' x2='46' y2='14' stroke='currentColor' strokeWidth='2' />
     </svg>
@@ -65,7 +65,7 @@ export function IconQuadA() {
     <svg width='48' height='28' viewBox='0 0 48 28' xmlns='http://www.w3.org/2000/svg'>
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* 2x2 grid - equal quadrants */}
-      <line x1='24' y1='4' x2='24' y2='24' stroke='currentColor' strokeWidth='2' />
+  <line x1='24' y1='2' x2='24' y2='26' stroke='currentColor' strokeWidth='2' />
       <line x1='2' y1='14' x2='46' y2='14' stroke='currentColor' strokeWidth='2' />
     </svg>
   );
@@ -77,7 +77,7 @@ export function IconQuadB() {
       <rect x='2' y='2' width='44' height='24' stroke='currentColor' strokeWidth='2.5' fill='none' rx='1' />
       {/* left large, right column split into 3 stacked */}
       {/* vertical moved right to close the two small right-side rectangles */}
-      <line x1='35' y1='4' x2='35' y2='24' stroke='currentColor' strokeWidth='2' />
+  <line x1='35' y1='2' x2='35' y2='26' stroke='currentColor' strokeWidth='2' />
       <line x1='35' y1='10' x2='46' y2='10' stroke='currentColor' strokeWidth='2' />
       <line x1='35' y1='18' x2='46' y2='18' stroke='currentColor' strokeWidth='2' />
     </svg>

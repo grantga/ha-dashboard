@@ -11,11 +11,13 @@ type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default';
 
 type HDMIInputProps = {
     windowIndex: number;
+    audioSource: string;
+    loadingAudioSource: string;
+    setAudioSource: (key: string) => Promise<void>;
 };
 
-export default function HDMIInput({ windowIndex }: HDMIInputProps) {
+export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource, setAudioSource, }: HDMIInputProps) {
     const { value: hdmiValue, loadingValue: loadingHdmiValue, setValue: setHdmiValue } = useSelectEntityMode(`select.orei_uhd_401mv_window_${windowIndex}_input`);
-    const { value: audioSource, loadingValue: loadingAudioSource, setValue: setAudioSource } = useSelectEntityMode('select.orei_uhd_401mv_audio_output_source');
     const [pickerOpen, setPickerOpen] = useState(false);
 
     const inferDevice = (val: unknown): DeviceType => {

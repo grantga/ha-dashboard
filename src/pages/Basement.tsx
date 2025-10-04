@@ -13,9 +13,9 @@ export default function BasementPage() {
     const loadingAny = loadMode != "" || loadingTriple != "" || loadingQuad != "" || loadingPbp != "";
     //handle the alt pbp, triple and quad modes
     let detailedMode = mode;
-    if (mode == "PBP" && pbpMode == "Mode 2") {
+    if (mode == "PBP" && pbpMode == "PBP mode 2") {
         detailedMode = "PBP2"
-    } else if (mode == "Triple" && tripleMode == "Mode 2") {
+    } else if (mode == "Triple" && tripleMode == "Triple mode 2") {
         detailedMode = "Triple2"
     } else if (mode == "Quad" && quadMode == "Mode 2") {
         detailedMode = "Quad2"
