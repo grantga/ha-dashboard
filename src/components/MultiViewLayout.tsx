@@ -67,8 +67,10 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
-            <Grid item xs={7}>
-              <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
+            <Grid item xs={5} sx={{ display: 'flex', alignItems: 'center' }}>
+              <Grid container sx={{ height: '60%', width: '100%' }} spacing={1} direction="column" justifyContent="center">
+                <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
+              </Grid>
             </Grid>
             <Grid item xs={5}>
               <Grid container sx={{ height: '100%' }} spacing={1} direction='column'>
@@ -81,7 +83,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
               </Grid>
             </Grid>
           </Grid>
-        </Box>
+        </Box >
       );
     case 'Triple2':
       return (
