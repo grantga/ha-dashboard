@@ -11,10 +11,8 @@ export function IconPIP() {
   return (
     <svg width="48" height="28" viewBox="0 0 48 28" xmlns="http://www.w3.org/2000/svg" aria-hidden>
       <rect x="2" y="2" width="44" height="24" stroke="currentColor" strokeWidth="2.5" fill="none" rx="1" />
-      {/* small inset box lower-right with cross divider */}
+      {/* small inset box lower-right (single rectangle) */}
       <rect x="29" y="14" width="14" height="9" stroke="currentColor" strokeWidth="2" fill="none" />
-      <line x1="29" y1="18.5" x2="43" y2="18.5" stroke="currentColor" strokeWidth="2" />
-      <line x1="36" y1="14" x2="36" y2="23" stroke="currentColor" strokeWidth="2" />
     </svg>
   );
 }
@@ -55,8 +53,10 @@ export function IconTripleB() {
     <svg width="48" height="28" viewBox="0 0 48 28" xmlns="http://www.w3.org/2000/svg" aria-hidden>
       <rect x="2" y="2" width="44" height="24" stroke="currentColor" strokeWidth="2.5" fill="none" rx="1" />
       {/* right large, left split into 2 stacked */}
-      <line x1="22" y1="4" x2="22" y2="24" stroke="currentColor" strokeWidth="2" />
-      <line x1="2" y1="14" x2="22" y2="14" stroke="currentColor" strokeWidth="2" />
+      {/* vertical divider moved closer to right so left stacked panels are smaller */}
+      <line x1="34" y1="4" x2="34" y2="24" stroke="currentColor" strokeWidth="2" />
+      {/* split the right area into two stacked rectangles */}
+      <line x1="34" y1="14" x2="46" y2="14" stroke="currentColor" strokeWidth="2" />
     </svg>
   );
 }
@@ -77,7 +77,8 @@ export function IconQuadB() {
     <svg width="48" height="28" viewBox="0 0 48 28" xmlns="http://www.w3.org/2000/svg" aria-hidden>
       <rect x="2" y="2" width="44" height="24" stroke="currentColor" strokeWidth="2.5" fill="none" rx="1" />
       {/* left large, right column split into 3 stacked */}
-      <line x1="24" y1="4" x2="24" y2="24" stroke="currentColor" strokeWidth="2" />
+      {/* vertical moved right to close the two small right-side rectangles */}
+      <line x1="35" y1="4" x2="35" y2="24" stroke="currentColor" strokeWidth="2" />
       <line x1="35" y1="10" x2="46" y2="10" stroke="currentColor" strokeWidth="2" />
       <line x1="35" y1="18" x2="46" y2="18" stroke="currentColor" strokeWidth="2" />
     </svg>
