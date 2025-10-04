@@ -3,7 +3,7 @@ import { useEntity, useService } from '@hakit/core';
 
 type UseSelectEntityMode = {
     value: string;
-    loading: boolean;
+    loadingValue: string;
     options?: string[];
     setValue: (key: string) => Promise<void>;
 };
@@ -14,18 +14,16 @@ export default function useSelectEntityMode(entityId: string): UseSelectEntityMo
     const selectService = useService('select') as any;
 
     const [value, setValueState] = useState<string>(() => (entity && entity.state) || 'unknown');
-    const [loading, setLoading] = useState<boolean>(() => !entity);
+    const [loadingValue, setLoadingValue] = useState<string>(() => "unknown");
 
     useEffect(() => {
         // Sync local mode when entity becomes available
         if (entity && entity.state && entity.state !== value) {
             setValueState(entity.state);
         }
-        // Update loading: true while entity is not yet available
-        if (!entity) {
-            setLoading(true);
-        } else {
-            setLoading(false);
+        // Clear loading when entity is available
+        if (entity) {
+            setLoadingValue("");
         }
     }, [entity]);
 
@@ -46,8 +44,8 @@ export default function useSelectEntityMode(entityId: string): UseSelectEntityMo
 
     const setValue = useCallback(
         async (key: string) => {
-            setLoading(true);
             const option = pickOptionForKey(key);
+            setLoadingValue(option);
             try {
                 await selectService.select_option({ target: entityId, serviceData: { option } });
             } catch {
@@ -59,7 +57,7 @@ export default function useSelectEntityMode(entityId: string): UseSelectEntityMo
     return {
         value,
         options,
-        loading,
+        loadingValue,
         setValue,
     };
 }
