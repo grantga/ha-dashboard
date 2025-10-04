@@ -1,12 +1,14 @@
 import { Box, Typography } from '@mui/material';
 import { TVIcon } from './MultiviewIcons';
+import useSelectEntityMode from '../hooks/useSelectEntityMode';
 
 type HDMIInputProps = {
-  label?: string;
-  thumbnail?: string; // optional future use
+  windowIndex: number;
 };
 
-export default function HDMIInput({ label }: HDMIInputProps) {
+export default function HDMIInput({ windowIndex }: HDMIInputProps) {
+  const { value } = useSelectEntityMode(`select.orei_uhd_401mv_window_${windowIndex}_input`);
+
   return (
     <Box
       sx={{
@@ -22,7 +24,7 @@ export default function HDMIInput({ label }: HDMIInputProps) {
     >
       <TVIcon />
       <Typography variant='subtitle2' sx={{ mt: 1 }}>
-        {label}
+        {value ? `HDMI ${value}` : `HDMI${windowIndex}`}
       </Typography>
     </Box>
   );
