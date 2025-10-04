@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import useLocalStorage from './hooks/useLocalStorage';
-import { useHass } from "@hakit/core";
+import { useHass } from '@hakit/core';
 import {
   AppBar,
   Toolbar,
@@ -47,25 +47,29 @@ function Dashboard() {
   const location = useLocation();
 
   const getActiveIndex = (path: string) => {
-    const idx = roomConfig.findIndex((r) => r.path !== '/' ? path.startsWith(r.path) : path === '/' );
+    const idx = roomConfig.findIndex(r => (r.path !== '/' ? path.startsWith(r.path) : path === '/'));
     return idx >= 0 ? idx : 0;
   };
 
   const activeIndex = getActiveIndex(location.pathname);
 
   const drawer = (
-  <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative' }}>
       {/* use Toolbar to match AppBar height exactly */}
-      <Toolbar sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: drawerOpen ? 'space-between' : 'center',
-        px: drawerOpen ? 2 : 1,
-      }}>
-        {drawerOpen && <Typography noWrap variant="h6">Seattle House</Typography>}
-        <IconButton onClick={handleDrawerToggle}>
-          {drawerOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-        </IconButton>
+      <Toolbar
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: drawerOpen ? 'space-between' : 'center',
+          px: drawerOpen ? 2 : 1,
+        }}
+      >
+        {drawerOpen && (
+          <Typography noWrap variant='h6'>
+            Seattle House
+          </Typography>
+        )}
+        <IconButton onClick={handleDrawerToggle}>{drawerOpen ? <ChevronLeftIcon /> : <ChevronRightIcon />}</IconButton>
       </Toolbar>
       <Divider />
       <List sx={{ position: 'relative' }}>
@@ -101,67 +105,70 @@ function Dashboard() {
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', width: '100%' }}>
-      <Box 
-        component="nav" 
-        sx={{ 
-          width: { sm: drawerOpen ? drawerWidth : miniDrawerWidth }, 
+      <Box
+        component='nav'
+        sx={{
+          width: { sm: drawerOpen ? drawerWidth : miniDrawerWidth },
           flexShrink: { sm: 0 },
           transition: 'width 0.2s',
-        }} 
-        aria-label="rooms"
+        }}
+        aria-label='rooms'
       >
         <Drawer
-          variant="temporary"
+          variant='temporary'
           open={mobileOpen}
           onClose={() => setMobileOpen(false)}
           ModalProps={{ keepMounted: true }}
-          sx={{ 
-            display: { xs: 'block', sm: 'none' }, 
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth } 
+          sx={{
+            display: { xs: 'block', sm: 'none' },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
           }}
         >
           {drawer}
         </Drawer>
 
         <Drawer
-          variant="permanent"
+          variant='permanent'
           open={drawerOpen}
-          sx={{ 
-            display: { xs: 'none', sm: 'block' }, 
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
+          sx={{
+            display: { xs: 'none', sm: 'block' },
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerOpen ? drawerWidth : miniDrawerWidth,
               transition: 'width 0.2s',
               overflowX: 'hidden',
-            } 
+            },
           }}
         >
           {drawer}
         </Drawer>
       </Box>
 
-      <Box component="main" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-        <AppBar  position="static" elevation={0} sx={{ bgcolor: 'background.paper', color: 'text.primary', borderBottom: 1, borderColor: 'divider' }}>
+      <Box component='main' sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+        <AppBar
+          position='static'
+          elevation={0}
+          sx={{ bgcolor: 'background.paper', color: 'text.primary', borderBottom: 1, borderColor: 'divider' }}
+        >
           <Toolbar>
             <IconButton
-              color="inherit"
-              edge="start"
+              color='inherit'
+              edge='start'
               onClick={() => setMobileOpen(true)}
               sx={{ mr: 2, display: { sm: 'none' } }}
-              aria-label="open drawer"
+              aria-label='open drawer'
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div">
+            <Typography variant='h6' component='div'>
               {roomConfig[activeIndex].label}
             </Typography>
           </Toolbar>
         </AppBar>
-        
-        <Container maxWidth="lg" sx={{ mt: 3, mb: 3 }}>
+
+        <Container maxWidth='lg' sx={{ mt: 3, mb: 3 }}>
           {/* render child route pages here */}
           <Outlet />
-        
         </Container>
       </Box>
     </Box>
