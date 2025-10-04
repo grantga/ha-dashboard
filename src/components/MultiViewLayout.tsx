@@ -1,15 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Box, Grid, Skeleton } from '@mui/material';
 import HDMIInput from './HDMIInput';
 
-export default function MultiViewLayout({ mode, loading }: { mode?: string | null; loading: boolean }) {
-  const [localMode, setLocalMode] = useState<string | null | undefined>(mode);
-  useEffect(() => {
-    setLocalMode(mode);
-  }, [mode]);
+export default function MultiViewLayout({ mode, loading }: { mode: string | null; loading: boolean }) {
 
   const previewHeight = 280;
-
   if (loading) {
     return (
       <Box sx={{ height: previewHeight, display: 'flex', alignItems: 'center', justifyContent: 'center', mt: 2 }}>
@@ -17,14 +11,14 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
       </Box>
     );
   }
-
-  switch (localMode) {
+  //render the selected mode
+  switch (mode) {
     case 'Single':
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }}>
             <Grid item xs={12}>
-              <HDMIInput />
+              <HDMIInput windowIndex={1} />
             </Grid>
           </Grid>
         </Box>
@@ -34,11 +28,11 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
         <Box sx={{ height: previewHeight, mt: 2, position: 'relative' }}>
           <Grid container sx={{ height: '100%' }}>
             <Grid item xs={12}>
-              <HDMIInput label='Main' />
+              <HDMIInput windowIndex={1} />
             </Grid>
           </Grid>
           <Box sx={{ position: 'absolute', right: 24, bottom: 24, width: 140, height: 90 }}>
-            <HDMIInput />
+            <HDMIInput windowIndex={2} />
           </Box>
         </Box>
       );
@@ -47,10 +41,10 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
             <Grid item xs={6}>
-              <HDMIInput />
+              <HDMIInput windowIndex={1} />
             </Grid>
             <Grid item xs={6}>
-              <HDMIInput />
+              <HDMIInput windowIndex={2} />
             </Grid>
           </Grid>
         </Box>
@@ -60,10 +54,10 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
             <Grid item xs={8}>
-              <HDMIInput />
+              <HDMIInput windowIndex={1} />
             </Grid>
             <Grid item xs={4}>
-              <HDMIInput />
+              <HDMIInput windowIndex={2} />
             </Grid>
           </Grid>
         </Box>
@@ -73,15 +67,15 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
             <Grid item xs={7}>
-              <HDMIInput />
+              <HDMIInput windowIndex={1} />
             </Grid>
             <Grid item xs={5}>
               <Grid container sx={{ height: '100%' }} spacing={1} direction='column'>
                 <Grid item sx={{ height: '50%' }}>
-                  <HDMIInput />
+                  <HDMIInput windowIndex={2} />
                 </Grid>
                 <Grid item sx={{ height: '50%' }}>
-                  <HDMIInput />
+                  <HDMIInput windowIndex={3} />
                 </Grid>
               </Grid>
             </Grid>
@@ -93,15 +87,15 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
             <Grid item xs={7}>
-              <HDMIInput />
+              <HDMIInput windowIndex={1} />
             </Grid>
             <Grid item xs={5}>
               <Grid container sx={{ height: '100%' }} spacing={1} direction='column'>
                 <Grid item sx={{ height: '50%' }}>
-                  <HDMIInput />
+                  <HDMIInput windowIndex={2} />
                 </Grid>
                 <Grid item sx={{ height: '50%' }}>
-                  <HDMIInput />
+                  <HDMIInput windowIndex={3} />
                 </Grid>
               </Grid>
             </Grid>
@@ -113,16 +107,16 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
             <Grid item xs={6}>
-              <HDMIInput />
+              <HDMIInput windowIndex={1} />
             </Grid>
             <Grid item xs={6}>
-              <HDMIInput />
+              <HDMIInput windowIndex={2} />
             </Grid>
             <Grid item xs={6}>
-              <HDMIInput />
+              <HDMIInput windowIndex={3} />
             </Grid>
             <Grid item xs={6}>
-              <HDMIInput />
+              <HDMIInput windowIndex={4} />
             </Grid>
           </Grid>
         </Box>
@@ -132,18 +126,18 @@ export default function MultiViewLayout({ mode, loading }: { mode?: string | nul
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
             <Grid item xs={7}>
-              <HDMIInput />
+              <HDMIInput windowIndex={1} />
             </Grid>
             <Grid item xs={5}>
               <Grid container sx={{ height: '100%' }} spacing={1} direction='column'>
                 <Grid item sx={{ height: '33.333%' }}>
-                  <HDMIInput />
+                  <HDMIInput windowIndex={2} />
                 </Grid>
                 <Grid item sx={{ height: '33.333%' }}>
-                  <HDMIInput />
+                  <HDMIInput windowIndex={3} />
                 </Grid>
                 <Grid item sx={{ height: '33.333%' }}>
-                  <HDMIInput />
+                  <HDMIInput windowIndex={4} />
                 </Grid>
               </Grid>
             </Grid>

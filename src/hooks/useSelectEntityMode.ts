@@ -1,25 +1,25 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useEntity, useService } from '@hakit/core';
 
-type UseMultiviewMode = {
-  mode: string;
-  options?: string[];
+type UseSelectEntityMode = {
+  value: string;
   loading: boolean;
-  setMode: (key: string) => Promise<void>;
+  options?: string[];
+  setValue: (key: string) => Promise<void>;
 };
 
-export default function useMultiviewMode(entityId = 'select.orei_uhd_401mv_multiview_mode'): UseMultiviewMode {
+export default function useSelectEntityMode(entityId: string): UseSelectEntityMode {
   // `useEntity` subscribes to entity updates from Home Assistant
   const entity = useEntity(entityId as any) as any;
   const selectService = useService('select') as any;
 
-  const [mode, setModeState] = useState<string>(() => (entity && entity.state) || 'single');
+  const [value, setValueState] = useState<string>(() => (entity && entity.state) || 'single');
   const [loading, setLoading] = useState<boolean>(() => !entity);
 
   useEffect(() => {
     // Sync local mode when entity becomes available
-    if (entity && entity.state && entity.state !== mode) {
-      setModeState(entity.state);
+    if (entity && entity.state && entity.state !== value) {
+      setValueState(entity.state);
     }
     // Update loading: true while entity is not yet available
     setLoading(!entity);
@@ -42,9 +42,9 @@ export default function useMultiviewMode(entityId = 'select.orei_uhd_401mv_multi
     [options]
   );
 
-  const setMode = useCallback(
+  const setValue = useCallback(
     async (key: string) => {
-      setModeState(key);
+      setValueState(key);
       setLoading(true);
       const option = pickOptionForKey(key);
       try {
@@ -57,9 +57,9 @@ export default function useMultiviewMode(entityId = 'select.orei_uhd_401mv_multi
   );
 
   return {
-    mode,
+    value,
     options,
     loading,
-    setMode,
+    setValue,
   };
 }

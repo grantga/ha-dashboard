@@ -12,14 +12,14 @@ const MODES = [
   { key: 'Quad2', label: 'Quad2', Icon: IconQuadB },
 ];
 
-export default function ModeSelector({ mode, setMode, loading }: { mode?: string | null; setMode: (m: string) => void; loading: boolean }) {
+export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode, setPbpMode, loading }: { mode: string; setMode: (m: string) => void; loading: boolean; setPbpMode: (m: string) => void; setTripleMode: (m: string) => void; setQuadMode: (m: string) => void; }) {
   return (
     <Box {...(loading ? { 'aria-busy': true } : {})}>
       <ToggleButtonGroup
         value={mode}
         exclusive
         onChange={(_, v) => {
-          if (v) setMode(v);
+          setSelectedMode(v);
         }}
         aria-label='display mode'
         sx={{ width: '100%' }}
@@ -51,6 +51,25 @@ export default function ModeSelector({ mode, setMode, loading }: { mode?: string
           })}
         </Grid>
       </ToggleButtonGroup>
-    </Box>
+    </Box >
   );
+
+  function setSelectedMode(v: any) {
+    setMode(v);
+    if (v === "PBP2") {
+      setPbpMode("Mode 2");
+    } else if (v === "PBP") {
+      setPbpMode("Mode 1");
+    }
+    if (v === "Triple2") {
+      setTripleMode("Mode 2");
+    } else if (v === "Triple") {
+      setTripleMode("Mode 1");
+    }
+    if (v === "Quad2") {
+      setQuadMode("Mode 2");
+    } else if (v === "Quad") {
+      setQuadMode("Mode 1");
+    }
+  }
 }
