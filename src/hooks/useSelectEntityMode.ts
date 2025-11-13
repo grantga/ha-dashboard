@@ -6,12 +6,14 @@ type UseSelectEntityMode = {
     loadingValue: string;
     options?: string[];
     setValue: (key: string) => Promise<void>;
+    togglePower: () => Promise<void>;
 };
 
 export default function useSelectEntityMode(entityId: string): UseSelectEntityMode {
     // `useEntity` subscribes to entity updates from Home Assistant
     const entity = useEntity(entityId as any) as any;
     const selectService = useService('select') as any;
+    const powerService = useService('switch') as any;
 
     const [value, setValueState] = useState<string>(() => (entity && entity.state) || 'unknown');
     const [loadingValue, setLoadingValue] = useState<string>(() => "unknown");
@@ -57,10 +59,23 @@ export default function useSelectEntityMode(entityId: string): UseSelectEntityMo
         [entityId, value, pickOptionForKey, selectService]
     );
 
+    const togglePower = useCallback(async () => {
+        try {
+            if (value === 'off') {
+                setLoadingValue('on');
+            } else {
+                setLoadingValue('off');
+            }
+            await powerService.toggle({ target: entityId });
+        } catch {
+        }
+    }, [entityId, powerService]);
+
     return {
         value,
         options,
         loadingValue,
         setValue,
+        togglePower
     };
 }

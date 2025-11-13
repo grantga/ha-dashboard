@@ -13,6 +13,9 @@ const MODES = [
 ];
 
 export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode, setPbpMode, loading }: { mode: string; setMode: (m: string) => void; loading: boolean; setPbpMode: (m: string) => void; setTripleMode: (m: string) => void; setQuadMode: (m: string) => void; }) {
+  if (mode === "unavailable") {
+    return null;
+  }
   return (
     <Box {...(loading ? { 'aria-busy': true } : {})}>
       <ToggleButtonGroup
