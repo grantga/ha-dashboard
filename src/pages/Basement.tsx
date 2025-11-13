@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
+import DevicePower from '../components/DevicePower';
 
 export default function BasementPage() {
 
@@ -24,6 +25,7 @@ export default function BasementPage() {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
             <Box sx={{ maxWidth: 600, width: '100%' }}>
+                <DevicePower />
                 <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
                 <MultiViewLayout mode={detailedMode} loading={loadingAny} />
             </Box>
