@@ -5,10 +5,9 @@ config({ path: '.env' });
 // Then load the .env.development file which should have the token
 config({ path: '.env.development' });
 
-
 (async function () {
   await typeSync({
     url: process.env.VITE_HA_URL!,
     token: process.env.VITE_HA_TOKEN!,
   });
-}())
+})();
