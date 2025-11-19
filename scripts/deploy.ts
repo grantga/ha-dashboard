@@ -86,7 +86,7 @@ async function deploy() {
         // empty the directory initially so we remove anything that doesn't need to be there
         try {
           await client.rmdir(remote);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (e) {
           // directory may not exist, ignore
         }
