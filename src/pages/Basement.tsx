@@ -4,6 +4,7 @@ import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
 import DevicePower from '../components/DevicePower';
 import MediaPlayerControl from '../components/MediaPlayerControl';
+import ThemeToggle from '../components/ThemeToggle';
 
 export default function BasementPage() {
 
@@ -24,7 +25,12 @@ export default function BasementPage() {
     }
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100%', mt: 4, mb: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100%', mt: 4, mb: 4, position: 'relative' }}>
+            {/* Theme Toggle - Floating in top-right */}
+            <Box sx={{ position: 'absolute', top: -8, right: 16, zIndex: 10 }}>
+                <ThemeToggle />
+            </Box>
+
             <Box sx={{ maxWidth: 800, width: '100%' }}>
                 <Stack spacing={3}>
                     <Fade in timeout={300}>
