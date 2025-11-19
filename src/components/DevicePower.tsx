@@ -34,9 +34,9 @@ export default function DevicePower() {
 
     return (
         // container that stretches full width and centers the vertical button stack at the top
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 0 }} >
-                <Stack direction="row" spacing={1.5} flexWrap="nowrap" useFlexGap>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 0, width: '100%', maxWidth: '100%' }} >
+                <Stack direction="row" spacing={1.5} flexWrap="nowrap" useFlexGap sx={{ width: '100%' }}>
                     {devices.map((b) => {
                         return (
                             <Button
@@ -47,20 +47,36 @@ export default function DevicePower() {
                                 size="large"
                                 onClick={() => handleClick(b)}
                                 startIcon={
-                                    <PowerSettingsNewIcon />
+                                    <PowerSettingsNewIcon sx={{ flexShrink: 0 }} />
                                 }
                                 sx={{
-                                    minWidth: 120,
+                                    flex: 1,
+                                    minWidth: { xs: 0, sm: 120 },
+                                    maxWidth: { xs: '25%', sm: 'none' },
                                     py: 1.5,
                                     fontWeight: 600,
-                                    fontSize: '0.95rem',
+                                    fontSize: { xs: '0.75rem', sm: '0.95rem' },
                                     boxShadow: b.isOn ? '0 4px 12px rgba(99, 102, 241, 0.4)' : 'none',
+                                    overflow: 'hidden',
+                                    '& .MuiButton-startIcon': {
+                                        marginRight: { xs: 0.5, sm: 1 },
+                                    },
                                     '&:hover': {
                                         boxShadow: b.isOn ? '0 6px 16px rgba(99, 102, 241, 0.5)' : '0 2px 8px rgba(148, 163, 184, 0.2)',
                                     },
                                 }}
                             >
-                                {b.label}
+                                <Box
+                                    component="span"
+                                    sx={{
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap',
+                                        display: 'block',
+                                    }}
+                                >
+                                    {b.label}
+                                </Box>
                             </Button>
                         );
                     })}
