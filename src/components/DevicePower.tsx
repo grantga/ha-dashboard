@@ -56,13 +56,13 @@ export default function DevicePower() {
                                     py: 1.5,
                                     fontWeight: 600,
                                     fontSize: { xs: '0.75rem', sm: '0.95rem' },
-                                    boxShadow: b.isOn ? '0 4px 12px rgba(99, 102, 241, 0.4)' : 'none',
+                                    boxShadow: (theme: any) => b.isOn ? theme.palette.custom.shadowPrimary : 'none',
                                     overflow: 'hidden',
                                     '& .MuiButton-startIcon': {
                                         marginRight: { xs: 0.5, sm: 1 },
                                     },
                                     '&:hover': {
-                                        boxShadow: b.isOn ? '0 6px 16px rgba(99, 102, 241, 0.5)' : '0 2px 8px rgba(148, 163, 184, 0.2)',
+                                        boxShadow: (theme: any) => b.isOn ? theme.palette.custom.shadowPrimaryHover : theme.palette.custom.shadowSecondary,
                                     },
                                 }}
                             >

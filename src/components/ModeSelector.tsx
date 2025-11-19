@@ -36,7 +36,7 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
                 {loading ? (
                   <Skeleton
                     variant='rectangular'
-                    sx={{
+                    sx={(theme: any) => ({
                       minWidth: 64,
                       height: 80,
                       display: 'flex',
@@ -44,7 +44,7 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
                       alignItems: 'center',
                       px: 1,
                       borderRadius: 2,
-                      background: 'linear-gradient(90deg, rgba(30, 41, 59, 0.4) 0%, rgba(99, 102, 241, 0.15) 50%, rgba(30, 41, 59, 0.4) 100%)',
+                      background: theme.palette.custom.shimmerGradient,
                       backgroundSize: '200% 100%',
                       animation: 'shimmer 6s infinite',
                       '@keyframes shimmer': {
@@ -55,13 +55,13 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
                           backgroundPosition: '-200% 0',
                         },
                       },
-                    }}
+                    })}
                   />
                 ) : (
                   <Tooltip title={m.label} placement='top' arrow>
                     <ToggleButton
                       value={m.key}
-                      sx={{
+                      sx={(theme: any) => ({
                         height: 80,
                         minWidth: 64,
                         px: 1.5,
@@ -71,13 +71,13 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
                         transition: 'all 0.2s ease-in-out',
                         '&:hover': {
                           transform: 'translateY(-2px)',
-                          boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)',
+                          boxShadow: theme.palette.custom.shadowPrimary,
                         },
                         '&.Mui-selected': {
                           transform: 'scale(1.05)',
-                          boxShadow: '0 4px 12px rgba(99, 102, 241, 0.4)',
+                          boxShadow: theme.palette.custom.shadowPrimary,
                         },
-                      }}
+                      })}
                     >
                       <Box sx={{ color: 'text.primary' }}>
                         <IconComp />

@@ -36,11 +36,11 @@ export default function BasementPage() {
                     <Fade in timeout={300}>
                         <Card
                             variant="outlined"
-                            sx={{
-                                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%)',
+                            sx={(theme: any) => ({
+                                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
                                 backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(148, 163, 184, 0.1)',
-                            }}
+                                border: `1px solid ${theme.palette.custom.border}`,
+                            })}
                         >
                             <CardContent sx={{ p: 2.5 }}>
                                 <DevicePower />
@@ -51,11 +51,11 @@ export default function BasementPage() {
                     <Fade in timeout={400}>
                         <Card
                             variant="outlined"
-                            sx={{
-                                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%)',
+                            sx={(theme: any) => ({
+                                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
                                 backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(148, 163, 184, 0.1)',
-                            }}
+                                border: `1px solid ${theme.palette.custom.border}`,
+                            })}
                         >
                             <CardContent sx={{ p: 2.5 }}>
                                 <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
@@ -66,11 +66,11 @@ export default function BasementPage() {
                     <Fade in timeout={500}>
                         <Card
                             variant="outlined"
-                            sx={{
-                                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%)',
+                            sx={(theme: any) => ({
+                                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
                                 backdropFilter: 'blur(10px)',
-                                border: '1px solid rgba(148, 163, 184, 0.1)',
-                            }}
+                                border: `1px solid ${theme.palette.custom.border}`,
+                            })}
                         >
                             <CardContent sx={{ p: 2.5 }}>
                                 <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
