@@ -33,22 +33,22 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
             maxWidth="sm"
             fullWidth
             PaperProps={{
-                sx: {
-                    background: 'rgba(15, 23, 42, 0.98)',
+                sx: (theme: any) => ({
+                    background: theme.palette.custom.modalBackground,
                     backdropFilter: 'blur(20px)',
                     borderRadius: 3,
-                    border: '1px solid rgba(99, 102, 241, 0.2)',
-                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.6)',
-                }
+                    border: `1px solid ${theme.palette.custom.modalBorder}`,
+                    boxShadow: theme.palette.custom.modalShadow,
+                })
             }}
         >
-            <DialogTitle sx={{
-                color: 'white',
+            <DialogTitle sx={(theme: any) => ({
+                color: theme.palette.mode === 'dark' ? 'white' : 'text.primary',
                 fontSize: '1.5rem',
                 fontWeight: 700,
-                borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
+                borderBottom: `1px solid ${theme.palette.custom.modalBorder}`,
                 pb: 2,
-            }}>
+            })}>
                 Change Input
             </DialogTitle>
             <DialogContent sx={{ pt: 3 }}>
@@ -59,29 +59,29 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
                                 role="button"
                                 tabIndex={0}
                                 onClick={() => handlePick(d.key)}
-                                sx={{
+                                sx={(theme: any) => ({
                                     cursor: 'pointer',
                                     border: '2px solid',
-                                    borderColor: 'rgba(148, 163, 184, 0.2)',
+                                    borderColor: theme.palette.custom.border,
                                     borderRadius: 2,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     position: 'relative',
                                     overflow: 'hidden',
                                     height: 160,
-                                    background: 'rgba(30, 41, 59, 0.4)',
+                                    background: theme.palette.custom.cardBackground,
                                     backdropFilter: 'blur(10px)',
                                     transition: 'all 0.3s ease-in-out',
                                     '&:hover': {
                                         borderColor: 'primary.main',
                                         transform: 'scale(1.05)',
-                                        boxShadow: '0 4px 16px rgba(99, 102, 241, 0.4)',
-                                        background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.08) 100%)',
+                                        boxShadow: theme.palette.custom.shadowPrimary,
+                                        background: theme.palette.custom.cardBackgroundGradientHover,
                                     },
                                     '&:active': {
                                         transform: 'scale(0.98)',
                                     },
-                                }}
+                                })}
                             >
                                 {/* Full-bleed SVG background */}
                                 <Box
@@ -102,26 +102,26 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
                                         component="img"
                                         src={d.img}
                                         alt={d.label}
-                                        sx={{
+                                        sx={(theme: any) => ({
                                             width: '85%',
                                             height: '85%',
                                             objectFit: 'contain',
-                                            filter: d.key === 'switch'
-                                                ? 'brightness(1.2) saturate(0.8) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
-                                                : 'brightness(0) saturate(100%) invert(74%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(95%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))',
+                                            filter: theme.palette.mode === 'dark'
+                                                ? 'brightness(0) saturate(100%) invert(74%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(95%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
+                                                : 'brightness(0) saturate(100%) invert(35%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(85%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
                                             transition: 'all 0.3s ease-in-out',
-                                        }}
+                                        })}
                                     />
                                 </Box>
 
                                 {/* Bottom gradient overlay with device name */}
                                 <Box
-                                    sx={{
+                                    sx={(theme: any) => ({
                                         position: 'absolute',
                                         bottom: 0,
                                         left: 0,
                                         right: 0,
-                                        background: 'linear-gradient(to top, rgba(15, 23, 42, 0.98) 0%, rgba(15, 23, 42, 0.85) 40%, transparent 100%)',
+                                        background: theme.palette.custom.overlayGradient,
                                         display: 'flex',
                                         flexDirection: 'column',
                                         justifyContent: 'flex-start',
@@ -129,18 +129,18 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
                                         pb: 2,
                                         px: 2,
                                         pointerEvents: 'none',
-                                    }}
+                                    })}
                                 >
                                     <Typography
                                         variant="h6"
-                                        sx={{
-                                            color: 'white',
+                                        sx={(theme: any) => ({
+                                            color: theme.palette.mode === 'dark' ? 'white' : theme.palette.text.secondary,
                                             textAlign: 'left',
-                                            textShadow: '0 2px 8px rgba(0, 0, 0, 0.9)',
+                                            textShadow: theme.palette.mode === 'dark' ? '0 2px 8px rgba(0, 0, 0, 0.9)' : '0 2px 8px rgba(255, 255, 255, 0.8)',
                                             fontSize: '2rem',
                                             fontWeight: 700,
                                             letterSpacing: '-0.01em',
-                                        }}
+                                        })}
                                     >
                                         {d.label}
                                     </Typography>

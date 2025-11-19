@@ -48,11 +48,11 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     disabled={value === 'off' || muted == null}
                     aria-label="mute"
                     title={muted ? 'Unmute' : 'Mute'}
-                    sx={{
+                    sx={(theme: any) => ({
                         bgcolor: muted ? 'primary.main' : 'transparent',
-                        '&:hover': { bgcolor: muted ? 'primary.dark' : 'rgba(148, 163, 184, 0.1)' },
+                        '&:hover': { bgcolor: muted ? 'primary.dark' : theme.palette.action.hover },
                         transition: 'all 0.2s',
-                    }}
+                    })}
                 >
                     <VolumeOffIcon color={muted ? 'inherit' : 'inherit'} />
                 </IconButton>
@@ -61,9 +61,9 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     onClick={() => volumeDown()}
                     disabled={disabled}
                     aria-label="volume down"
-                    sx={{
-                        '&:hover': { bgcolor: 'rgba(148, 163, 184, 0.1)' },
-                    }}
+                    sx={(theme: any) => ({
+                        '&:hover': { bgcolor: theme.palette.action.hover },
+                    })}
                 >
                     <VolumeDownIcon color={muted || disabled ? 'inherit' : 'primary'} />
                 </IconButton>
@@ -77,13 +77,13 @@ export default function MediaPlayerControl({ entityId }: Props) {
                         aria-label="volume"
                         min={0}
                         max={100}
-                        sx={{
+                        sx={(theme: any) => ({
                             '& .MuiSlider-thumb': {
                                 width: 16,
                                 height: 16,
                                 transition: '0.2s',
                                 '&:hover, &.Mui-focusVisible': {
-                                    boxShadow: '0 0 0 8px rgba(99, 102, 241, 0.16)',
+                                    boxShadow: `0 0 0 8px ${theme.palette.mode === 'dark' ? 'rgba(99, 102, 241, 0.16)' : 'rgba(25, 118, 210, 0.16)'}`,
                                 },
                             },
                             '& .MuiSlider-track': {
@@ -93,7 +93,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
                                 height: 4,
                                 opacity: 0.3,
                             },
-                        }}
+                        })}
                     />
                 </Box>
 
@@ -101,9 +101,9 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     onClick={() => volumeUp()}
                     disabled={disabled}
                     aria-label="volume up"
-                    sx={{
-                        '&:hover': { bgcolor: 'rgba(148, 163, 184, 0.1)' },
-                    }}
+                    sx={(theme: any) => ({
+                        '&:hover': { bgcolor: theme.palette.action.hover },
+                    })}
                 >
                     <VolumeUpIcon color={muted || disabled ? 'inherit' : 'primary'} />
                 </IconButton>
@@ -117,14 +117,14 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     label="Input"
                     onChange={handleSelectChange}
                     disabled={!sources || value === 'off'}
-                    sx={{
+                    sx={(theme: any) => ({
                         '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(148, 163, 184, 0.2)',
+                            borderColor: theme.palette.custom.border,
                         },
                         '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'rgba(148, 163, 184, 0.4)',
+                            borderColor: theme.palette.custom.borderHover,
                         },
-                    }}
+                    })}
                 >
                     {sources && sources.length ? (
                         sources.map((s: string) => (

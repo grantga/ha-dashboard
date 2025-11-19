@@ -31,23 +31,23 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             maxWidth="xs"
             fullWidth
             PaperProps={{
-                sx: {
-                    background: 'rgba(15, 23, 42, 0.98)',
+                sx: (theme: any) => ({
+                    background: theme.palette.custom.modalBackground,
                     backdropFilter: 'blur(20px)',
                     borderRadius: 3,
-                    border: '1px solid rgba(99, 102, 241, 0.2)',
-                    boxShadow: '0 20px 60px rgba(0, 0, 0, 0.6)',
-                }
+                    border: `1px solid ${theme.palette.custom.modalBorder}`,
+                    boxShadow: theme.palette.custom.modalShadow,
+                })
             }}
         >
-            <DialogTitle sx={{
-                color: 'white',
+            <DialogTitle sx={(theme: any) => ({
+                color: theme.palette.mode === 'dark' ? 'white' : 'text.primary',
                 fontSize: '1.5rem',
                 fontWeight: 700,
-                borderBottom: '1px solid rgba(99, 102, 241, 0.2)',
+                borderBottom: `1px solid ${theme.palette.custom.modalBorder}`,
                 pb: 2,
                 textAlign: 'center',
-            }}>
+            })}>
                 Roku Remote
             </DialogTitle>
             <DialogContent>
@@ -62,45 +62,45 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                     <Box sx={{ display: 'flex', gap: 2 }}>
                         <IconButton
                             onClick={sendRokuCommand("home")}
-                            sx={{
+                            sx={(theme: any) => ({
                                 width: 56,
                                 height: 56,
-                                background: 'rgba(30, 41, 59, 0.6)',
-                                border: '2px solid rgba(99, 102, 241, 0.3)',
-                                color: 'rgba(148, 163, 184, 0.9)',
+                                background: theme.palette.custom.buttonBackground,
+                                border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                                color: theme.palette.custom.iconColor,
                                 transition: 'all 0.2s ease-in-out',
                                 '&:hover': {
-                                    background: 'rgba(99, 102, 241, 0.2)',
-                                    border: '2px solid rgba(99, 102, 241, 0.6)',
-                                    color: '#818cf8',
+                                    background: theme.palette.custom.buttonBackgroundHover,
+                                    border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                                    color: theme.palette.custom.iconColorHover,
                                     transform: 'scale(1.05)',
                                 },
                                 '&:active': {
                                     transform: 'scale(0.95)',
                                 },
-                            }}
+                            })}
                         >
                             <HomeIcon />
                         </IconButton>
                         <IconButton
                             onClick={sendRokuCommand("back")}
-                            sx={{
+                            sx={(theme: any) => ({
                                 width: 56,
                                 height: 56,
-                                background: 'rgba(30, 41, 59, 0.6)',
-                                border: '2px solid rgba(99, 102, 241, 0.3)',
-                                color: 'rgba(148, 163, 184, 0.9)',
+                                background: theme.palette.custom.buttonBackground,
+                                border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                                color: theme.palette.custom.iconColor,
                                 transition: 'all 0.2s ease-in-out',
                                 '&:hover': {
-                                    background: 'rgba(99, 102, 241, 0.2)',
-                                    border: '2px solid rgba(99, 102, 241, 0.6)',
-                                    color: '#818cf8',
+                                    background: theme.palette.custom.buttonBackgroundHover,
+                                    border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                                    color: theme.palette.custom.iconColorHover,
                                     transform: 'scale(1.05)',
                                 },
                                 '&:active': {
                                     transform: 'scale(0.95)',
                                 },
-                            }}
+                            })}
                         >
                             <ArrowBackIcon />
                         </IconButton>
@@ -118,27 +118,27 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                         {/* Up */}
                         <IconButton
                             onClick={sendRokuCommand("up")}
-                            sx={{
+                            sx={(theme: any) => ({
                                 position: 'absolute',
                                 top: 0,
                                 left: '50%',
                                 transform: 'translateX(-50%)',
                                 width: 56,
                                 height: 56,
-                                background: 'rgba(30, 41, 59, 0.6)',
-                                border: '2px solid rgba(99, 102, 241, 0.3)',
-                                color: 'rgba(148, 163, 184, 0.9)',
+                                background: theme.palette.custom.buttonBackground,
+                                border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                                color: theme.palette.custom.iconColor,
                                 transition: 'all 0.2s ease-in-out',
                                 '&:hover': {
-                                    background: 'rgba(99, 102, 241, 0.2)',
-                                    border: '2px solid rgba(99, 102, 241, 0.6)',
-                                    color: '#818cf8',
+                                    background: theme.palette.custom.buttonBackgroundHover,
+                                    border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                                    color: theme.palette.custom.iconColorHover,
                                     transform: 'translateX(-50%) scale(1.05)',
                                 },
                                 '&:active': {
                                     transform: 'translateX(-50%) scale(0.95)',
                                 },
-                            }}
+                            })}
                         >
                             <ArrowUpwardIcon />
                         </IconButton>
@@ -146,27 +146,27 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                         {/* Left */}
                         <IconButton
                             onClick={sendRokuCommand("left")}
-                            sx={{
+                            sx={(theme: any) => ({
                                 position: 'absolute',
                                 left: 0,
                                 top: '50%',
                                 transform: 'translateY(-50%)',
                                 width: 56,
                                 height: 56,
-                                background: 'rgba(30, 41, 59, 0.6)',
-                                border: '2px solid rgba(99, 102, 241, 0.3)',
-                                color: 'rgba(148, 163, 184, 0.9)',
+                                background: theme.palette.custom.buttonBackground,
+                                border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                                color: theme.palette.custom.iconColor,
                                 transition: 'all 0.2s ease-in-out',
                                 '&:hover': {
-                                    background: 'rgba(99, 102, 241, 0.2)',
-                                    border: '2px solid rgba(99, 102, 241, 0.6)',
-                                    color: '#818cf8',
+                                    background: theme.palette.custom.buttonBackgroundHover,
+                                    border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                                    color: theme.palette.custom.iconColorHover,
                                     transform: 'translateY(-50%) scale(1.05)',
                                 },
                                 '&:active': {
                                     transform: 'translateY(-50%) scale(0.95)',
                                 },
-                            }}
+                            })}
                         >
                             <ArrowBackIcon2 />
                         </IconButton>
@@ -174,26 +174,26 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                         {/* OK button in center */}
                         <IconButton
                             onClick={sendRokuCommand("select")}
-                            sx={{
+                            sx={(theme: any) => ({
                                 width: 64,
                                 height: 64,
-                                background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.3) 0%, rgba(99, 102, 241, 0.2) 100%)',
-                                border: '2px solid rgba(99, 102, 241, 0.5)',
-                                color: '#818cf8',
+                                background: theme.palette.custom.cardBackgroundGradient,
+                                border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                                color: theme.palette.custom.iconColorHover,
                                 fontSize: '0.875rem',
                                 fontWeight: 700,
                                 transition: 'all 0.2s ease-in-out',
                                 '&:hover': {
-                                    background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.4) 0%, rgba(99, 102, 241, 0.3) 100%)',
-                                    border: '2px solid rgba(99, 102, 241, 0.8)',
-                                    color: '#a5b4fc',
+                                    background: theme.palette.custom.cardBackgroundGradientHover,
+                                    border: `2px solid ${theme.palette.primary.main}`,
+                                    color: theme.palette.primary.light,
                                     transform: 'scale(1.05)',
-                                    boxShadow: '0 4px 16px rgba(99, 102, 241, 0.4)',
+                                    boxShadow: theme.palette.custom.shadowPrimary,
                                 },
                                 '&:active': {
                                     transform: 'scale(0.95)',
                                 },
-                            }}
+                            })}
                         >
                             OK
                         </IconButton>
@@ -201,27 +201,27 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                         {/* Right */}
                         <IconButton
                             onClick={sendRokuCommand("right")}
-                            sx={{
+                            sx={(theme: any) => ({
                                 position: 'absolute',
                                 right: 0,
                                 top: '50%',
                                 transform: 'translateY(-50%)',
                                 width: 56,
                                 height: 56,
-                                background: 'rgba(30, 41, 59, 0.6)',
-                                border: '2px solid rgba(99, 102, 241, 0.3)',
-                                color: 'rgba(148, 163, 184, 0.9)',
+                                background: theme.palette.custom.buttonBackground,
+                                border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                                color: theme.palette.custom.iconColor,
                                 transition: 'all 0.2s ease-in-out',
                                 '&:hover': {
-                                    background: 'rgba(99, 102, 241, 0.2)',
-                                    border: '2px solid rgba(99, 102, 241, 0.6)',
-                                    color: '#818cf8',
+                                    background: theme.palette.custom.buttonBackgroundHover,
+                                    border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                                    color: theme.palette.custom.iconColorHover,
                                     transform: 'translateY(-50%) scale(1.05)',
                                 },
                                 '&:active': {
                                     transform: 'translateY(-50%) scale(0.95)',
                                 },
-                            }}
+                            })}
                         >
                             <ArrowForwardIcon />
                         </IconButton>
@@ -229,27 +229,27 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                         {/* Down */}
                         <IconButton
                             onClick={sendRokuCommand("down")}
-                            sx={{
+                            sx={(theme: any) => ({
                                 position: 'absolute',
                                 bottom: 0,
                                 left: '50%',
                                 transform: 'translateX(-50%)',
                                 width: 56,
                                 height: 56,
-                                background: 'rgba(30, 41, 59, 0.6)',
-                                border: '2px solid rgba(99, 102, 241, 0.3)',
-                                color: 'rgba(148, 163, 184, 0.9)',
+                                background: theme.palette.custom.buttonBackground,
+                                border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                                color: theme.palette.custom.iconColor,
                                 transition: 'all 0.2s ease-in-out',
                                 '&:hover': {
-                                    background: 'rgba(99, 102, 241, 0.2)',
-                                    border: '2px solid rgba(99, 102, 241, 0.6)',
-                                    color: '#818cf8',
+                                    background: theme.palette.custom.buttonBackgroundHover,
+                                    border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                                    color: theme.palette.custom.iconColorHover,
                                     transform: 'translateX(-50%) scale(1.05)',
                                 },
                                 '&:active': {
                                     transform: 'translateX(-50%) scale(0.95)',
                                 },
-                            }}
+                            })}
                         >
                             <ArrowDownwardIcon />
                         </IconButton>

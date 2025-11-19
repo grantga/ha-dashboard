@@ -13,9 +13,9 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
           variant='rectangular'
           width='60%'
           height={previewHeight * 0.6}
-          sx={{
+          sx={(theme: any) => ({
             borderRadius: 2,
-            background: 'linear-gradient(90deg, rgba(30, 41, 59, 0.4) 0%, rgba(99, 102, 241, 0.15) 50%, rgba(30, 41, 59, 0.4) 100%)',
+            background: theme.palette.custom.shimmerGradient,
             backgroundSize: '200% 100%',
             animation: 'shimmer 6s infinite',
             '@keyframes shimmer': {
@@ -26,7 +26,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
                 backgroundPosition: '-200% 0',
               },
             },
-          }}
+          })}
         />
       </Box>
     );
