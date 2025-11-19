@@ -14,8 +14,10 @@ type Props = {
 export default function RokuRemoteModal({ open, onClose, device }: Props) {
     const rokuRemote = useEntity(device === 'roku1' ? "remote.roku_basement_1" : "remote.roku_basement_2");
 
-    const sendRokuCommand = (command: string) => () =>
-        rokuRemote.service.sendCommand({ serviceData: { device: rokuRemote.entity_id, command: command, num_repeats: 1, delay_secs: 0, hold_secs: 0 } });
+
+    const sendRokuCommand = (command: string) => () => {
+        rokuRemote.service.sendCommand({ serviceData: { device: rokuRemote.entity_id, command: command as any, num_repeats: 1, delay_secs: 0, hold_secs: 0 } });
+    }
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
