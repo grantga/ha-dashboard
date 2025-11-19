@@ -21,6 +21,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import HomeIcon from '@mui/icons-material/Home';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import { useNavigate, Outlet, useLocation } from 'react-router-dom';
+import ThemeToggle from './components/ThemeToggle';
 
 const drawerWidth = 240;
 const miniDrawerWidth = 64;
@@ -160,9 +161,10 @@ function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant='h6' component='div'>
+            <Typography variant='h6' component='div' sx={{ flexGrow: 1 }}>
               {roomConfig[activeIndex].label}
             </Typography>
+            <ThemeToggle />
           </Toolbar>
         </AppBar>
 
