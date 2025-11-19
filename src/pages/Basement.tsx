@@ -26,8 +26,8 @@ export default function BasementPage() {
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100%', mt: 4, mb: 4, position: 'relative' }}>
-            {/* Theme Toggle - Floating in top-right */}
-            <Box sx={{ position: 'absolute', top: -8, right: 16, zIndex: 10 }}>
+            {/* Theme Toggle - Floating in bottom-right */}
+            <Box sx={{ position: 'absolute', bottom: 32, right: 16, zIndex: 10 }}>
                 <ThemeToggle />
             </Box>
 
