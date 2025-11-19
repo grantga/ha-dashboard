@@ -11,7 +11,7 @@ export default function DevicePower() {
     const { value: mvPower, togglePower: setMVPower, loadingValue: loadingMVPower } = useSelectEntityMode('switch.orei_uhd_401mv_power');
 
     const devices = [
-        { id: 'all', label: 'All On', isOn: !(receiverPower === 'off' || projectorPower === 'off' || mvPower === 'off'), loading: loadingReceiver || loadingProjectorPower || loadingMVPower },
+        { id: 'all', label: 'All', isOn: !(receiverPower === 'off' || projectorPower === 'off' || mvPower === 'off'), loading: loadingReceiver || loadingProjectorPower || loadingMVPower },
         { id: 'receiver', label: 'Receiver', isOn: receiverPower !== 'off', loading: loadingReceiver, togglePower: setReceiverPower },
         { id: 'projector', label: 'Projector', isOn: projectorPower !== 'off', loading: loadingProjectorPower, togglePower: setProjectorPower },
         { id: 'multiview', label: 'Multiview', isOn: mvPower !== 'off', loading: loadingMVPower, togglePower: setMVPower },
@@ -35,8 +35,8 @@ export default function DevicePower() {
 
     return (
         // container that stretches full width and centers the vertical button stack at the top
-        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 1 }}>
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 1 }} flexWrap={'wrap'}>
                 <Stack direction="row" spacing={1}>
                     {devices.map((b) => {
                         return (
