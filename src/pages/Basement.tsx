@@ -13,7 +13,7 @@ export default function BasementPage() {
     const { value: quadMode, setValue: setQuadMode, loadingValue: loadingQuad } = useSelectEntityMode('select.orei_uhd_401mv_quad_mode');
     const { value: pbpMode, setValue: setPbpMode, loadingValue: loadingPbp } = useSelectEntityMode('select.orei_uhd_401mv_pbp_mode');
 
-    const loadingAny = loadMode != "" || loadingTriple != "" || loadingQuad != "" || loadingPbp != "";
+    const loadingAny = loadMode !== "" || loadingTriple !== "" || loadingQuad !== "" || loadingPbp !== "";
     //handle the alt pbp, triple and quad modes
     let detailedMode = mode;
     if (mode == "PBP" && pbpMode == "PBP mode 2") {
