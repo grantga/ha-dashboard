@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useEntity, useService } from '@hakit/core';
+import { useEntity, useService, type EntityName } from '@hakit/core';
 
 type UseSelectEntityMode = {
     value: string;
@@ -9,11 +9,11 @@ type UseSelectEntityMode = {
     togglePower: () => Promise<void>;
 };
 
-export default function useSelectEntityMode(entityId: string): UseSelectEntityMode {
+export default function useSelectEntityMode(entityId: EntityName): UseSelectEntityMode {
     // `useEntity` subscribes to entity updates from Home Assistant
-    const entity = useEntity(entityId as any) as any;
-    const selectService = useService('select') as any;
-    const powerService = useService('switch') as any;
+    const entity = useEntity(entityId);
+    const selectService = useService('select');
+    const powerService = useService('switch');
 
     const [value, setValueState] = useState<string>(() => (entity && entity.state) || 'unknown');
     const [loadingValue, setLoadingValue] = useState<string>(() => "unknown");
@@ -51,7 +51,7 @@ export default function useSelectEntityMode(entityId: string): UseSelectEntityMo
             if (option !== value) {
                 setLoadingValue(option);
                 try {
-                    await selectService.select_option({ target: entityId, serviceData: { option } });
+                    selectService.selectOption({ target: entityId, serviceData: { option } });
                 } catch {
                 }
             }
@@ -66,7 +66,7 @@ export default function useSelectEntityMode(entityId: string): UseSelectEntityMo
             } else {
                 setLoadingValue('off');
             }
-            await powerService.toggle({ target: entityId });
+            powerService.toggle({ target: entityId });
         } catch {
         }
     }, [entityId, powerService]);

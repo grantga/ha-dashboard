@@ -1,8 +1,9 @@
-import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
+import { Box, Card, CardContent, Stack } from '@mui/material';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
 import DevicePower from '../components/DevicePower';
+import MediaPlayerControl from '../components/MediaPlayerControl';
 
 export default function BasementPage() {
 
@@ -29,6 +30,11 @@ export default function BasementPage() {
                     <Card variant="outlined">
                         <CardContent>
                             <DevicePower />
+                        </CardContent>
+                    </Card>
+                    <Card variant="outlined">
+                        <CardContent>
+                            <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
                         </CardContent>
                     </Card>
                     <Card variant="outlined">
