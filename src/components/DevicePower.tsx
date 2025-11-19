@@ -25,8 +25,7 @@ export default function DevicePower() {
                 if (d.togglePower && !d.isOn) {
                     d.togglePower();
                 }
-            }
-            );
+            });
         }
         else {
             device.togglePower();
@@ -36,8 +35,8 @@ export default function DevicePower() {
     return (
         // container that stretches full width and centers the vertical button stack at the top
         <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 1 }} flexWrap={'wrap'}>
-                <Stack direction="row" spacing={1}>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 0 }} >
+                <Stack direction="row" spacing={1.5} flexWrap="nowrap" useFlexGap>
                     {devices.map((b) => {
                         return (
                             <Button
@@ -45,11 +44,21 @@ export default function DevicePower() {
                                 variant={b.isOn ? "contained" : "outlined"}
                                 loading={b.loading !== ""}
                                 loadingPosition="start"
-                                size="small"
+                                size="large"
                                 onClick={() => handleClick(b)}
                                 startIcon={
                                     <PowerSettingsNewIcon />
                                 }
+                                sx={{
+                                    minWidth: 120,
+                                    py: 1.5,
+                                    fontWeight: 600,
+                                    fontSize: '0.95rem',
+                                    boxShadow: b.isOn ? '0 4px 12px rgba(99, 102, 241, 0.4)' : 'none',
+                                    '&:hover': {
+                                        boxShadow: b.isOn ? '0 6px 16px rgba(99, 102, 241, 0.5)' : '0 2px 8px rgba(148, 163, 184, 0.2)',
+                                    },
+                                }}
                             >
                                 {b.label}
                             </Button>

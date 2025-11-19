@@ -41,35 +41,75 @@ export default function MediaPlayerControl({ entityId }: Props) {
     };
 
     return (
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton
-                onClick={() => setMuted && setMuted(!(muted ?? false))}
-                disabled={value === 'off' || muted == null}
-                aria-label="mute"
-                title={muted ? 'Unmute' : 'Mute'}
-            >
-                <VolumeOffIcon color={muted ? 'primary' : 'inherit'} />
-            </IconButton>
+        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, width: '100%' }}>
+                <IconButton
+                    onClick={() => setMuted && setMuted(!(muted ?? false))}
+                    disabled={value === 'off' || muted == null}
+                    aria-label="mute"
+                    title={muted ? 'Unmute' : 'Mute'}
+                    sx={{
+                        bgcolor: muted ? 'primary.main' : 'transparent',
+                        '&:hover': { bgcolor: muted ? 'primary.dark' : 'rgba(148, 163, 184, 0.1)' },
+                        transition: 'all 0.2s',
+                    }}
+                >
+                    <VolumeOffIcon color={muted ? 'inherit' : 'inherit'} />
+                </IconButton>
 
-            <IconButton onClick={() => volumeDown()} disabled={disabled} aria-label="volume down">
-                <VolumeDownIcon color={muted || disabled ? 'inherit' : 'primary'} />
-            </IconButton>
+                <IconButton
+                    onClick={() => volumeDown()}
+                    disabled={disabled}
+                    aria-label="volume down"
+                    sx={{
+                        '&:hover': { bgcolor: 'rgba(148, 163, 184, 0.1)' },
+                    }}
+                >
+                    <VolumeDownIcon color={muted || disabled ? 'inherit' : 'primary'} />
+                </IconButton>
 
-            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
-                <Slider
-                    value={local ?? 0}
-                    onChange={handleChange}
-                    onChangeCommitted={handleCommit}
-                    disabled={disabled || (muted === true)}
-                    aria-label="volume"
-                    min={0}
-                    max={100}
-                />
+                <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', px: 1 }}>
+                    <Slider
+                        value={local ?? 0}
+                        onChange={handleChange}
+                        onChangeCommitted={handleCommit}
+                        disabled={disabled || (muted === true)}
+                        aria-label="volume"
+                        min={0}
+                        max={100}
+                        sx={{
+                            '& .MuiSlider-thumb': {
+                                width: 16,
+                                height: 16,
+                                transition: '0.2s',
+                                '&:hover, &.Mui-focusVisible': {
+                                    boxShadow: '0 0 0 8px rgba(99, 102, 241, 0.16)',
+                                },
+                            },
+                            '& .MuiSlider-track': {
+                                height: 4,
+                            },
+                            '& .MuiSlider-rail': {
+                                height: 4,
+                                opacity: 0.3,
+                            },
+                        }}
+                    />
+                </Box>
+
+                <IconButton
+                    onClick={() => volumeUp()}
+                    disabled={disabled}
+                    aria-label="volume up"
+                    sx={{
+                        '&:hover': { bgcolor: 'rgba(148, 163, 184, 0.1)' },
+                    }}
+                >
+                    <VolumeUpIcon color={muted || disabled ? 'inherit' : 'primary'} />
+                </IconButton>
             </Box>
-            <IconButton onClick={() => volumeUp()} disabled={disabled} aria-label="volume up">
-                <VolumeUpIcon color={muted || disabled ? 'inherit' : 'primary'} />
-            </IconButton>
-            <FormControl size="small" sx={{ minWidth: 160, ml: 1 }}>
+
+            <FormControl size="small" >
                 <InputLabel id={`source-select-label-${entityId}`}>Input</InputLabel>
                 <Select
                     labelId={`source-select-label-${entityId}`}
@@ -77,6 +117,14 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     label="Input"
                     onChange={handleSelectChange}
                     disabled={!sources || value === 'off'}
+                    sx={{
+                        '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'rgba(148, 163, 184, 0.2)',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                            borderColor: 'rgba(148, 163, 184, 0.4)',
+                        },
+                    }}
                 >
                     {sources && sources.length ? (
                         sources.map((s: string) => (
