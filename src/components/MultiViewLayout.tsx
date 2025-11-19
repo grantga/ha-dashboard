@@ -54,7 +54,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
     case 'PBP2':
       return (
         <Box sx={{ height: previewHeight, width: '100%', mt: 2 }}>
-          <Grid container sx={{ height: '100%' }} spacing={1}>
+          <Grid container sx={{ height: '100%', justifyContent: 'center' }} spacing={1}>
             <Grid size={6}>
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
@@ -67,7 +67,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
     case 'Triple':
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
-          <Grid container sx={{ height: '100%' }} spacing={1}>
+          <Grid container sx={{ height: '100%', justifyContent: 'center' }} spacing={1}>
             <Grid size={5} sx={{ display: 'flex', alignItems: 'center' }}>
               <Grid container sx={{ height: '60%', width: '100%' }} spacing={1} direction="column" justifyContent="center">
                 <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
