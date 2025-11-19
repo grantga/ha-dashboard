@@ -1,4 +1,5 @@
-import { Box, Grid, ToggleButton, ToggleButtonGroup, Tooltip, Skeleton } from '@mui/material';
+import { Box, ToggleButton, ToggleButtonGroup, Tooltip, Skeleton } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import { IconSingle, IconPIP, IconPBP, IconPBPAlt, IconTripleA, IconTripleB, IconQuadA, IconQuadB } from './MultiviewIcons';
 
 const MODES = [
@@ -25,13 +26,13 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
           setSelectedMode(v);
         }}
         aria-label='display mode'
-        sx={{ width: '100%' }}
+        sx={{ width: '100%', justifyContent: 'center' }}
       >
         <Grid container spacing={1} sx={{ p: 1, justifyContent: 'center' }}>
           {MODES.map(m => {
             const IconComp = m.Icon;
             return (
-              <Grid item xs='auto' key={m.key}>
+              <Grid key={m.key}>
                 {loading ? (
                   <Skeleton
                     variant='rectangular'
@@ -60,6 +61,9 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
   function setSelectedMode(v: any) {
     if (v === "Single") {
       setMode("Single");
+    }
+    if (v === "PIP") {
+      setMode("PIP");
     }
     if (v === "PBP2") {
       setMode("PBP");

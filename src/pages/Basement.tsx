@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
@@ -24,10 +24,20 @@ export default function BasementPage() {
 
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ maxWidth: 600, width: '100%' }}>
-                <DevicePower />
-                <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
-                <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+            <Box sx={{ maxWidth: 650, width: '100%' }}>
+                <Stack spacing={2}>
+                    <Card variant="outlined">
+                        <CardContent>
+                            <DevicePower />
+                        </CardContent>
+                    </Card>
+                    <Card variant="outlined">
+                        <CardContent>
+                            <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
+                            <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+                        </CardContent>
+                    </Card>
+                </Stack>
             </Box>
         </Box>
     );

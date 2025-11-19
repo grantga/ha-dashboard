@@ -1,4 +1,5 @@
-import { Box, Grid, Skeleton } from '@mui/material';
+import { Box, Skeleton } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import HDMIInput from './HDMIInput';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 
@@ -18,7 +19,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
           </Grid>
@@ -28,7 +29,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2, position: 'relative' }}>
           <Grid container sx={{ height: '100%' }}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
           </Grid>
@@ -41,10 +42,10 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
           </Grid>
@@ -52,12 +53,12 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'PBP2':
       return (
-        <Box sx={{ height: previewHeight, mt: 2 }}>
+        <Box sx={{ height: previewHeight, width: '100%', mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
           </Grid>
@@ -67,17 +68,17 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
-            <Grid item xs={5} sx={{ display: 'flex', alignItems: 'center' }}>
+            <Grid size={5} sx={{ display: 'flex', alignItems: 'center' }}>
               <Grid container sx={{ height: '60%', width: '100%' }} spacing={1} direction="column" justifyContent="center">
                 <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
               </Grid>
             </Grid>
-            <Grid item xs={5}>
+            <Grid size={5}>
               <Grid container sx={{ height: '100%' }} spacing={1} direction='column'>
-                <Grid item sx={{ height: '50%' }}>
+                <Grid sx={{ flex: 1 }}>
                   <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
                 </Grid>
-                <Grid item sx={{ height: '50%' }}>
+                <Grid sx={{ flex: 1 }} >
                   <HDMIInput windowIndex={3} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
                 </Grid>
               </Grid>
@@ -89,15 +90,15 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
-            <Grid item xs={7}>
+            <Grid size={7} >
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
-            <Grid item xs={5}>
+            <Grid size={5} >
               <Grid container sx={{ height: '100%' }} spacing={1} direction='column'>
-                <Grid item sx={{ height: '50%' }}>
+                <Grid sx={{ flex: 1 }}>
                   <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
                 </Grid>
-                <Grid item sx={{ height: '50%' }}>
+                <Grid sx={{ flex: 1 }}>
                   <HDMIInput windowIndex={3} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
                 </Grid>
               </Grid>
@@ -109,16 +110,16 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <HDMIInput windowIndex={3} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <HDMIInput windowIndex={4} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
           </Grid>
@@ -128,18 +129,23 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       return (
         <Box sx={{ height: previewHeight, mt: 2 }}>
           <Grid container sx={{ height: '100%' }} spacing={1}>
-            <Grid item xs={7}>
+            <Grid size={7}>
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
-            <Grid item xs={5}>
-              <Grid container sx={{ height: '100%' }} spacing={1} direction='column'>
-                <Grid item sx={{ height: '33.333%' }}>
+            <Grid size={5}>
+              <Grid
+                container
+                direction="column"
+                spacing={1}
+                sx={{ height: '100%' }}
+              >
+                <Grid sx={{ flex: 1 }}>
                   <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
                 </Grid>
-                <Grid item sx={{ height: '33.333%' }}>
+                <Grid sx={{ flex: 1 }}>
                   <HDMIInput windowIndex={3} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
                 </Grid>
-                <Grid item sx={{ height: '33.333%' }}>
+                <Grid sx={{ flex: 1 }}>
                   <HDMIInput windowIndex={4} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
                 </Grid>
               </Grid>

@@ -1,4 +1,5 @@
-import { Dialog, DialogTitle, DialogContent, Grid, Box, Typography } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Box, Typography } from '@mui/material';
+import Grid from '@mui/material/Grid2';
 import rokuImg from '../resources/images/roku.svg';
 import switchImg from '../resources/images/switch.svg';
 import xboxImg from '../resources/images/xbox.svg';
@@ -31,7 +32,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
             <DialogContent>
                 <Grid container spacing={2} sx={{ p: 1 }}>
                     {devices.map((d) => (
-                        <Grid item xs={6} key={d.key}>
+                        <Grid size={6} key={d.key}>
                             <Box
                                 role="button"
                                 tabIndex={0}
