@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack } from '@mui/material';
+import { Box, Card, CardContent, Stack, Fade } from '@mui/material';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
@@ -24,25 +24,54 @@ export default function BasementPage() {
     }
 
     return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <Box sx={{ maxWidth: 650, width: '100%' }}>
-                <Stack spacing={2}>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <DevicePower />
-                        </CardContent>
-                    </Card>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
-                        </CardContent>
-                    </Card>
-                    <Card variant="outlined">
-                        <CardContent>
-                            <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
-                            <MultiViewLayout mode={detailedMode} loading={loadingAny} />
-                        </CardContent>
-                    </Card>
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100%', mt: 4, mb: 4 }}>
+            <Box sx={{ maxWidth: 800, width: '100%' }}>
+                <Stack spacing={3}>
+                    <Fade in timeout={300}>
+                        <Card
+                            variant="outlined"
+                            sx={{
+                                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%)',
+                                backdropFilter: 'blur(10px)',
+                                border: '1px solid rgba(148, 163, 184, 0.1)',
+                            }}
+                        >
+                            <CardContent sx={{ p: 2.5 }}>
+                                <DevicePower />
+                            </CardContent>
+                        </Card>
+                    </Fade>
+
+                    <Fade in timeout={400}>
+                        <Card
+                            variant="outlined"
+                            sx={{
+                                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%)',
+                                backdropFilter: 'blur(10px)',
+                                border: '1px solid rgba(148, 163, 184, 0.1)',
+                            }}
+                        >
+                            <CardContent sx={{ p: 2.5 }}>
+                                <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
+                            </CardContent>
+                        </Card>
+                    </Fade>
+
+                    <Fade in timeout={500}>
+                        <Card
+                            variant="outlined"
+                            sx={{
+                                background: 'linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(30, 41, 59, 0.6) 100%)',
+                                backdropFilter: 'blur(10px)',
+                                border: '1px solid rgba(148, 163, 184, 0.1)',
+                            }}
+                        >
+                            <CardContent sx={{ p: 2.5 }}>
+                                <ModeSelector mode={detailedMode} setMode={setMode} setTripleMode={setTripleMode} setQuadMode={setQuadMode} setPbpMode={setPbpMode} loading={loadingAny} />
+                                <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+                            </CardContent>
+                        </Card>
+                    </Fade>
                 </Stack>
             </Box>
         </Box>

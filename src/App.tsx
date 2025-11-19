@@ -1,14 +1,8 @@
-import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { ThemeProvider, CssBaseline } from '@mui/material';
 import { HassConnect } from '@hakit/core';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Dashboard from './Dashboard';
-import HomePage from './pages/Home';
 import BasementPage from './pages/Basement';
-import LivingRoomPage from './pages/LivingRoom';
-
-const theme = createTheme({
-  palette: { mode: 'light' },
-});
+import { theme } from './theme';
 
 function App() {
   return (
@@ -20,11 +14,7 @@ function App() {
       BASE_URL, then VITE_BASE, and finally fall back to '/local/ha-dashboard'. */}
         <BrowserRouter basename={(import.meta as any).env.BASE_URL || (import.meta as any).env.VITE_BASE || '/local/ha-dashboard'}>
           <Routes>
-            <Route path='/' element={<Dashboard />}>
-              <Route index element={<HomePage />} />
-              <Route path='basement' element={<BasementPage />} />
-              <Route path='living-room' element={<LivingRoomPage />} />
-            </Route>
+            <Route path='/' element={<BasementPage />} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
