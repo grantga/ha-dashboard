@@ -48,6 +48,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
                                     justifyContent: 'center',
                                     p: 1,
                                     gap: 1,
+                                    height: 96
                                 }}
                             >
                                 <Box sx={{ width: 96, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -2,10 +2,12 @@ import { Box, Typography } from '@mui/material';
 import rokuImg from '../resources/images/roku.svg';
 import switchImg from '../resources/images/switch.svg';
 import xboxImg from '../resources/images/xbox.svg';
+import remoteImg from '../resources/images/remote.svg';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import DevicePickerModal from './DevicePickerModal';
 import type { DeviceType as PickerDeviceType } from './DevicePickerModal';
 import { useState } from 'react';
+import RokuRemoteModal from './RokuRemoteModal';
 
 type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default';
 
@@ -19,6 +21,7 @@ type HDMIInputProps = {
 export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource, setAudioSource, }: HDMIInputProps) {
     const { value: hdmiValue, loadingValue: loadingHdmiValue, setValue: setHdmiValue } = useSelectEntityMode(`select.orei_uhd_401mv_window_${windowIndex}_input`);
     const [pickerOpen, setPickerOpen] = useState(false);
+    const [remoteOpen, setRemoteOpen] = useState(false);
 
     const inferDevice = (val: unknown): DeviceType => {
         // Try to extract the HDMI/input number first
@@ -44,7 +47,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
     const device: DeviceType = loadingHdmiValue !== '' ? loadingDevice : setDevice;
 
     const handleSelectAudio = async () => {
-        if (pickerOpen) return;
+        if (pickerOpen || remoteOpen) return;
         // Convert HDMI value (e.g. 'HDMI 3' or '3') to the select option label 'Input 3'
         const digits = (String(hdmiValue).match(/\d+/) || [String(windowIndex)])[0];
         const target = `Input ${digits}`;
@@ -136,23 +139,40 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
                             }
                             setPickerOpen(true);
                         }}
-                        sx={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', cursor: 'pointer' }}
+                        sx={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'fill', cursor: 'pointer' }}
                     />
-                    {device === 'roku1' ? (
-                        <Typography variant='h4' paddingLeft={2} sx={{ color: '#6D2077', fontWeight: 700 }}>
-                            1
-                        </Typography>
-                    ) : null}
-                    {device === 'roku2' ? (
-                        <Typography variant='h4' paddingLeft={2} sx={{ color: '#6D2077', fontWeight: 700 }}>
-                            2
-                        </Typography>
+
+                    {(device === 'roku1' || device === 'roku2') ? (
+                        <>
+                            <Typography variant='h4' paddingLeft={2} paddingRight={1} sx={{ color: '#6D2077', fontWeight: 700 }}>
+                                {device === 'roku1' ? '1' : '2'}
+                            </Typography>
+                            <Box
+                                component="img"
+                                sx={{ height: 25 }}
+                                src={remoteImg}
+                                tabIndex={1}
+                                onClick={(e: any) => {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    if (e.nativeEvent && typeof e.nativeEvent.stopImmediatePropagation === 'function') {
+                                        e.nativeEvent.stopImmediatePropagation();
+                                    }
+                                    setRemoteOpen(true);
+                                }}
+                            />
+                        </>
                     ) : null}
                 </Box>
                 <DevicePickerModal
                     open={pickerOpen}
                     onClose={() => setPickerOpen(false)}
                     onSelect={(d: PickerDeviceType) => setUserSelectedDevice(d as DeviceType)}
+                />
+                <RokuRemoteModal
+                    open={remoteOpen}
+                    device={device}
+                    onClose={() => setRemoteOpen(false)}
                 />
             </Box>
         </Box>
