@@ -51,7 +51,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
               <HDMIInput windowIndex={1} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
             </Grid>
           </Grid>
-          <Box sx={{ position: 'absolute', right: 24, bottom: 24, width: 140, height: 90 }}>
+          <Box sx={{ position: 'absolute', right: 24, bottom: 24, width: 180, height: 140 }}>
             <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
           </Box>
         </Box>

@@ -64,7 +64,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
 
     const isCurrentAudioSrc = (() => {
         //match the window's hdmi value to the audio source
-        if (!audioSource || !hdmiValue) return false;
+        if (!audioSource || !hdmiValue || loadingDevice !== "default") return false;
         const hdmi = (String(hdmiValue).match(/\d+/) || [String(hdmiValue)])[0];
         let audio;
         if (loadingAudioSource != "") {
