@@ -9,25 +9,25 @@ type ThemeMode = 'light' | 'dark';
 
 export const ThemeContext = createContext({
   mode: 'dark' as ThemeMode,
-  toggleTheme: () => { },
+  toggleTheme: () => {},
 });
 
 function App() {
   const [mode, setMode] = useState<ThemeMode>(() => {
     // Load theme preference from localStorage or default to 'dark'
     const savedMode = localStorage.getItem('themeMode');
-    return (savedMode === 'light' || savedMode === 'dark') ? savedMode : 'dark';
+    return savedMode === 'light' || savedMode === 'dark' ? savedMode : 'dark';
   });
 
   const toggleTheme = () => {
-    setMode((prevMode) => {
+    setMode(prevMode => {
       const newMode = prevMode === 'light' ? 'dark' : 'light';
       localStorage.setItem('themeMode', newMode);
       return newMode;
     });
   };
 
-  const theme = useMemo(() => mode === 'light' ? lightTheme : darkTheme, [mode]);
+  const theme = useMemo(() => (mode === 'light' ? lightTheme : darkTheme), [mode]);
 
   return (
     <HassConnect hassUrl={import.meta.env.VITE_HA_URL} hassToken={import.meta.env.VITE_HA_TOKEN}>
