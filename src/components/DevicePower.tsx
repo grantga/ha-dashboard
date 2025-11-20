@@ -26,6 +26,14 @@ export default function DevicePower() {
                     d.togglePower();
                 }
             });
+            // if all devices are now on, turn them all off
+            if (devices.every((d) => d.isOn)) {
+                devices.forEach((d) => {
+                    if (d.togglePower && d.isOn) {
+                        d.togglePower();
+                    }
+                });
+            }
         }
         else {
             device.togglePower();
