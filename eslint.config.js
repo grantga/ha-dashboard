@@ -28,5 +28,5 @@ export default tseslint.config(
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': 'warn',
     },
-  },
+  }
 );
