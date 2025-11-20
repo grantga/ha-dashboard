@@ -16,7 +16,7 @@ type Props = {
 const devices: { key: DeviceType; label: string; img: string }[] = [
     { key: 'roku1', label: 'Roku 1', img: rokuImg },
     { key: 'roku2', label: 'Roku 2', img: rokuImg },
-    { key: 'switch', label: 'Switch', img: switchImg },
+    { key: 'switch', label: 'Switch 2', img: switchImg },
     { key: 'xbox', label: 'Xbox', img: xboxImg },
 ];
 
