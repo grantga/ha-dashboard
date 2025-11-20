@@ -21,7 +21,6 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
     const rokuMediaPlayer = useEntity(device === 'roku1' ? "media_player.roku_basement_1" : "media_player.roku_basement_2");
 
 
-
     const sendRokuCommand = (command: string) => () => {
         rokuRemote.service.sendCommand({ serviceData: { device: rokuRemote.entity_id, command: command as any, num_repeats: 1, delay_secs: 0, hold_secs: 0 } });
     }
