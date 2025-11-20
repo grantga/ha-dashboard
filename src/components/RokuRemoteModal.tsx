@@ -18,10 +18,15 @@ type Props = {
 
 export default function RokuRemoteModal({ open, onClose, device }: Props) {
     const rokuRemote = useEntity(device === 'roku1' ? "remote.roku_basement_1" : "remote.roku_basement_2");
+    const rokuMediaPlayer = useEntity(device === 'roku1' ? "media_player.roku_basement_1" : "media_player.roku_basement_2");
 
 
     const sendRokuCommand = (command: string) => () => {
         rokuRemote.service.sendCommand({ serviceData: { device: rokuRemote.entity_id, command: command as any, num_repeats: 1, delay_secs: 0, hold_secs: 0 } });
+    }
+
+    const sendRokuLaunchApp = (command: string) => () => {
+        rokuMediaPlayer.service.selectSource({ serviceData: { source: command } });
     }
 
     return (
@@ -254,8 +259,91 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                             <ArrowDownwardIcon />
                         </IconButton>
                     </Box>
+
+                    {/* 2x2 App Launch Grid */}
+                    <Box sx={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(4, 96px)',
+                        gridTemplateRows: 'repeat(2, 48px)',
+                        gap: 1,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        m: 2,
+                    }}>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('ESPN')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            ESPN
+                        </IconButton>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('Xfinity Stream')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            Xfinity
+                        </IconButton>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('Disney Plus')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            Disney+
+                        </IconButton>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('Netflix')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            Netflix
+                        </IconButton>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('FOX Sports')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            FOX Sports
+                        </IconButton>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('Prime Video')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            Prime Video
+                        </IconButton>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('YouTube TV')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            YouTube TV
+                        </IconButton>
+                        <IconButton
+                            onClick={sendRokuLaunchApp('Apple TV')}
+                            sx={getSendCommandButtonStyle()}
+                        >
+                            Apple TV
+                        </IconButton>
+                    </Box>
                 </Box>
             </DialogContent>
         </Dialog>
     );
+
+    function getSendCommandButtonStyle() {
+        return (theme: any) => ({
+            width: 96,
+            height: 48,
+            background: theme.palette.custom.buttonBackground,
+            border: `2px solid ${theme.palette.custom.buttonBorder}`,
+            color: theme.palette.custom.iconColor,
+            fontSize: '1rem',
+            fontWeight: 600,
+            borderRadius: 8,
+            transition: 'all 0.2s ease-in-out',
+            '&:hover': {
+                background: theme.palette.custom.buttonBackgroundHover,
+                border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                color: theme.palette.custom.iconColorHover,
+                transform: 'scale(1.05)',
+            },
+            '&:active': {
+                transform: 'scale(0.95)',
+            },
+        });
+    }
 }
