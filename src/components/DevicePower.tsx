@@ -21,19 +21,22 @@ export default function DevicePower() {
     const handleClick = (device: any) => {
         // Toggle local on/off state for the button and log the new state
         if (device.id === 'all') {
-            devices.forEach((d) => {
-                if (d.togglePower && !d.isOn) {
-                    d.togglePower();
-                }
-            });
-            // if all devices are now on, turn them all off
+            // if all devices are  on, turn them all off
             if (devices.every((d) => d.isOn)) {
                 devices.forEach((d) => {
                     if (d.togglePower && d.isOn) {
                         d.togglePower();
                     }
                 });
+            } else {
+                //turn on any device that is off
+                devices.forEach((d) => {
+                    if (d.togglePower && !d.isOn) {
+                        d.togglePower();
+                    }
+                });
             }
+
         }
         else {
             device.togglePower();
