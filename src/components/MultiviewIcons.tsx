@@ -84,8 +84,6 @@ export function IconQuadB() {
   );
 }
 
-
-
 export function XboxIcon({ width = 80, height = 50 }: { width?: number; height?: number }) {
   return (
     <svg width={width} height={height} viewBox='0 0 80 50' xmlns='http://www.w3.org/2000/svg'>
@@ -98,7 +96,11 @@ export function XboxIcon({ width = 80, height = 50 }: { width?: number; height?:
       <rect x='2' y='2' width='76' height='46' rx='6' fill='url(#xbGrad)' />
       {/* stylized controller silhouette */}
       <g transform='translate(40,25)'>
-        <path d='M-22,0 C-18,-10 -8,-12 0,-8 C8,-12 18,-10 22,0 C18,8 10,10 0,6 C-10,10 -18,8 -22,0 Z' fill='rgba(255,255,255,0.95)' opacity='0.12' />
+        <path
+          d='M-22,0 C-18,-10 -8,-12 0,-8 C8,-12 18,-10 22,0 C18,8 10,10 0,6 C-10,10 -18,8 -22,0 Z'
+          fill='rgba(255,255,255,0.95)'
+          opacity='0.12'
+        />
         <circle cx='-6' cy='-2' r='3.6' fill='#fff' />
         <circle cx='8' cy='-4' r='2.8' fill='#fff' />
         {/* central abstract mark */}

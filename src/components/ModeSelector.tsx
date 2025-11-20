@@ -13,8 +13,22 @@ const MODES = [
   { key: 'Quad2', label: 'Quad2', Icon: IconQuadB },
 ];
 
-export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode, setPbpMode, loading }: { mode: string; setMode: (m: string) => void; loading: boolean; setPbpMode: (m: string) => void; setTripleMode: (m: string) => void; setQuadMode: (m: string) => void; }) {
-  if (mode === "unavailable") {
+export default function ModeSelector({
+  mode,
+  setMode,
+  setTripleMode,
+  setQuadMode,
+  setPbpMode,
+  loading,
+}: {
+  mode: string;
+  setMode: (m: string) => void;
+  loading: boolean;
+  setPbpMode: (m: string) => void;
+  setTripleMode: (m: string) => void;
+  setQuadMode: (m: string) => void;
+}) {
+  if (mode === 'unavailable') {
     return null;
   }
   return (
@@ -90,36 +104,36 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
           })}
         </Grid>
       </ToggleButtonGroup>
-    </Box >
+    </Box>
   );
 
   function setSelectedMode(v: any) {
-    if (v === "Single") {
-      setMode("Single");
+    if (v === 'Single') {
+      setMode('Single');
     }
-    if (v === "PIP") {
-      setMode("PIP");
+    if (v === 'PIP') {
+      setMode('PIP');
     }
-    if (v === "PBP2") {
-      setMode("PBP");
-      setPbpMode("PBP mode 2");
-    } else if (v === "PBP") {
-      setMode("PBP");
-      setPbpMode("PBP mode 1");
+    if (v === 'PBP2') {
+      setMode('PBP');
+      setPbpMode('PBP mode 2');
+    } else if (v === 'PBP') {
+      setMode('PBP');
+      setPbpMode('PBP mode 1');
     }
-    if (v === "Triple2") {
-      setMode("Triple");
-      setTripleMode("Triple mode 2");
-    } else if (v === "Triple") {
-      setMode("Triple");
-      setTripleMode("Triple mode 1");
+    if (v === 'Triple2') {
+      setMode('Triple');
+      setTripleMode('Triple mode 2');
+    } else if (v === 'Triple') {
+      setMode('Triple');
+      setTripleMode('Triple mode 1');
     }
-    if (v === "Quad2") {
-      setMode("Quad");
-      setQuadMode("Mode 2");
-    } else if (v === "Quad") {
-      setMode("Quad");
-      setQuadMode("Mode 1");
+    if (v === 'Quad2') {
+      setMode('Quad');
+      setQuadMode('Mode 2');
+    } else if (v === 'Quad') {
+      setMode('Quad');
+      setQuadMode('Mode 1');
     }
   }
 }
