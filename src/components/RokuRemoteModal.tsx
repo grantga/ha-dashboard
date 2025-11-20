@@ -29,7 +29,6 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
         rokuMediaPlayer.service.selectSource({ serviceData: { source: command } });
     }
 
-
     return (
         <Dialog
             open={open}
