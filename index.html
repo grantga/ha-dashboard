@@ -3,9 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Seattle House</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Basement Dashboard</title>
+
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- iOS Specific Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Basement" />
+
+    <!-- iOS App Icons -->
+    <link rel="apple-touch-icon" href="/icons/icon-180.svg" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152.svg" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180.svg" />
+    <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-167.svg" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.svg" />
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.svg" />
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1976d2" />
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>

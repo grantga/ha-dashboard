@@ -43,8 +43,8 @@ export default function MediaPlayerControl({ entityId }: Props) {
   };
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, width: '100%' }}>
+    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         <IconButton
           onClick={() => setMuted && setMuted(!(muted ?? false))}
           disabled={value === 'off' || muted == null}

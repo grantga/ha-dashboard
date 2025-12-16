@@ -28,16 +28,14 @@ export default function BasementPage() {
   }
 
   return (
-    <Box
-      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100%', mt: 4, mb: 4, position: 'relative' }}
-    >
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100%', position: 'relative' }}>
       {/* Theme Toggle - Floating in bottom-right */}
-      <Box sx={{ position: 'absolute', bottom: 32, right: 16, zIndex: 10 }}>
+      <Box sx={{ position: 'absolute', bottom: 0, right: 0, zIndex: 10 }}>
         <ThemeToggle />
       </Box>
 
       <Box sx={{ maxWidth: 800, width: '100%' }}>
-        <Stack spacing={3}>
+        <Stack spacing={1}>
           <Fade in timeout={300}>
             <Card
               variant='outlined'
@@ -47,23 +45,11 @@ export default function BasementPage() {
                 border: `1px solid ${theme.palette.custom.border}`,
               })}
             >
-              <CardContent sx={{ p: 2.5 }}>
-                <DevicePower />
-              </CardContent>
-            </Card>
-          </Fade>
-
-          <Fade in timeout={400}>
-            <Card
-              variant='outlined'
-              sx={(theme: any) => ({
-                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${theme.palette.custom.border}`,
-              })}
-            >
-              <CardContent sx={{ p: 2.5 }}>
-                <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
+              <CardContent>
+                <Stack spacing={2}>
+                  <DevicePower />
+                  <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
+                </Stack>
               </CardContent>
             </Card>
           </Fade>
