@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack, Fade, type Theme } from '@mui/material';
+import { Box, Stack, Fade, Grid } from '@mui/material';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
@@ -6,6 +6,7 @@ import DevicePower from '../components/DevicePower';
 import MediaPlayerControl from '../components/MediaPlayerControl';
 import ThemeToggle from '../components/ThemeToggle';
 import LightEntityControl from '../components/LightEntityControl';
+import DashboardCard from '../components/DashboardCard';
 
 export default function BasementPage() {
   const { value: mode, setValue: setMode, loadingValue: loadMode } = useSelectEntityMode('select.orei_uhd_401mv_multiview_mode');
@@ -29,56 +30,43 @@ export default function BasementPage() {
   }
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start', minHeight: '100%', position: 'relative' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+        minHeight: '100vh',
+        position: 'relative',
+        p: { xs: 2, md: 4 }, // Responsive padding
+      }}
+    >
       {/* Theme Toggle - Floating in bottom-right */}
-      <Box sx={{ position: 'absolute', bottom: 0, right: 0, zIndex: 10 }}>
+      <Box sx={{ position: 'fixed', bottom: 24, right: 24, zIndex: 100 }}>
         <ThemeToggle />
       </Box>
 
-      <Box sx={{ maxWidth: 800, width: '100%' }}>
-        <Stack spacing={1}>
-          <Fade in timeout={300}>
-            <Card
-              variant='outlined'
-              sx={(theme: Theme) => ({
-                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${theme.palette.custom.border}`,
-              })}
-            >
-              <CardContent>
-                <Stack spacing={2}>
-                  <DevicePower />
-                  <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
-                </Stack>
-              </CardContent>
-            </Card>
-          </Fade>
+      <Box sx={{ maxWidth: 1400, width: '100%' }}>
+        <Fade in timeout={500}>
+          <Grid container spacing={4}>
+            {/* Left Column: Controls (Power, Media, Lights) */}
+            <Grid item xs={12} lg={4}>
+              <Stack spacing={3}>
+                <DashboardCard>
+                  <Stack spacing={3}>
+                    <DevicePower />
+                    <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
+                  </Stack>
+                </DashboardCard>
 
-          <Fade in timeout={300}>
-            <Card
-              variant='outlined'
-              sx={(theme: Theme) => ({
-                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${theme.palette.custom.border}`,
-              })}
-            >
-              <CardContent>
-                <LightEntityControl entityId='light.h600b' controlEntityIds={['light.h600b', 'light.h600b_2']} />
-              </CardContent>
-            </Card>
-          </Fade>
-          <Fade in timeout={500}>
-            <Card
-              variant='outlined'
-              sx={(theme: Theme) => ({
-                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
-                backdropFilter: 'blur(10px)',
-                border: `1px solid ${theme.palette.custom.border}`,
-              })}
-            >
-              <CardContent sx={{ p: 2.5 }}>
+                <DashboardCard>
+                  <LightEntityControl entityId='light.h600b' controlEntityIds={['light.h600b', 'light.h600b_2']} />
+                </DashboardCard>
+              </Stack>
+            </Grid>
+
+            {/* Right Column: Main Multiview Interface */}
+            <Grid item xs={12} lg={8}>
+              <DashboardCard contentPadding={3}>
                 <ModeSelector
                   mode={detailedMode}
                   setMode={setMode}
@@ -87,11 +75,13 @@ export default function BasementPage() {
                   setPbpMode={setPbpMode}
                   loading={loadingAny}
                 />
-                <MultiViewLayout mode={detailedMode} loading={loadingAny} />
-              </CardContent>
-            </Card>
-          </Fade>
-        </Stack>
+                <Box sx={{ mt: 3 }}>
+                  <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+                </Box>
+              </DashboardCard>
+            </Grid>
+          </Grid>
+        </Fade>
       </Box>
     </Box>
   );
