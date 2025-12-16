@@ -5,7 +5,7 @@ import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   {
-    ignores: ['dist', '**/*.d.ts'],
+    ignores: ['dist', '**/*.d.ts', 'public/sw.js'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
