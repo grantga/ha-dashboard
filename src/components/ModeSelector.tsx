@@ -51,7 +51,7 @@ export default function ModeSelector({
                   <Skeleton
                     variant='rectangular'
                     sx={(theme: Theme) => ({
-                      minWidth: 64,
+                      minWidth: 80,
                       height: 80,
                       display: 'flex',
                       justifyContent: 'center',
@@ -76,24 +76,39 @@ export default function ModeSelector({
                     <ToggleButton
                       value={m.key}
                       sx={(theme: Theme) => ({
-                        height: 80,
-                        minWidth: 64,
+                        height: 90,
+                        minWidth: 80,
                         px: 1.5,
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        transition: 'all 0.2s ease-in-out',
+                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        border: `1px solid ${theme.palette.custom.border}`,
+                        backgroundColor: 'transparent',
                         '&:hover': {
                           transform: 'translateY(-2px)',
-                          boxShadow: theme.palette.custom.shadowPrimary,
+                          backgroundColor: theme.palette.custom.buttonBackgroundHover,
+                          borderColor: theme.palette.custom.buttonBorderHover,
+                          boxShadow: theme.palette.custom.shadowPrimaryHover,
+                          '& .mode-icon': {
+                            color: theme.palette.custom.iconColorHover,
+                          },
                         },
                         '&.Mui-selected': {
                           transform: 'scale(1.05)',
-                          boxShadow: theme.palette.custom.shadowPrimary,
+                          backgroundColor: theme.palette.custom.buttonBackgroundHover,
+                          borderColor: theme.palette.primary.main,
+                          boxShadow: `0 0 20px ${theme.palette.primary.main}40`,
+                          '& .mode-icon': {
+                            color: theme.palette.primary.main,
+                          },
+                          '&:hover': {
+                            backgroundColor: theme.palette.custom.buttonBackgroundHover,
+                          },
                         },
                       })}
                     >
-                      <Box sx={{ color: 'text.primary' }}>
+                      <Box className='mode-icon' sx={{ color: 'text.secondary', transition: 'color 0.2s' }}>
                         <IconComp />
                       </Box>
                     </ToggleButton>

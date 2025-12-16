@@ -271,6 +271,6 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
         </Box>
       );
     default:
-      return null;
+      return <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>Multiview is off.</Box>;
   }
 }
