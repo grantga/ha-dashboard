@@ -19,9 +19,10 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
   const rokuRemote = useEntity(device === 'roku1' ? 'remote.roku_basement_1' : 'remote.roku_basement_2');
   const rokuMediaPlayer = useEntity(device === 'roku1' ? 'media_player.roku_basement_1' : 'media_player.roku_basement_2');
 
-  const sendRokuCommand = (command: string) => () => {
+  const sendRokuCommand = (value: string) => () => {
     rokuRemote.service.sendCommand({
-      serviceData: { device: rokuRemote.entity_id, command: { value: command }, num_repeats: 1, delay_secs: 0, hold_secs: 0 },
+      // @ts-expect-error - HA typings expect command: object but Roku accepts a string
+      serviceData: { device: rokuRemote.entity_id, command: value, num_repeats: 1, delay_secs: 0, hold_secs: 0 },
     });
   };
 

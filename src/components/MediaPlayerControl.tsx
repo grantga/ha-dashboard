@@ -5,6 +5,7 @@ import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import useMediaPlayer from '../hooks/useMediaPlayer';
+import type { EntityName } from '@hakit/core';
 
 type Props = {
   entityId: string;
@@ -12,7 +13,7 @@ type Props = {
 
 export default function MediaPlayerControl({ entityId }: Props) {
   const { value, volume, setVolume, volumeUp, volumeDown, muted, setMuted, sources, currentSource, setSource } = useMediaPlayer(
-    entityId
+    entityId as EntityName
   );
   // slider shows 0..100
   const [local, setLocal] = useState<number | null>(() => (typeof volume === 'number' ? Math.round(volume * 100) : null));
