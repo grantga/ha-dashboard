@@ -1,4 +1,4 @@
-import { Box, ToggleButton, ToggleButtonGroup, Tooltip, Skeleton } from '@mui/material';
+import { Box, ToggleButton, ToggleButtonGroup, Tooltip, Skeleton, type Theme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { IconSingle, IconPIP, IconPBP, IconPBPAlt, IconTripleA, IconTripleB, IconQuadA, IconQuadB } from './MultiviewIcons';
 
@@ -13,8 +13,22 @@ const MODES = [
   { key: 'Quad2', label: 'Quad2', Icon: IconQuadB },
 ];
 
-export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode, setPbpMode, loading }: { mode: string; setMode: (m: string) => void; loading: boolean; setPbpMode: (m: string) => void; setTripleMode: (m: string) => void; setQuadMode: (m: string) => void; }) {
-  if (mode === "unavailable") {
+export default function ModeSelector({
+  mode,
+  setMode,
+  setTripleMode,
+  setQuadMode,
+  setPbpMode,
+  loading,
+}: {
+  mode: string;
+  setMode: (m: string) => void;
+  loading: boolean;
+  setPbpMode: (m: string) => void;
+  setTripleMode: (m: string) => void;
+  setQuadMode: (m: string) => void;
+}) {
+  if (mode === 'unavailable') {
     return null;
   }
   return (
@@ -36,7 +50,7 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
                 {loading ? (
                   <Skeleton
                     variant='rectangular'
-                    sx={(theme: any) => ({
+                    sx={(theme: Theme) => ({
                       minWidth: 64,
                       height: 80,
                       display: 'flex',
@@ -61,7 +75,7 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
                   <Tooltip title={m.label} placement='top' arrow>
                     <ToggleButton
                       value={m.key}
-                      sx={(theme: any) => ({
+                      sx={(theme: Theme) => ({
                         height: 80,
                         minWidth: 64,
                         px: 1.5,
@@ -90,36 +104,36 @@ export default function ModeSelector({ mode, setMode, setTripleMode, setQuadMode
           })}
         </Grid>
       </ToggleButtonGroup>
-    </Box >
+    </Box>
   );
 
-  function setSelectedMode(v: any) {
-    if (v === "Single") {
-      setMode("Single");
+  function setSelectedMode(v: string | null) {
+    if (v === 'Single') {
+      setMode('Single');
     }
-    if (v === "PIP") {
-      setMode("PIP");
+    if (v === 'PIP') {
+      setMode('PIP');
     }
-    if (v === "PBP2") {
-      setMode("PBP");
-      setPbpMode("PBP mode 2");
-    } else if (v === "PBP") {
-      setMode("PBP");
-      setPbpMode("PBP mode 1");
+    if (v === 'PBP2') {
+      setMode('PBP');
+      setPbpMode('PBP mode 2');
+    } else if (v === 'PBP') {
+      setMode('PBP');
+      setPbpMode('PBP mode 1');
     }
-    if (v === "Triple2") {
-      setMode("Triple");
-      setTripleMode("Triple mode 2");
-    } else if (v === "Triple") {
-      setMode("Triple");
-      setTripleMode("Triple mode 1");
+    if (v === 'Triple2') {
+      setMode('Triple');
+      setTripleMode('Triple mode 2');
+    } else if (v === 'Triple') {
+      setMode('Triple');
+      setTripleMode('Triple mode 1');
     }
-    if (v === "Quad2") {
-      setMode("Quad");
-      setQuadMode("Mode 2");
-    } else if (v === "Quad") {
-      setMode("Quad");
-      setQuadMode("Mode 1");
+    if (v === 'Quad2') {
+      setMode('Quad');
+      setQuadMode('Mode 2');
+    } else if (v === 'Quad') {
+      setMode('Quad');
+      setQuadMode('Mode 1');
     }
   }
 }
