@@ -11,7 +11,8 @@
     "prettier": "prettier --write .",
     "sync": "npx tsx scripts/sync-types.ts",
     "prebuild": "npm run prettier",
-    "deploy": "npx tsx scripts/deploy.ts"
+    "deploy": "npx tsx scripts/deploy.ts",
+    "generate-icons": "node scripts/generate-icons.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
