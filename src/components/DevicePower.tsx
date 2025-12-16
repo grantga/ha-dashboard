@@ -1,5 +1,8 @@
 import { Box, Button, Stack, type Theme } from '@mui/material';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import SpeakerGroupIcon from '@mui/icons-material/SpeakerGroup';
+import VideocamIcon from '@mui/icons-material/Videocam'; // Projector
+import ViewQuiltIcon from '@mui/icons-material/ViewQuilt'; // Multiview
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import useMediaPlayer from '../hooks/useMediaPlayer';
 
@@ -22,10 +25,32 @@ export default function DevicePower() {
       label: 'All',
       isOn: !(receiverPower === 'off' || projectorPower === 'off' || mvPower === 'off'),
       loading: loadingReceiver || loadingProjectorPower || loadingMVPower,
+      icon: PowerSettingsNewIcon,
     },
-    { id: 'receiver', label: 'Receiver', isOn: receiverPower !== 'off', loading: loadingReceiver, togglePower: setReceiverPower },
-    { id: 'projector', label: 'Projector', isOn: projectorPower !== 'off', loading: loadingProjectorPower, togglePower: setProjectorPower },
-    { id: 'multiview', label: 'Multiview', isOn: mvPower !== 'off', loading: loadingMVPower, togglePower: setMVPower },
+    {
+      id: 'receiver',
+      label: 'Receiver',
+      isOn: receiverPower !== 'off',
+      loading: loadingReceiver,
+      togglePower: setReceiverPower,
+      icon: SpeakerGroupIcon,
+    },
+    {
+      id: 'projector',
+      label: 'Projector',
+      isOn: projectorPower !== 'off',
+      loading: loadingProjectorPower,
+      togglePower: setProjectorPower,
+      icon: VideocamIcon,
+    },
+    {
+      id: 'multiview',
+      label: 'Multiview',
+      isOn: mvPower !== 'off',
+      loading: loadingMVPower,
+      togglePower: setMVPower,
+      icon: ViewQuiltIcon,
+    },
   ];
 
   const handleClick = (device: (typeof devices)[number]) => {
@@ -55,8 +80,9 @@ export default function DevicePower() {
     // container that stretches full width and centers the vertical button stack at the top
     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
       <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 0, width: '100%', maxWidth: '100%' }}>
-        <Stack direction='row' spacing={1.5} flexWrap='nowrap' useFlexGap sx={{ width: '100%' }}>
+        <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap sx={{ width: '100%' }}>
           {devices.map(b => {
+            const Icon = b.icon;
             return (
               <Button
                 key={b.id}
@@ -65,14 +91,15 @@ export default function DevicePower() {
                 loadingPosition='start'
                 size='large'
                 onClick={() => handleClick(b)}
-                startIcon={<PowerSettingsNewIcon sx={{ flexShrink: 0 }} />}
+                startIcon={<Icon sx={{ flexShrink: 0 }} />}
                 sx={{
-                  flex: 1,
-                  minWidth: { xs: 0, sm: 120 },
-                  maxWidth: { xs: '25%', sm: 'none' },
+                  flex: '1 1 auto', // Allow grow and shrink, but auto basis for content adaptation
+                  minWidth: { xs: '45%', sm: 100 }, // Ensure 2 per row on really small screens
+                  maxWidth: { xs: '100%', sm: 'none' },
+                  mt: { xs: 1, sm: 0 }, // Add margin top for wrapped items
                   py: 1.5,
                   fontWeight: 600,
-                  fontSize: { xs: '0.75rem', sm: '0.95rem' },
+                  fontSize: { xs: '0.75rem', sm: '0.9rem' },
                   boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
                   overflow: 'hidden',
                   '& .MuiButton-startIcon': {
