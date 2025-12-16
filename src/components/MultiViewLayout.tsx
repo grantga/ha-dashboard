@@ -1,4 +1,4 @@
-import { Box, Skeleton } from '@mui/material';
+import { Box, Skeleton, type Theme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import HDMIInput from './HDMIInput';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
@@ -17,7 +17,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
           variant='rectangular'
           width='60%'
           height={previewHeight * 0.6}
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             borderRadius: 2,
             background: theme.palette.custom.shimmerGradient,
             backgroundSize: '200% 100%',

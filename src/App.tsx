@@ -2,14 +2,8 @@ import { ThemeProvider, CssBaseline } from '@mui/material';
 import { HassConnect } from '@hakit/core';
 import BasementPage from './pages/Basement';
 import { darkTheme, lightTheme } from './theme';
-import { useState, useMemo, createContext } from 'react';
-
-type ThemeMode = 'light' | 'dark';
-
-export const ThemeContext = createContext({
-  mode: 'dark' as ThemeMode,
-  toggleTheme: () => {},
-});
+import { useState, useMemo } from 'react';
+import { ThemeContext, type ThemeMode } from './contexts/ThemeContext';
 
 function App() {
   const [mode, setMode] = useState<ThemeMode>(() => {

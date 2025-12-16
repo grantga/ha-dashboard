@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, type Theme } from '@mui/material';
 import rokuImg from '../resources/images/roku.svg';
 import switchImg from '../resources/images/switch.svg';
 import xboxImg from '../resources/images/xbox.svg';
@@ -93,7 +93,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
       role='button'
       tabIndex={0}
       onClick={handleSelectAudio}
-      sx={(theme: any) => ({
+      sx={(theme: Theme) => ({
         cursor: 'pointer',
         border: '2px solid',
         borderColor: isCurrentAudioSrc() ? 'primary.main' : 'custom.border',
@@ -140,7 +140,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
     >
       {/* Full-bleed SVG background */}
       <Box
-        sx={(_: any) => ({
+        sx={{
           position: 'absolute',
           top: 0,
           left: 0,
@@ -158,13 +158,13 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
             '100%': { opacity: 0.25, transform: 'scale(1)' },
           },
           animation: isFlashingDevice ? 'flashDeviceImg 900ms ease-in-out infinite' : 'none',
-        })}
+        }}
       >
         <Box
           component='img'
           src={device === 'roku1' || device === 'roku2' ? rokuImg : device === 'switch' ? switchImg : xboxImg}
           alt={String(device)}
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             width: '85%',
             height: '85%',
             objectFit: 'contain',
@@ -182,7 +182,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
       {/* Bottom gradient overlay with device name - now clickable */}
       <Box
         className='device-name-box'
-        onClick={(e: any) => {
+        onClick={(e: React.MouseEvent) => {
           e.preventDefault();
           e.stopPropagation();
           if (e.nativeEvent && typeof e.nativeEvent.stopImmediatePropagation === 'function') {
@@ -190,7 +190,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
           }
           setPickerOpen(true);
         }}
-        sx={(theme: any) => ({
+        sx={(theme: Theme) => ({
           position: 'absolute',
           bottom: 0,
           left: 0,
@@ -216,7 +216,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
         <Typography
           className='device-name'
           variant='h5'
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             color: theme.palette.mode === 'dark' ? 'white' : theme.palette.text.secondary,
             textAlign: 'left',
             textShadow: theme.palette.mode === 'dark' ? '0 2px 8px rgba(0, 0, 0, 0.9)' : '0 2px 8px rgba(255, 255, 255, 0.8)',
@@ -234,7 +234,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
       {(device === 'roku1' || device === 'roku2') && (
         <Box
           className='remote-button'
-          onClick={(e: any) => {
+          onClick={(e: React.MouseEvent) => {
             e.preventDefault();
             e.stopPropagation();
             if (e.nativeEvent && typeof e.nativeEvent.stopImmediatePropagation === 'function') {
@@ -242,7 +242,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
             }
             setRemoteOpen(true);
           }}
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             position: 'absolute',
             top: 16,
             right: 16,
@@ -279,7 +279,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
           <Box
             component='img'
             src={remoteImg}
-            sx={(theme: any) => ({
+            sx={(theme: Theme) => ({
               height: 28,
               width: 28,
               filter:

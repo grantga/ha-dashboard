@@ -65,7 +65,7 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
       const cs = (entity.attributes.source || entity.attributes.input_source || entity.attributes.input) ?? null;
       setCurrentSource(cs);
     }
-  }, [entity]);
+  }, [entity, value]);
 
   const togglePower = useCallback(async () => {
     try {
@@ -75,8 +75,10 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
         setLoadingValue('off');
       }
       mediaPlayerService.toggle({ target: entityId });
-    } catch {}
-  }, [entityId, mediaPlayerService]);
+    } catch {
+      // Ignore service call errors
+    }
+  }, [entityId, mediaPlayerService, value]);
 
   const setVolume = useCallback(
     async (level: number) => {
@@ -85,7 +87,9 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
         const vol = Math.max(0, Math.min(1, level));
         mediaPlayerService.volumeSet({ target: entityId, serviceData: { volume_level: vol } });
         setVolumeState(vol);
-      } catch {}
+      } catch {
+        // Ignore service call errors
+      }
     },
     [entityId, mediaPlayerService]
   );
@@ -93,20 +97,26 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
   const volumeUp = useCallback(async () => {
     try {
       mediaPlayerService.volumeUp({ target: entityId });
-    } catch {}
+    } catch {
+      // Ignore service call errors
+    }
   }, [entityId, mediaPlayerService]);
 
   const volumeDown = useCallback(async () => {
     try {
       mediaPlayerService.volumeDown({ target: entityId });
-    } catch {}
+    } catch {
+      // Ignore service call errors
+    }
   }, [entityId, mediaPlayerService]);
 
   const setMuted = useCallback(
     async (isMuted: boolean) => {
       try {
         mediaPlayerService.volumeMute({ target: entityId, serviceData: { is_volume_muted: isMuted } });
-      } catch {}
+      } catch {
+        // Ignore service call errors
+      }
     },
     [entityId, mediaPlayerService]
   );
@@ -117,7 +127,9 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
         // call HA service to select source/input
         mediaPlayerService.selectSource({ target: entityId, serviceData: { source } });
         setCurrentSource(source);
-      } catch {}
+      } catch {
+        // Ignore service call errors
+      }
     },
     [entityId, mediaPlayerService]
   );

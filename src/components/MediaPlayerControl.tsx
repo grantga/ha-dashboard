@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Slider, Box, IconButton, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import type { SelectChangeEvent } from '@mui/material';
+import type { SelectChangeEvent, Theme } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import VolumeDownIcon from '@mui/icons-material/VolumeDown';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
@@ -12,8 +12,8 @@ type Props = {
 
 export default function MediaPlayerControl({ entityId }: Props) {
   const { value, volume, setVolume, volumeUp, volumeDown, muted, setMuted, sources, currentSource, setSource } = useMediaPlayer(
-    entityId as any
-  ) as any;
+    entityId
+  );
   // slider shows 0..100
   const [local, setLocal] = useState<number | null>(() => (typeof volume === 'number' ? Math.round(volume * 100) : null));
 
@@ -50,7 +50,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
           disabled={value === 'off' || muted == null}
           aria-label='mute'
           title={muted ? 'Unmute' : 'Mute'}
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             bgcolor: muted ? 'primary.main' : 'transparent',
             '&:hover': { bgcolor: muted ? 'primary.dark' : theme.palette.action.hover },
             transition: 'all 0.2s',
@@ -63,7 +63,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
           onClick={() => volumeDown()}
           disabled={disabled}
           aria-label='volume down'
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             '&:hover': { bgcolor: theme.palette.action.hover },
           })}
         >
@@ -79,7 +79,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
             aria-label='volume'
             min={0}
             max={100}
-            sx={(theme: any) => ({
+            sx={(theme: Theme) => ({
               '& .MuiSlider-thumb': {
                 width: 16,
                 height: 16,
@@ -103,7 +103,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
           onClick={() => volumeUp()}
           disabled={disabled}
           aria-label='volume up'
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             '&:hover': { bgcolor: theme.palette.action.hover },
           })}
         >
@@ -119,7 +119,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
           label='Input'
           onChange={handleSelectChange}
           disabled={!sources || value === 'off'}
-          sx={(theme: any) => ({
+          sx={(theme: Theme) => ({
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: theme.palette.custom.border,
             },

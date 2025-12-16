@@ -27,7 +27,7 @@ export default function useSelectEntityMode(entityId: EntityName): UseSelectEnti
     if (entity) {
       setLoadingValue('');
     }
-  }, [entity]);
+  }, [entity, value]);
 
   const options: string[] | undefined = entity?.attributes?.options;
 
@@ -52,7 +52,9 @@ export default function useSelectEntityMode(entityId: EntityName): UseSelectEnti
         setLoadingValue(option);
         try {
           selectService.selectOption({ target: entityId, serviceData: { option } });
-        } catch {}
+        } catch {
+          // Ignore service call errors
+        }
       }
     },
     [entityId, value, pickOptionForKey, selectService]
@@ -66,8 +68,10 @@ export default function useSelectEntityMode(entityId: EntityName): UseSelectEnti
         setLoadingValue('off');
       }
       powerService.toggle({ target: entityId });
-    } catch {}
-  }, [entityId, powerService]);
+    } catch {
+      // Ignore service call errors
+    }
+  }, [entityId, powerService, value]);
 
   return {
     value,

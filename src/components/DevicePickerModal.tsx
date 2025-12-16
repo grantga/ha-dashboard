@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, Box, Typography } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Box, Typography, type Theme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import rokuImg from '../resources/images/roku.svg';
 import switchImg from '../resources/images/switch.svg';
@@ -33,7 +33,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
       maxWidth='sm'
       fullWidth
       PaperProps={{
-        sx: (theme: any) => ({
+        sx: (theme: Theme) => ({
           background: theme.palette.custom.modalBackground,
           backdropFilter: 'blur(20px)',
           borderRadius: 3,
@@ -43,7 +43,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
       }}
     >
       <DialogTitle
-        sx={(theme: any) => ({
+        sx={(theme: Theme) => ({
           color: theme.palette.mode === 'dark' ? 'white' : 'text.primary',
           fontSize: '1.5rem',
           fontWeight: 700,
@@ -61,7 +61,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
                 role='button'
                 tabIndex={0}
                 onClick={() => handlePick(d.key)}
-                sx={(theme: any) => ({
+                sx={(theme: Theme) => ({
                   cursor: 'pointer',
                   border: '2px solid',
                   borderColor: theme.palette.custom.border,
@@ -104,7 +104,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
                     component='img'
                     src={d.img}
                     alt={d.label}
-                    sx={(theme: any) => ({
+                    sx={(theme: Theme) => ({
                       width: '85%',
                       height: '85%',
                       objectFit: 'contain',
@@ -119,7 +119,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
 
                 {/* Bottom gradient overlay with device name */}
                 <Box
-                  sx={(theme: any) => ({
+                  sx={(theme: Theme) => ({
                     position: 'absolute',
                     bottom: 0,
                     left: 0,
@@ -136,7 +136,7 @@ export default function DevicePickerModal({ open, onClose, onSelect }: Props) {
                 >
                   <Typography
                     variant='h6'
-                    sx={(theme: any) => ({
+                    sx={(theme: Theme) => ({
                       color: theme.palette.mode === 'dark' ? 'white' : theme.palette.text.secondary,
                       textAlign: 'left',
                       textShadow: theme.palette.mode === 'dark' ? '0 2px 8px rgba(0, 0, 0, 0.9)' : '0 2px 8px rgba(255, 255, 255, 0.8)',

@@ -1,4 +1,4 @@
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, type Theme } from '@mui/material';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import useMediaPlayer from '../hooks/useMediaPlayer';
@@ -28,7 +28,7 @@ export default function DevicePower() {
     { id: 'multiview', label: 'Multiview', isOn: mvPower !== 'off', loading: loadingMVPower, togglePower: setMVPower },
   ];
 
-  const handleClick = (device: any) => {
+  const handleClick = (device: (typeof devices)[number]) => {
     // Toggle local on/off state for the button and log the new state
     if (device.id === 'all') {
       // if all devices are  on, turn them all off
@@ -47,7 +47,7 @@ export default function DevicePower() {
         });
       }
     } else {
-      device.togglePower();
+      device.togglePower?.();
     }
   };
 
@@ -73,13 +73,13 @@ export default function DevicePower() {
                   py: 1.5,
                   fontWeight: 600,
                   fontSize: { xs: '0.75rem', sm: '0.95rem' },
-                  boxShadow: (theme: any) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
+                  boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
                   overflow: 'hidden',
                   '& .MuiButton-startIcon': {
                     marginRight: { xs: 0.5, sm: 1 },
                   },
                   '&:hover': {
-                    boxShadow: (theme: any) => (b.isOn ? theme.palette.custom.shadowPrimaryHover : theme.palette.custom.shadowSecondary),
+                    boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimaryHover : theme.palette.custom.shadowSecondary),
                   },
                 }}
               >

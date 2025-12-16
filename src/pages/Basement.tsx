@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack, Fade } from '@mui/material';
+import { Box, Card, CardContent, Stack, Fade, type Theme } from '@mui/material';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
@@ -39,7 +39,7 @@ export default function BasementPage() {
           <Fade in timeout={300}>
             <Card
               variant='outlined'
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
                 backdropFilter: 'blur(10px)',
                 border: `1px solid ${theme.palette.custom.border}`,
@@ -57,7 +57,7 @@ export default function BasementPage() {
           <Fade in timeout={500}>
             <Card
               variant='outlined'
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
                 backdropFilter: 'blur(10px)',
                 border: `1px solid ${theme.palette.custom.border}`,
