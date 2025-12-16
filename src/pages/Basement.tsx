@@ -49,13 +49,26 @@ export default function BasementPage() {
               <CardContent>
                 <Stack spacing={2}>
                   <DevicePower />
-                  <LightEntityControl entityId='light.h600b' controlEntityIds={['light.h600b', 'light.h600b_2']} />
                   <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
                 </Stack>
               </CardContent>
             </Card>
           </Fade>
 
+          <Fade in timeout={300}>
+            <Card
+              variant='outlined'
+              sx={(theme: Theme) => ({
+                background: `linear-gradient(135deg, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.8)' : 'rgba(255, 255, 255, 0.9)'} 0%, ${theme.palette.mode === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.7)'} 100%)`,
+                backdropFilter: 'blur(10px)',
+                border: `1px solid ${theme.palette.custom.border}`,
+              })}
+            >
+              <CardContent>
+                <LightEntityControl entityId='light.h600b' controlEntityIds={['light.h600b', 'light.h600b_2']} />
+              </CardContent>
+            </Card>
+          </Fade>
           <Fade in timeout={500}>
             <Card
               variant='outlined'

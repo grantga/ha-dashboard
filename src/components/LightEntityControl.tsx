@@ -104,6 +104,18 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
     return 'rgb(200,200,200)';
   })();
 
+  // compute a slightly darker background color for the filled portion of the brightness track
+  const computedFillColorBackground = (() => {
+    // derive a base RGB from explicit color or picker hue
+    const base = color ?? (pickerHue !== null ? hslToRgb(pickerHue, 1, 0.5) : { r: 200, g: 200, b: 200 });
+    // darken by factor (0..1) — lower = darker
+    const factor = 0.5;
+    const r = Math.max(0, Math.min(255, Math.round(base.r * factor)));
+    const g = Math.max(0, Math.min(255, Math.round(base.g * factor)));
+    const b = Math.max(0, Math.min(255, Math.round(base.b * factor)));
+    return `rgb(${r}, ${g}, ${b})`;
+  })();
+
   const fillPercent = Math.max(0, Math.min(100, pendingBrightness ?? 0));
 
   // handle picking on the hue gradient
@@ -141,7 +153,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
   };
 
   return (
-    <div style={{ border: '1px solid #ccc', borderRadius: 8, padding: 16, width: '100%', boxSizing: 'border-box' }}>
+    <div style={{ width: '100%' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Button
           variant={value === 'on' ? 'contained' : 'outlined'}
@@ -189,7 +201,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             marginLeft: 12,
             borderRadius: 8,
             // background is dynamic per current color/fill
-            background: `linear-gradient(90deg, ${computedFillColor} ${fillPercent}%, #e6e6e6 ${fillPercent}%)`,
+            background: `linear-gradient(90deg, ${computedFillColor} ${fillPercent}%, ${computedFillColorBackground} ${fillPercent}%)`,
             opacity: value === 'on' ? 1 : 0.45,
             cursor: value === 'on' ? 'pointer' : 'not-allowed',
           }}
