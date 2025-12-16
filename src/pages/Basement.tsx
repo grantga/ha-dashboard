@@ -5,6 +5,7 @@ import MultiViewLayout from '../components/MultiViewLayout';
 import DevicePower from '../components/DevicePower';
 import MediaPlayerControl from '../components/MediaPlayerControl';
 import ThemeToggle from '../components/ThemeToggle';
+import LightEntityControl from '../components/LightEntityControl';
 
 export default function BasementPage() {
   const { value: mode, setValue: setMode, loadingValue: loadMode } = useSelectEntityMode('select.orei_uhd_401mv_multiview_mode');
@@ -48,6 +49,7 @@ export default function BasementPage() {
               <CardContent>
                 <Stack spacing={2}>
                   <DevicePower />
+                  <LightEntityControl entityId='light.h600b' controlEntityIds={['light.h600b', 'light.h600b_2']} />
                   <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
                 </Stack>
               </CardContent>
