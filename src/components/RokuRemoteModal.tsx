@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, Box, IconButton } from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, Box, IconButton, type Theme } from '@mui/material';
 import type { DeviceType } from './DevicePickerModal';
 import { useEntity } from '@hakit/core';
 import HomeIcon from '@mui/icons-material/Home';
@@ -21,7 +21,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
 
   const sendRokuCommand = (command: string) => () => {
     rokuRemote.service.sendCommand({
-      serviceData: { device: rokuRemote.entity_id, command: command as any, num_repeats: 1, delay_secs: 0, hold_secs: 0 },
+      serviceData: { device: rokuRemote.entity_id, command: { value: command }, num_repeats: 1, delay_secs: 0, hold_secs: 0 },
     });
   };
 
@@ -36,7 +36,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
       maxWidth='xs'
       fullWidth
       PaperProps={{
-        sx: (theme: any) => ({
+        sx: (theme: Theme) => ({
           background: theme.palette.custom.modalBackground,
           backdropFilter: 'blur(20px)',
           borderRadius: 3,
@@ -46,7 +46,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
       }}
     >
       <DialogTitle
-        sx={(theme: any) => ({
+        sx={(theme: Theme) => ({
           color: theme.palette.mode === 'dark' ? 'white' : 'text.primary',
           fontSize: '1.5rem',
           fontWeight: 700,
@@ -71,7 +71,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
           <Box sx={{ display: 'flex', gap: 2 }}>
             <IconButton
               onClick={sendRokuCommand('home')}
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 width: 56,
                 height: 56,
                 background: theme.palette.custom.buttonBackground,
@@ -93,7 +93,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             </IconButton>
             <IconButton
               onClick={sendRokuCommand('back')}
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 width: 56,
                 height: 56,
                 background: theme.palette.custom.buttonBackground,
@@ -129,7 +129,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Up */}
             <IconButton
               onClick={sendRokuCommand('up')}
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 position: 'absolute',
                 top: 0,
                 left: '50%',
@@ -157,7 +157,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Left */}
             <IconButton
               onClick={sendRokuCommand('left')}
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 position: 'absolute',
                 left: 0,
                 top: '50%',
@@ -185,7 +185,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* OK button in center */}
             <IconButton
               onClick={sendRokuCommand('select')}
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 width: 64,
                 height: 64,
                 background: theme.palette.custom.cardBackgroundGradient,
@@ -212,7 +212,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Right */}
             <IconButton
               onClick={sendRokuCommand('right')}
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 position: 'absolute',
                 right: 0,
                 top: '50%',
@@ -240,7 +240,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Down */}
             <IconButton
               onClick={sendRokuCommand('down')}
-              sx={(theme: any) => ({
+              sx={(theme: Theme) => ({
                 position: 'absolute',
                 bottom: 0,
                 left: '50%',
@@ -309,7 +309,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
   );
 
   function getSendCommandButtonStyle() {
-    return (theme: any) => ({
+    return (theme: Theme) => ({
       width: 96,
       height: 48,
       background: theme.palette.custom.buttonBackground,

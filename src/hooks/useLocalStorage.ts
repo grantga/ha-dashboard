@@ -9,7 +9,7 @@ export default function useLocalStorage<T>(key: string, initial: T | (() => T)) 
       }
       const raw = window.localStorage.getItem(key);
       if (raw != null) return JSON.parse(raw) as T;
-    } catch (e) {
+    } catch {
       // ignore and fall back to initial
     }
     return typeof initial === 'function' ? (initial as () => T)() : initial;
@@ -18,7 +18,7 @@ export default function useLocalStorage<T>(key: string, initial: T | (() => T)) 
   useEffect(() => {
     try {
       window.localStorage.setItem(key, JSON.stringify(state));
-    } catch (e) {
+    } catch {
       // ignore write failures (e.g., storage disabled)
     }
   }, [key, state]);

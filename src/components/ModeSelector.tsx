@@ -1,4 +1,4 @@
-import { Box, ToggleButton, ToggleButtonGroup, Tooltip, Skeleton } from '@mui/material';
+import { Box, ToggleButton, ToggleButtonGroup, Tooltip, Skeleton, type Theme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { IconSingle, IconPIP, IconPBP, IconPBPAlt, IconTripleA, IconTripleB, IconQuadA, IconQuadB } from './MultiviewIcons';
 
@@ -50,7 +50,7 @@ export default function ModeSelector({
                 {loading ? (
                   <Skeleton
                     variant='rectangular'
-                    sx={(theme: any) => ({
+                    sx={(theme: Theme) => ({
                       minWidth: 64,
                       height: 80,
                       display: 'flex',
@@ -75,7 +75,7 @@ export default function ModeSelector({
                   <Tooltip title={m.label} placement='top' arrow>
                     <ToggleButton
                       value={m.key}
-                      sx={(theme: any) => ({
+                      sx={(theme: Theme) => ({
                         height: 80,
                         minWidth: 64,
                         px: 1.5,
@@ -107,7 +107,7 @@ export default function ModeSelector({
     </Box>
   );
 
-  function setSelectedMode(v: any) {
+  function setSelectedMode(v: string | null) {
     if (v === 'Single') {
       setMode('Single');
     }
