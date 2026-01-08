@@ -66,7 +66,6 @@ export default function useLightEntity(statusEntityId: EntityName, controlEntity
       setEffectListState(entity.attributes.effect_list || null);
       setColorTempState(entity.attributes.color_temp || null);
     }
-    console.log(JSON.stringify(entity));
   }, [entity, value]);
 
   const turnOn = useCallback(

@@ -58,7 +58,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
   useEffect(() => {
     if (color) {
       // if the color equals the configured white color, treat as white selection
-      if (colorTemp == WHITE_COLOR_TEMP) {
+      if (colorTemp === WHITE_COLOR_TEMP) {
         setPickerHue(null);
         return;
       }
