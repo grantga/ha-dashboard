@@ -1,6 +1,8 @@
 // Service Worker for PWA functionality
+// Cache name should be updated when deploying new versions to ensure users get fresh content
 const CACHE_NAME = 'ha-dashboard-v1';
-const BASE_PATH = self.location.pathname.split('/').slice(0, -1).join('/') || '/';
+// Get base path from service worker registration scope
+const BASE_PATH = new URL('./', self.location).pathname;
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -32,19 +34,23 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   console.log('[Service Worker] Activating...');
   event.waitUntil(
-    caches.keys().then(cacheNames => {
-      return Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('[Service Worker] Deleting old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
-        })
-      );
-    })
+    caches
+      .keys()
+      .then(cacheNames => {
+        return Promise.all(
+          cacheNames.map(cacheName => {
+            if (cacheName !== CACHE_NAME) {
+              console.log('[Service Worker] Deleting old cache:', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+      .then(() => {
+        // Take control of all pages immediately
+        return self.clients.claim();
+      })
   );
-  // Take control of all pages immediately
-  return self.clients.claim();
 });
 
 // Fetch event - serve from cache, fallback to network
@@ -58,20 +64,35 @@ self.addEventListener('fetch', event => {
   }
 
   // Network-first strategy for API calls (Home Assistant)
-  if (url.pathname.includes('/api/')) {
+  if (url.pathname.startsWith('/api/')) {
     event.respondWith(
       fetch(request)
         .then(response => {
           // Clone the response before caching
           const responseToCache = response.clone();
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(request, responseToCache);
-          });
+          caches
+            .open(CACHE_NAME)
+            .then(cache => {
+              cache.put(request, responseToCache);
+            })
+            .catch(error => {
+              console.error('[Service Worker] Failed to cache API response:', error);
+            });
           return response;
         })
         .catch(() => {
           // Fallback to cache if network fails
-          return caches.match(request);
+          return caches.match(request).then(cachedResponse => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // Return a basic error response if no cache is available
+            return new Response(JSON.stringify({ error: 'Offline and no cached data available' }), {
+              status: 503,
+              statusText: 'Service Unavailable',
+              headers: { 'Content-Type': 'application/json' },
+            });
+          });
         })
     );
     return;
@@ -86,15 +107,20 @@ self.addEventListener('fetch', event => {
 
       return fetch(request).then(response => {
         // Don't cache non-successful responses
-        if (!response || response.status !== 200 || response.type === 'error') {
+        if (!response || response.status !== 200) {
           return response;
         }
 
         // Clone the response before caching
         const responseToCache = response.clone();
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(request, responseToCache);
-        });
+        caches
+          .open(CACHE_NAME)
+          .then(cache => {
+            cache.put(request, responseToCache);
+          })
+          .catch(error => {
+            console.error('[Service Worker] Failed to cache static asset:', error);
+          });
 
         return response;
       });

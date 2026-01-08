@@ -18,13 +18,6 @@ if (typeof VITE_FOLDER_NAME === 'undefined' || VITE_FOLDER_NAME === '') {
 export default defineConfig({
   base: `/local/${VITE_FOLDER_NAME}/`,
   plugins: [react()],
-  build: {
-    rollupOptions: {
-      input: {
-        main: './index.html',
-      },
-    },
-  },
   // Copy service worker to dist
   publicDir: 'public',
 });
