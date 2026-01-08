@@ -59,7 +59,10 @@ export default function BasementPage() {
                 </DashboardCard>
 
                 <DashboardCard>
-                  <LightEntityControl entityId='light.h600b' controlEntityIds={['light.h600b', 'light.h600b_2']} />
+                  <LightEntityControl
+                    entityId='light.h600b'
+                    controlEntityIds={['light.h600b', 'light.h600b_2', 'light.h600b_3', 'light.h6046']}
+                  />
                 </DashboardCard>
               </Stack>
             </Grid>
