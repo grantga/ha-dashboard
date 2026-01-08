@@ -6,10 +6,15 @@ export type UseLightEntity = {
   loadingValue: string;
   brightness: number | null;
   color: { r: number; g: number; b: number } | null;
-  turnOn: (options?: { brightness?: number; color?: { r: number; g: number; b: number } }) => Promise<void>;
+  effect: string | null;
+  effectList: string[] | null;
+  colorTemp: number | null;
+  turnOn: (options?: { brightness?: number; color?: { r: number; g: number; b: number }; effect?: string }) => Promise<void>;
   turnOff: () => Promise<void>;
   setBrightness: (brightness: number) => Promise<void>;
   setColor: (color: { r: number; g: number; b: number }) => Promise<void>;
+  setEffect: (effect: string) => Promise<void>;
+  setColorTemp: (mireds: number) => Promise<void>;
 };
 
 export default function useLightEntity(statusEntityId: EntityName, controlEntityIds?: EntityName[]): UseLightEntity {
@@ -34,6 +39,13 @@ export default function useLightEntity(statusEntityId: EntityName, controlEntity
     }
     return null;
   });
+  const [effect, setEffectState] = useState<string | null>(() => (entity && entity.attributes && entity.attributes.effect) || null);
+  const [effectList, setEffectListState] = useState<string[] | null>(
+    () => (entity && entity.attributes && entity.attributes.effect_list) || null
+  );
+  const [colorTemp, setColorTempState] = useState<number | null>(
+    () => (entity && entity.attributes && entity.attributes.color_temp) || null
+  );
 
   useEffect(() => {
     if (entity && entity.state && entity.state !== value) {
@@ -49,18 +61,26 @@ export default function useLightEntity(statusEntityId: EntityName, controlEntity
       const [r, g, b] = entity.attributes.rgb_color;
       setColorState({ r, g, b });
     }
+    if (entity && entity.attributes) {
+      setEffectState(entity.attributes.effect || null);
+      setEffectListState(entity.attributes.effect_list || null);
+      setColorTempState(entity.attributes.color_temp || null);
+    }
   }, [entity, value]);
 
   const turnOn = useCallback(
-    async (options?: { brightness?: number; color?: { r: number; g: number; b: number } }) => {
+    async (options?: { brightness?: number; color?: { r: number; g: number; b: number }; effect?: string }) => {
       try {
         setLoadingValue('on');
-        const serviceData: { brightness_pct?: number; rgb_color?: [number, number, number] } = {};
+        const serviceData: { brightness_pct?: number; rgb_color?: [number, number, number]; effect?: string } = {};
         if (options?.brightness !== undefined) {
           serviceData.brightness_pct = options.brightness;
         }
         if (options?.color) {
           serviceData.rgb_color = [options.color.r, options.color.g, options.color.b];
+        }
+        if (options?.effect) {
+          serviceData.effect = options.effect;
         }
         lightService.turnOn({ target: controlIds, serviceData });
       } catch {
@@ -105,6 +125,32 @@ export default function useLightEntity(statusEntityId: EntityName, controlEntity
     [controlIds, lightService]
   );
 
+  const setEffect = useCallback(
+    async (e: string) => {
+      try {
+        setLoadingValue('on');
+        lightService.turnOn({ target: controlIds, serviceData: { effect: e } });
+        setEffectState(e);
+      } catch {
+        // Ignore service call errors
+      }
+    },
+    [controlIds, lightService]
+  );
+
+  const setColorTemp = useCallback(
+    async (mireds: number) => {
+      try {
+        setLoadingValue('on');
+        lightService.turnOn({ target: controlIds, serviceData: { color_temp: mireds } });
+        setColorTempState(mireds);
+      } catch {
+        // Ignore service call errors
+      }
+    },
+    [controlIds, lightService]
+  );
+
   return {
     value,
     loadingValue,
@@ -114,5 +160,10 @@ export default function useLightEntity(statusEntityId: EntityName, controlEntity
     turnOff,
     setBrightness,
     setColor,
+    setEffect,
+    effect,
+    effectList,
+    colorTemp,
+    setColorTemp,
   };
 }
