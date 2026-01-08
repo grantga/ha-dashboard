@@ -36,6 +36,7 @@ function hslToRgb(h: number, s: number, l: number) {
 }
 
 const WHITE_COLOR = { r: 255, g: 255, b: 255 };
+const WHITE_COLOR_TEMP = 310;
 
 const rgbEquals = (a: { r: number; g: number; b: number } | null | undefined, b: { r: number; g: number; b: number }) => {
   if (!a) return false;
@@ -43,7 +44,7 @@ const rgbEquals = (a: { r: number; g: number; b: number } | null | undefined, b:
 };
 
 const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, controlEntityIds }) => {
-  const { value, brightness, color, turnOn, turnOff, setBrightness, setColor } = useLightEntity(
+  const { value, brightness, color, colorTemp, turnOn, turnOff, setBrightness, setColor, setColorTemp } = useLightEntity(
     entityId as EntityName,
     controlEntityIds?.map(c => c as EntityName)
   );
@@ -57,7 +58,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
   useEffect(() => {
     if (color) {
       // if the color equals the configured white color, treat as white selection
-      if (rgbEquals(color, WHITE_COLOR)) {
+      if (colorTemp === WHITE_COLOR_TEMP) {
         setPickerHue(null);
         return;
       }
@@ -88,7 +89,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
         setPickerHue(0);
       }
     }
-  }, [color]);
+  }, [color, colorTemp]);
 
   const commitBrightness = () => {
     if (pendingBrightness !== null) setBrightness(pendingBrightness);
@@ -225,7 +226,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             {/* white preset box */}
             <div
               onClick={() => {
-                setColor(WHITE_COLOR);
+                setColorTemp(WHITE_COLOR_TEMP);
                 setPickerHue(null);
               }}
               role='button'
