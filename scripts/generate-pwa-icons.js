@@ -21,7 +21,7 @@ async function generateIcons() {
   // Check if source icon exists
   if (!fs.existsSync(sourceIcon)) {
     console.error(`❌ Source icon not found at ${sourceIcon}`);
-    console.error('   Please ensure icon.svg exists in the public/icons directory.');
+    console.error(`   Please ensure icon.svg exists at: ${sourceIcon}`);
     process.exit(1);
   }
 
