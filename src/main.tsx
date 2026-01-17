@@ -17,7 +17,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker
       .register(swPath)
       .then(registration => {
-        console.log('Service Worker registered successfully:', registration.scope);
+        console.debug('Service Worker registered successfully:', registration.scope);
       })
       .catch(error => {
         console.error('Service Worker registration failed:', error);

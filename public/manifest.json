@@ -2,21 +2,21 @@
   "name": "Basement Dashboard",
   "short_name": "Basement",
   "description": "Home Assistant Basement Dashboard",
-  "start_url": "index.html",
-  "scope": "/local/ha-dashboard/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#121212",
   "theme_color": "#1976d2",
   "orientation": "landscape",
   "icons": [
     {
-      "src": "/local/ha-dashboard/icons/icon-192.png",
+      "src": "icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/local/ha-dashboard/icons/icon-512.png",
+      "src": "icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

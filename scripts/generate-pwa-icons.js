@@ -11,6 +11,8 @@ const iconsDir = path.join(publicDir, 'icons');
 const sourceIcon = path.join(iconsDir, 'icon.svg');
 
 // Icon sizes needed for iOS and PWA
+// iOS: 152 (iPad 2 & Mini), 167 (iPad Pro), 180 (iPhone)
+// PWA: 192 (standard), 512 (high-res)
 const sizes = [152, 167, 180, 192, 512];
 
 async function generateIcons() {
@@ -18,7 +20,8 @@ async function generateIcons() {
 
   // Check if source icon exists
   if (!fs.existsSync(sourceIcon)) {
-    console.error(`❌ Source icon not found: ${sourceIcon}`);
+    console.error(`❌ Source icon not found at ${sourceIcon}`);
+    console.error('   Please ensure icon.svg exists in the public/icons directory.');
     process.exit(1);
   }
 
