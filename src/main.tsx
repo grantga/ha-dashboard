@@ -8,3 +8,19 @@ createRoot(document.getElementById('root')!).render(
     <App />
   </StrictMode>
 );
+
+// Register service worker for PWA functionality
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Use the base path from Vite config
+    const swPath = `${import.meta.env.BASE_URL}sw.js`;
+    navigator.serviceWorker
+      .register(swPath)
+      .then(registration => {
+        console.debug('Service Worker registered successfully:', registration.scope);
+      })
+      .catch(error => {
+        console.error('Service Worker registration failed:', error);
+      });
+  });
+}
