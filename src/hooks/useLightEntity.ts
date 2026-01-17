@@ -20,7 +20,14 @@ export type UseLightEntity = {
 export default function useLightEntity(statusEntityId: EntityName, controlEntityIds?: EntityName[]): UseLightEntity {
   // statusEntityId: entity to read state/attributes from
   // controlEntityIds: optional array of entity ids to send service calls to
-  const entity = useEntity(statusEntityId);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let entity: any;
+  try {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    entity = useEntity(statusEntityId);
+  } catch {
+    console.debug('Entity not found:', statusEntityId);
+  }
   const lightService = useService('light');
   const controlIds = useMemo(
     () => (controlEntityIds && controlEntityIds.length > 0 ? controlEntityIds : [statusEntityId]),
