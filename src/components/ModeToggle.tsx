@@ -22,8 +22,13 @@ export default function ModeToggle({ currentMode, onModeChange, loading = false 
           py: 1.5,
           fontWeight: 600,
           fontSize: { xs: '0.75rem', sm: '0.9rem' },
+          backgroundColor: currentMode === 'movie' ? '#14b8a6' : 'transparent',
+          borderColor: '#14b8a6',
+          color: currentMode === 'movie' ? 'white' : '#14b8a6',
           boxShadow: (theme: Theme) => (currentMode === 'movie' ? theme.palette.custom?.shadowPrimary : 'none'),
           '&:hover': {
+            backgroundColor: currentMode === 'movie' ? '#0d9488' : 'rgba(20, 184, 166, 0.1)',
+            borderColor: '#0d9488',
             boxShadow: (theme: Theme) =>
               currentMode === 'movie' ? theme.palette.custom?.shadowPrimaryHover : theme.palette.custom?.shadowSecondary,
           },
@@ -42,8 +47,13 @@ export default function ModeToggle({ currentMode, onModeChange, loading = false 
           py: 1.5,
           fontWeight: 600,
           fontSize: { xs: '0.75rem', sm: '0.9rem' },
+          backgroundColor: currentMode === 'multiview' ? '#14b8a6' : 'transparent',
+          borderColor: '#14b8a6',
+          color: currentMode === 'multiview' ? 'white' : '#14b8a6',
           boxShadow: (theme: Theme) => (currentMode === 'multiview' ? theme.palette.custom?.shadowPrimary : 'none'),
           '&:hover': {
+            backgroundColor: currentMode === 'multiview' ? '#0d9488' : 'rgba(20, 184, 166, 0.1)',
+            borderColor: '#0d9488',
             boxShadow: (theme: Theme) =>
               currentMode === 'multiview' ? theme.palette.custom?.shadowPrimaryHover : theme.palette.custom?.shadowSecondary,
           },
