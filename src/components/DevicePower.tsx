@@ -107,8 +107,9 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
                     fontSize: { xs: '0.75rem', sm: '0.9rem' },
                     boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
                     overflow: 'hidden',
+                    justifyContent: 'center',
                     '& .MuiButton-startIcon': {
-                      marginRight: { xs: 0.5, sm: 1 },
+                      marginRight: { xs: 0, sm: 1 },
                     },
                     '&:hover': {
                       boxShadow: (theme: Theme) =>
