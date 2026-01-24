@@ -79,7 +79,7 @@ export default function BasementPage() {
                 <DashboardCard>
                   <Stack spacing={3}>
                     <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
-                    <DevicePower />
+                    <DevicePower currentMode={appMode} />
                     <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
                   </Stack>
                 </DashboardCard>

@@ -49,7 +49,7 @@ export default function ModeToggle({ currentMode, onModeChange, loading = false 
           },
         }}
       >
-        Multiview Mode
+        Multi Mode
       </Button>
     </Box>
   );
