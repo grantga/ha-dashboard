@@ -1,5 +1,7 @@
 import { Box, Stack, Fade, Grid } from '@mui/material';
+import { useState } from 'react';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
+import useMediaPlayer from '../hooks/useMediaPlayer';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
 import DevicePower from '../components/DevicePower';
@@ -7,6 +9,8 @@ import MediaPlayerControl from '../components/MediaPlayerControl';
 import ThemeToggle from '../components/ThemeToggle';
 import LightEntityControl from '../components/LightEntityControl';
 import DashboardCard from '../components/DashboardCard';
+import ModeToggle from '../components/ModeToggle';
+import MovieMode from '../components/MovieMode';
 
 export default function BasementPage() {
   const { value: mode, setValue: setMode, loadingValue: loadMode } = useSelectEntityMode('select.orei_uhd_401mv_multiview_mode');
@@ -17,6 +21,27 @@ export default function BasementPage() {
   } = useSelectEntityMode('select.orei_uhd_401mv_triple_mode');
   const { value: quadMode, setValue: setQuadMode, loadingValue: loadingQuad } = useSelectEntityMode('select.orei_uhd_401mv_quad_mode');
   const { value: pbpMode, setValue: setPbpMode, loadingValue: loadingPbp } = useSelectEntityMode('select.orei_uhd_401mv_pbp_mode');
+
+  // Receiver control for input switching
+  const { setSource } = useMediaPlayer('media_player.rx_v6a_bf8066');
+
+  // Movie vs Multiview mode state
+  const [appMode, setAppMode] = useState<'movie' | 'multiview'>('multiview');
+  const [modeLoading, setModeLoading] = useState(false);
+
+  const handleModeChange = async (newMode: 'movie' | 'multiview') => {
+    setModeLoading(true);
+    setAppMode(newMode);
+
+    // Switch receiver input based on mode
+    if (newMode === 'movie') {
+      await setSource('Movie Room');
+    } else {
+      await setSource('HDMI1 multi');
+    }
+
+    setModeLoading(false);
+  };
 
   const loadingAny = loadMode !== '' || loadingTriple !== '' || loadingQuad !== '' || loadingPbp !== '';
   //handle the alt pbp, triple and quad modes
@@ -53,6 +78,7 @@ export default function BasementPage() {
               <Stack spacing={3}>
                 <DashboardCard>
                   <Stack spacing={3}>
+                    <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
                     <DevicePower />
                     <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
                   </Stack>
@@ -70,17 +96,23 @@ export default function BasementPage() {
             {/* Right Column: Main Multiview Interface */}
             <Grid item xs={12} lg={8}>
               <DashboardCard contentPadding={3}>
-                <ModeSelector
-                  mode={detailedMode}
-                  setMode={setMode}
-                  setTripleMode={setTripleMode}
-                  setQuadMode={setQuadMode}
-                  setPbpMode={setPbpMode}
-                  loading={loadingAny}
-                />
-                <Box sx={{ mt: 3 }}>
-                  <MultiViewLayout mode={detailedMode} loading={loadingAny} />
-                </Box>
+                {appMode === 'multiview' ? (
+                  <>
+                    <ModeSelector
+                      mode={detailedMode}
+                      setMode={setMode}
+                      setTripleMode={setTripleMode}
+                      setQuadMode={setQuadMode}
+                      setPbpMode={setPbpMode}
+                      loading={loadingAny}
+                    />
+                    <Box sx={{ mt: 3 }}>
+                      <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+                    </Box>
+                  </>
+                ) : (
+                  <MovieMode />
+                )}
               </DashboardCard>
             </Grid>
           </Grid>
