@@ -6,7 +6,7 @@ import ViewQuiltIcon from '@mui/icons-material/ViewQuilt'; // Multiview
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import useMediaPlayer from '../hooks/useMediaPlayer';
 
-export default function DevicePower() {
+export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'multiview' }) {
   const {
     value: receiverPower,
     togglePower: setReceiverPower,
@@ -26,6 +26,7 @@ export default function DevicePower() {
       isOn: !(receiverPower === 'off' || projectorPower === 'off' || mvPower === 'off'),
       loading: loadingReceiver || loadingProjectorPower || loadingMVPower,
       icon: PowerSettingsNewIcon,
+      visible: true,
     },
     {
       id: 'receiver',
@@ -34,6 +35,7 @@ export default function DevicePower() {
       loading: loadingReceiver,
       togglePower: setReceiverPower,
       icon: SpeakerGroupIcon,
+      visible: true,
     },
     {
       id: 'projector',
@@ -42,6 +44,7 @@ export default function DevicePower() {
       loading: loadingProjectorPower,
       togglePower: setProjectorPower,
       icon: VideocamIcon,
+      visible: true,
     },
     {
       id: 'multiview',
@@ -50,6 +53,7 @@ export default function DevicePower() {
       loading: loadingMVPower,
       togglePower: setMVPower,
       icon: ViewQuiltIcon,
+      visible: currentMode === 'multiview',
     },
   ];
 
@@ -59,14 +63,14 @@ export default function DevicePower() {
       // if all devices are  on, turn them all off
       if (devices.every(d => d.isOn)) {
         devices.forEach(d => {
-          if (d.togglePower && d.isOn) {
+          if (d.togglePower && d.isOn && d.visible) {
             d.togglePower();
           }
         });
       } else {
         //turn on any device that is off
         devices.forEach(d => {
-          if (d.togglePower && !d.isOn) {
+          if (d.togglePower && !d.isOn && d.visible) {
             d.togglePower();
           }
         });
@@ -81,49 +85,51 @@ export default function DevicePower() {
     <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
       <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 0, width: '100%', maxWidth: '100%' }}>
         <Stack direction='row' spacing={1.5} flexWrap='wrap' useFlexGap sx={{ width: '100%' }}>
-          {devices.map(b => {
-            const Icon = b.icon;
-            return (
-              <Button
-                key={b.id}
-                variant={b.isOn ? 'contained' : 'outlined'}
-                loading={b.loading !== ''}
-                loadingPosition='start'
-                size='large'
-                onClick={() => handleClick(b)}
-                startIcon={<Icon sx={{ flexShrink: 0 }} />}
-                sx={{
-                  flex: '1 1 auto', // Allow grow and shrink, but auto basis for content adaptation
-                  minWidth: { xs: '45%', sm: 100 }, // Ensure 2 per row on really small screens
-                  maxWidth: { xs: '100%', sm: 'none' },
-                  mt: { xs: 1, sm: 0 }, // Add margin top for wrapped items
-                  py: 1.5,
-                  fontWeight: 600,
-                  fontSize: { xs: '0.75rem', sm: '0.9rem' },
-                  boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
-                  overflow: 'hidden',
-                  '& .MuiButton-startIcon': {
-                    marginRight: { xs: 0.5, sm: 1 },
-                  },
-                  '&:hover': {
-                    boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimaryHover : theme.palette.custom.shadowSecondary),
-                  },
-                }}
-              >
-                <Box
-                  component='span'
+          {devices
+            .filter(d => d.visible)
+            .map(b => {
+              const Icon = b.icon;
+              return (
+                <Button
+                  key={b.id}
+                  variant={b.isOn ? 'contained' : 'outlined'}
+                  loading={b.loading !== ''}
+                  loadingPosition='start'
+                  size='large'
+                  onClick={() => handleClick(b)}
+                  startIcon={<Icon sx={{ flexShrink: 0 }} />}
                   sx={{
+                    flex: '1 1 auto', // Allow grow and shrink, but auto basis for content adaptation
+                    maxWidth: { xs: '100%', sm: 'none' },
+                    mt: { xs: 1, sm: 0 }, // Add margin top for wrapped items
+                    py: 1.5,
+                    fontWeight: 600,
+                    fontSize: { xs: '0.75rem', sm: '0.9rem' },
+                    boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
                     overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    display: 'block',
+                    '& .MuiButton-startIcon': {
+                      marginRight: { xs: 0.5, sm: 1 },
+                    },
+                    '&:hover': {
+                      boxShadow: (theme: Theme) =>
+                        b.isOn ? theme.palette.custom.shadowPrimaryHover : theme.palette.custom.shadowSecondary,
+                    },
                   }}
                 >
-                  {b.label}
-                </Box>
-              </Button>
-            );
-          })}
+                  <Box
+                    component='span'
+                    sx={{
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      whiteSpace: 'nowrap',
+                      display: { xs: 'none', sm: 'block' },
+                    }}
+                  >
+                    {b.label}
+                  </Box>
+                </Button>
+              );
+            })}
         </Stack>
       </Box>
     </Box>
