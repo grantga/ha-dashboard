@@ -1,4 +1,4 @@
-import { Box, Typography, IconButton, type Theme } from '@mui/material';
+import { Box, IconButton, type Theme } from '@mui/material';
 import { useState } from 'react';
 import rokuImg from '../resources/images/roku.svg';
 import remoteImg from '../resources/images/remote.svg';
