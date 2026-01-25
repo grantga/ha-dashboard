@@ -23,7 +23,7 @@ function App() {
   const theme = useMemo(() => (mode === 'light' ? lightTheme : darkTheme), [mode]);
 
   return (
-    <HassConnect hassUrl={import.meta.env.VITE_HA_URL} hassToken={import.meta.env.VITE_HA_TOKEN}>
+    <HassConnect hassUrl={import.meta.env.VITE_HA_URL}>
       <ThemeContext.Provider value={{ mode, toggleTheme }}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
