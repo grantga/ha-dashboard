@@ -62,11 +62,34 @@ export default function BasementPage() {
         alignItems: 'flex-start',
         minHeight: '100vh',
         position: 'relative',
-        p: { xs: 2, md: 4 }, // Responsive padding
+        // Support for iOS safe areas (status bar, home indicator, notches)
+        pt: {
+          xs: 'calc(16px + env(safe-area-inset-top))',
+          md: 'calc(32px + env(safe-area-inset-top))',
+        },
+        pb: {
+          xs: 'calc(16px + env(safe-area-inset-bottom))',
+          md: 'calc(32px + env(safe-area-inset-bottom))',
+        },
+        pl: {
+          xs: 'calc(16px + env(safe-area-inset-left))',
+          md: 'calc(32px + env(safe-area-inset-left))',
+        },
+        pr: {
+          xs: 'calc(16px + env(safe-area-inset-right))',
+          md: 'calc(32px + env(safe-area-inset-right))',
+        },
       }}
     >
       {/* Theme Toggle - Floating in bottom-right */}
-      <Box sx={{ position: 'fixed', bottom: 24, right: 24, zIndex: 100 }}>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 'calc(24px + env(safe-area-inset-bottom))',
+          right: 'calc(24px + env(safe-area-inset-right))',
+          zIndex: 100,
+        }}
+      >
         <ThemeToggle />
       </Box>
 
