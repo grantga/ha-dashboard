@@ -1,4 +1,4 @@
-import { Box, Skeleton, type Theme } from '@mui/material';
+import { Box, Skeleton, Typography, type Theme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import HDMIInput from './HDMIInput';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
@@ -271,6 +271,12 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
         </Box>
       );
     default:
-      return <Box style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>Multiview is off.</Box>;
+      return (
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+          <Typography variant='h6' sx={{ textAlign: 'center', color: 'text.secondary' }}>
+            Multiview is off.
+          </Typography>
+        </Box>
+      );
   }
 }
