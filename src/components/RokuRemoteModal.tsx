@@ -1,6 +1,6 @@
 import { Dialog, DialogTitle, DialogContent, Box, IconButton, type Theme } from '@mui/material';
 import type { DeviceType } from './DevicePickerModal';
-import { useEntity } from '@hakit/core';
+import { useEntity, type EntityName } from '@hakit/core';
 import HomeIcon from '@mui/icons-material/Home';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
@@ -16,12 +16,29 @@ type Props = {
 };
 
 export default function RokuRemoteModal({ open, onClose, device }: Props) {
-  const rokuRemote = useEntity(device === 'roku1' ? 'remote.roku_basement_1' : 'remote.roku_basement_2');
-  const rokuMediaPlayer = useEntity(device === 'roku1' ? 'media_player.roku_basement_1' : 'media_player.roku_basement_2');
+  const ROKU_ENTITIES: Record<string, { remote: EntityName; media: EntityName }> = {
+    roku1: {
+      remote: 'remote.roku_basement_1' as EntityName,
+      media: 'media_player.roku_basement_1' as EntityName,
+    },
+    roku2: {
+      remote: 'remote.roku_basement_2' as EntityName,
+      media: 'media_player.roku_basement_2' as EntityName,
+    },
+    movie_room_4k: {
+      remote: 'remote.movie_room_4k' as EntityName,
+      media: 'media_player.movie_room_4k' as EntityName,
+    },
+  };
+
+  const selected = ROKU_ENTITIES[device as keyof typeof ROKU_ENTITIES] || ROKU_ENTITIES.roku1;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rokuRemote = useEntity(selected.remote as any) as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rokuMediaPlayer = useEntity(selected.media as any) as any;
 
   const sendRokuCommand = (value: string) => () => {
     rokuRemote.service.sendCommand({
-      // @ts-expect-error - HA typings expect command: object but Roku accepts a string
       serviceData: { device: rokuRemote.entity_id, command: value, num_repeats: 1, delay_secs: 0, hold_secs: 0 },
     });
   };
@@ -271,9 +288,13 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
           <Box
             sx={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(4, 96px)',
-              gridTemplateRows: 'repeat(2, 48px)',
-              gap: 1,
+              gridTemplateColumns: {
+                xs: 'repeat(2, 1fr)',
+                sm: 'repeat(4, 96px)',
+              },
+              gap: 1.5,
+              width: '100%',
+              maxWidth: 400,
               justifyContent: 'center',
               alignItems: 'center',
               m: 2,
@@ -311,7 +332,8 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
 
   function getSendCommandButtonStyle() {
     return (theme: Theme) => ({
-      width: 96,
+      width: '100%',
+      minWidth: { xs: 'auto', sm: 96 },
       height: 48,
       background: theme.palette.custom.buttonBackground,
       border: `2px solid ${theme.palette.custom.buttonBorder}`,
