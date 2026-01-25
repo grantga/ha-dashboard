@@ -1,6 +1,6 @@
 // Service Worker for PWA functionality
 // Cache name should be updated when deploying new versions to ensure users get fresh content
-const CACHE_NAME = 'ha-dashboard-v1';
+const CACHE_NAME = 'ha-dashboard-v2';
 // Get base path from service worker registration scope
 const BASE_PATH = new URL('./', self.location).pathname;
 
@@ -53,7 +53,7 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event
 self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
@@ -98,32 +98,51 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Cache-first strategy for static assets
+  // Network-first strategy for HTML files and the root path
+  // This ensures users get the latest version of the app when online
+  const isHtmlRequest =
+    request.mode === 'navigate' ||
+    (request.method === 'GET' && request.headers.get('accept').includes('text/html')) ||
+    url.pathname === BASE_PATH ||
+    url.pathname === `${BASE_PATH}index.html`;
+
+  if (isHtmlRequest) {
+    event.respondWith(
+      fetch(request)
+        .then(response => {
+          // If valid response, cache it and return
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // If network fails, try to serve from cache
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+
+  // Stale-while-revalidate strategy for other static assets
   event.respondWith(
     caches.match(request).then(cachedResponse => {
-      if (cachedResponse) {
-        return cachedResponse;
-      }
-
-      return fetch(request).then(response => {
+      const fetchPromise = fetch(request).then(networkResponse => {
         // Don't cache non-successful responses
-        if (!response || response.status !== 200) {
-          return response;
-        }
-
-        // Clone the response before caching
-        const responseToCache = response.clone();
-        caches
-          .open(CACHE_NAME)
-          .then(cache => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then(cache => {
             cache.put(request, responseToCache);
-          })
-          .catch(error => {
-            console.error('[Service Worker] Failed to cache static asset:', error);
           });
-
-        return response;
+        }
+        return networkResponse;
       });
+
+      // Return cached response if available, otherwise wait for network
+      return cachedResponse || fetchPromise;
     })
   );
 });
