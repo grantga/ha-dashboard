@@ -4,10 +4,12 @@ import switchImg from '../resources/images/switch.svg';
 import xboxImg from '../resources/images/xbox.svg';
 import remoteImg from '../resources/images/remote.svg';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
+import { useEntity, type EntityName } from '@hakit/core';
 import DevicePickerModal from './DevicePickerModal';
 import type { DeviceType as PickerDeviceType } from './DevicePickerModal';
 import { useState } from 'react';
 import RokuRemoteModal from './RokuRemoteModal';
+import { getAppIcon } from '../resources/appIcons';
 
 type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default';
 
@@ -57,6 +59,27 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
   const setDevice: DeviceType = inferDevice(hdmiValue);
   const loadingDevice: DeviceType = inferDevice(loadingHdmiValue);
   const device: DeviceType = loadingHdmiValue !== '' ? loadingDevice : setDevice;
+
+  const mediaPlayerEntity =
+    device === 'roku1' || device === 'roku2'
+      ? ((device === 'roku1' ? 'media_player.roku_basement_1' : 'media_player.roku_basement_2') as EntityName)
+      : ('media_player.roku_basement_1' as EntityName);
+
+  const activeAppEntity =
+    device === 'roku1' || device === 'roku2'
+      ? ((device === 'roku1' ? 'sensor.roku_basement_1_active_app' : 'sensor.roku_basement_2_active_app') as EntityName)
+      : ('sensor.roku_basement_1_active_app' as EntityName);
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rokuMedia = useEntity(mediaPlayerEntity as any) as any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const activeAppSensor = useEntity(activeAppEntity as any) as any;
+
+  const currentAppName =
+    device === 'roku1' || device === 'roku2'
+      ? activeAppSensor?.state || rokuMedia?.attributes?.app_name || rokuMedia?.attributes?.source
+      : null;
+  const appIcon = getAppIcon(currentAppName);
 
   const handleSelectAudio = async () => {
     if (pickerOpen || remoteOpen) return;
@@ -149,8 +172,9 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          opacity: 0.25,
+          opacity: appIcon ? 0.4 : 0.25,
           pointerEvents: 'none',
+          transition: 'all 0.5s ease-in-out',
           // animate the full image area's opacity when a device update is in-flight
           '@keyframes flashDeviceImg': {
             '0%': { opacity: 0.25, transform: 'scale(1)' },
@@ -162,19 +186,21 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
       >
         <Box
           component='img'
-          src={device === 'roku1' || device === 'roku2' ? rokuImg : device === 'switch' ? switchImg : xboxImg}
+          src={appIcon || (device === 'roku1' || device === 'roku2' ? rokuImg : device === 'switch' ? switchImg : xboxImg)}
           alt={String(device)}
           sx={(theme: Theme) => ({
-            width: '85%',
-            height: '85%',
-            objectFit: 'contain',
+            width: appIcon ? '100%' : '85%',
+            height: appIcon ? '100%' : '85%',
+            objectFit: appIcon ? 'cover' : 'contain',
             // Apply theme color using filter - converts to indigo/slate color scheme
-            filter: isCurrentAudioSrc()
-              ? 'brightness(0) saturate(100%) invert(53%) sepia(98%) saturate(3283%) hue-rotate(225deg) brightness(102%) contrast(92%) drop-shadow(0 4px 12px rgba(99, 102, 241, 0.6))'
-              : theme.palette.mode === 'dark'
-                ? 'brightness(0) saturate(100%) invert(74%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(95%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
-                : 'brightness(0) saturate(100%) invert(35%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(85%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
-            transition: 'all 0.3s ease-in-out',
+            filter: appIcon
+              ? 'none'
+              : isCurrentAudioSrc()
+                ? 'brightness(0) saturate(100%) invert(53%) sepia(98%) saturate(3283%) hue-rotate(225deg) brightness(102%) contrast(92%) drop-shadow(0 4px 12px rgba(99, 102, 241, 0.6))'
+                : theme.palette.mode === 'dark'
+                  ? 'brightness(0) saturate(100%) invert(74%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(95%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
+                  : 'brightness(0) saturate(100%) invert(35%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(85%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
+            transition: 'all 0.5s ease-in-out',
           })}
         />
       </Box>
