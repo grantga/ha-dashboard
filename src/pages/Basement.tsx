@@ -95,7 +95,7 @@ export default function BasementPage() {
 
             {/* Right Column: Main Multiview Interface */}
             <Grid item xs={12} lg={8}>
-              <DashboardCard contentPadding={3}>
+              <DashboardCard contentPadding={appMode === 'multiview' ? 3 : 0} noPadding={appMode === 'movie'}>
                 {appMode === 'multiview' ? (
                   <>
                     <ModeSelector
