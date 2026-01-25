@@ -23,7 +23,7 @@ export default function BasementPage() {
   const { value: pbpMode, setValue: setPbpMode, loadingValue: loadingPbp } = useSelectEntityMode('select.orei_uhd_401mv_pbp_mode');
 
   // Receiver control for input switching
-  const { setSource } = useMediaPlayer('media_player.rx_v6a_bf8066');
+  const { setSource, value: receiverState } = useMediaPlayer('media_player.rx_v6a_bf8066');
 
   // Movie vs Multiview mode state
   const [appMode, setAppMode] = useState<'movie' | 'multiview'>('multiview');
@@ -80,7 +80,7 @@ export default function BasementPage() {
                   <Stack spacing={3}>
                     <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
                     <DevicePower currentMode={appMode} />
-                    <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
+                    {receiverState !== 'off' && receiverState !== 'unknown' && <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />}
                   </Stack>
                 </DashboardCard>
 

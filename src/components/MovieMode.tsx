@@ -85,40 +85,6 @@ export default function MovieMode() {
         />
       </Box>
 
-      {/* Device name overlay */}
-      <Box
-        sx={(theme: Theme) => ({
-          position: 'absolute',
-          bottom: { xs: 'auto', md: 0 },
-          top: { xs: 16, md: 'auto' },
-          left: 0,
-          right: 0,
-          background: { xs: 'transparent', md: theme.palette.custom.overlayGradient },
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: { xs: 'flex-start', md: 'flex-end' },
-          alignItems: { xs: 'center', md: 'flex-start' },
-          pb: { xs: 0, md: 4 },
-          px: 4,
-          zIndex: 1, // Lower zIndex so buttons are on top
-          pointerEvents: 'none', // Critical: allows clicks to pass through to the remote
-        })}
-      >
-        <Typography
-          variant='h2'
-          sx={(theme: Theme) => ({
-            color: theme.palette.mode === 'dark' ? 'white' : theme.palette.text.secondary,
-            textAlign: { xs: 'center', md: 'left' },
-            textShadow: theme.palette.mode === 'dark' ? '0 4px 12px rgba(0, 0, 0, 0.9)' : '0 2px 8px rgba(255, 255, 255, 0.8)',
-            fontSize: { xs: '2.25rem', sm: '3.5rem', lg: '4.5rem' },
-            fontWeight: 800,
-            letterSpacing: '-0.02em',
-          })}
-        >
-          Movie Room 4K
-        </Typography>
-      </Box>
-
       {/* Corner D-Pad Remote */}
       <Box
         sx={{
