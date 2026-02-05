@@ -42,7 +42,7 @@ export default function ModeSelector({
         aria-label='display mode'
         sx={{ width: '100%', justifyContent: 'center' }}
       >
-        <Grid container spacing={1.5} sx={{ p: 0, justifyContent: 'center' }}>
+        <Grid container spacing={1} sx={{ p: 0, justifyContent: 'center' }}>
           {MODES.map(m => {
             const IconComp = m.Icon;
             return (
@@ -51,8 +51,8 @@ export default function ModeSelector({
                   <Skeleton
                     variant='rectangular'
                     sx={(theme: Theme) => ({
-                      minWidth: 80,
-                      height: 80,
+                      minWidth: 60,
+                      height: 60,
                       display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
@@ -76,9 +76,9 @@ export default function ModeSelector({
                     <ToggleButton
                       value={m.key}
                       sx={(theme: Theme) => ({
-                        height: 90,
-                        minWidth: 80,
-                        px: 1.5,
+                        minWidth: 60,
+                        px: 1,
+                        py: 1,
                         display: 'flex',
                         justifyContent: 'center',
                         alignItems: 'center',
@@ -108,7 +108,16 @@ export default function ModeSelector({
                         },
                       })}
                     >
-                      <Box className='mode-icon' sx={{ color: 'text.secondary', transition: 'color 0.2s' }}>
+                      <Box
+                        className='mode-icon'
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: 'text.secondary',
+                          transition: 'color 0.2s',
+                        }}
+                      >
                         <IconComp />
                       </Box>
                     </ToggleButton>

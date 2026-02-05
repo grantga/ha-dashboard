@@ -1,5 +1,7 @@
 import { Box, Stack, Fade, Grid } from '@mui/material';
+import { useState } from 'react';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
+import useMediaPlayer from '../hooks/useMediaPlayer';
 import ModeSelector from '../components/ModeSelector';
 import MultiViewLayout from '../components/MultiViewLayout';
 import DevicePower from '../components/DevicePower';
@@ -7,6 +9,8 @@ import MediaPlayerControl from '../components/MediaPlayerControl';
 import ThemeToggle from '../components/ThemeToggle';
 import LightEntityControl from '../components/LightEntityControl';
 import DashboardCard from '../components/DashboardCard';
+import ModeToggle from '../components/ModeToggle';
+import MovieMode from '../components/MovieMode';
 
 export default function BasementPage() {
   const { value: mode, setValue: setMode, loadingValue: loadMode } = useSelectEntityMode('select.orei_uhd_401mv_multiview_mode');
@@ -17,6 +21,27 @@ export default function BasementPage() {
   } = useSelectEntityMode('select.orei_uhd_401mv_triple_mode');
   const { value: quadMode, setValue: setQuadMode, loadingValue: loadingQuad } = useSelectEntityMode('select.orei_uhd_401mv_quad_mode');
   const { value: pbpMode, setValue: setPbpMode, loadingValue: loadingPbp } = useSelectEntityMode('select.orei_uhd_401mv_pbp_mode');
+
+  // Receiver control for input switching
+  const { setSource, value: receiverState } = useMediaPlayer('media_player.rx_v6a_bf8066');
+
+  // Movie vs Multiview mode state
+  const [appMode, setAppMode] = useState<'movie' | 'multiview'>('multiview');
+  const [modeLoading, setModeLoading] = useState(false);
+
+  const handleModeChange = async (newMode: 'movie' | 'multiview') => {
+    setModeLoading(true);
+    setAppMode(newMode);
+
+    // Switch receiver input based on mode
+    if (newMode === 'movie') {
+      await setSource('Movie Room');
+    } else {
+      await setSource('HDMI1 multi');
+    }
+
+    setModeLoading(false);
+  };
 
   const loadingAny = loadMode !== '' || loadingTriple !== '' || loadingQuad !== '' || loadingPbp !== '';
   //handle the alt pbp, triple and quad modes
@@ -37,11 +62,34 @@ export default function BasementPage() {
         alignItems: 'flex-start',
         minHeight: '100vh',
         position: 'relative',
-        p: { xs: 2, md: 4 }, // Responsive padding
+        // Support for iOS safe areas (status bar, home indicator, notches)
+        pt: {
+          xs: 'calc(16px + env(safe-area-inset-top))',
+          md: 'calc(32px + env(safe-area-inset-top))',
+        },
+        pb: {
+          xs: 'calc(16px + env(safe-area-inset-bottom))',
+          md: 'calc(32px + env(safe-area-inset-bottom))',
+        },
+        pl: {
+          xs: 'calc(16px + env(safe-area-inset-left))',
+          md: 'calc(32px + env(safe-area-inset-left))',
+        },
+        pr: {
+          xs: 'calc(16px + env(safe-area-inset-right))',
+          md: 'calc(32px + env(safe-area-inset-right))',
+        },
       }}
     >
       {/* Theme Toggle - Floating in bottom-right */}
-      <Box sx={{ position: 'fixed', bottom: 24, right: 24, zIndex: 100 }}>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 'calc(24px + env(safe-area-inset-bottom))',
+          right: 'calc(24px + env(safe-area-inset-right))',
+          zIndex: 100,
+        }}
+      >
         <ThemeToggle />
       </Box>
 
@@ -53,8 +101,9 @@ export default function BasementPage() {
               <Stack spacing={3}>
                 <DashboardCard>
                   <Stack spacing={3}>
-                    <DevicePower />
-                    <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />
+                    <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
+                    <DevicePower currentMode={appMode} />
+                    {receiverState !== 'off' && receiverState !== 'unknown' && <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />}
                   </Stack>
                 </DashboardCard>
 
@@ -69,18 +118,24 @@ export default function BasementPage() {
 
             {/* Right Column: Main Multiview Interface */}
             <Grid item xs={12} lg={8}>
-              <DashboardCard contentPadding={3}>
-                <ModeSelector
-                  mode={detailedMode}
-                  setMode={setMode}
-                  setTripleMode={setTripleMode}
-                  setQuadMode={setQuadMode}
-                  setPbpMode={setPbpMode}
-                  loading={loadingAny}
-                />
-                <Box sx={{ mt: 3 }}>
-                  <MultiViewLayout mode={detailedMode} loading={loadingAny} />
-                </Box>
+              <DashboardCard contentPadding={appMode === 'multiview' ? 3 : 0} noPadding={appMode === 'movie'}>
+                {appMode === 'multiview' ? (
+                  <>
+                    <ModeSelector
+                      mode={detailedMode}
+                      setMode={setMode}
+                      setTripleMode={setTripleMode}
+                      setQuadMode={setQuadMode}
+                      setPbpMode={setPbpMode}
+                      loading={loadingAny}
+                    />
+                    <Box sx={{ mt: 3 }}>
+                      <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+                    </Box>
+                  </>
+                ) : (
+                  <MovieMode />
+                )}
               </DashboardCard>
             </Grid>
           </Grid>

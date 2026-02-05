@@ -1,5 +1,5 @@
 import { ThemeProvider, CssBaseline } from '@mui/material';
-import { HassConnect } from '@hakit/core';
+import { HassConnectWithReconnect } from './components/HassConnectWithReconnect';
 import BasementPage from './pages/Basement';
 import { darkTheme, lightTheme } from './theme';
 import { useState, useMemo } from 'react';
@@ -23,14 +23,14 @@ function App() {
   const theme = useMemo(() => (mode === 'light' ? lightTheme : darkTheme), [mode]);
 
   return (
-    <HassConnect hassUrl={import.meta.env.VITE_HA_URL} hassToken={import.meta.env.VITE_HA_TOKEN}>
+    <HassConnectWithReconnect hassUrl={import.meta.env.VITE_HA_URL}>
       <ThemeContext.Provider value={{ mode, toggleTheme }}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <BasementPage />
         </ThemeProvider>
       </ThemeContext.Provider>
-    </HassConnect>
+    </HassConnectWithReconnect>
   );
 }
 

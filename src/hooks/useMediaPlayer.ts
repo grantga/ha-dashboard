@@ -17,6 +17,7 @@ type UseMediaPlayer = {
   sources: string[] | null;
   currentSource: string | null;
   setSource: (source: string) => Promise<void>;
+  attributes: Record<string, unknown>;
 };
 
 export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
@@ -147,5 +148,6 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
     sources,
     currentSource,
     setSource,
+    attributes: entity?.attributes ?? {},
   };
 }

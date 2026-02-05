@@ -4,7 +4,7 @@ import rokuImg from '../resources/images/roku.svg';
 import switchImg from '../resources/images/switch.svg';
 import xboxImg from '../resources/images/xbox.svg';
 
-export type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default';
+export type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default' | 'movie_room_4k';
 
 type Props = {
   open: boolean;
