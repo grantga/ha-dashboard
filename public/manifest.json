@@ -2,7 +2,7 @@
   "name": "Basement Dashboard",
   "short_name": "Basement",
   "description": "Home Assistant Basement Dashboard",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#121212",
