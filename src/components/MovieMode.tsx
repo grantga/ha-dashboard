@@ -11,16 +11,13 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import HomeIcon from '@mui/icons-material/Home';
 import BackIcon from '@mui/icons-material/ArrowBack';
 
-import { getAppIcon } from '../resources/appIcons';
-
 export default function MovieMode() {
   const [remoteOpen, setRemoteOpen] = useState(false);
 
-  const ROKU_ENTITIES: Record<string, { remote: EntityName; media: EntityName; activeApp: EntityName }> = {
+  const ROKU_ENTITIES: Record<string, { remote: EntityName; media: EntityName }> = {
     movie_room_4k: {
       remote: 'remote.movie_room_4k' as EntityName,
       media: 'media_player.movie_room_4k' as EntityName,
-      activeApp: 'sensor.movie_room_4k_active_app' as EntityName,
     },
   };
 
@@ -29,11 +26,14 @@ export default function MovieMode() {
   const rokuRemote = useEntity(selected.remote as any) as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rokuMedia = useEntity(selected.media as any) as any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const activeAppSensor = useEntity(selected.activeApp as any) as any;
 
-  const currentAppName = activeAppSensor?.state || rokuMedia?.attributes?.app_name || rokuMedia?.attributes?.source;
-  const appIcon = getAppIcon(currentAppName);
+  // Get app icon from Home Assistant media player entity_picture
+  let appIcon = rokuMedia?.attributes?.entity_picture;
+
+  // If the entity_picture is a relative URL, prepend the HA URL
+  if (appIcon && appIcon.startsWith('/')) {
+    appIcon = `${import.meta.env.VITE_HA_URL}${appIcon}`;
+  }
 
   const sendRokuCommand = (value: string) => () => {
     rokuRemote.service.sendCommand({
@@ -46,14 +46,14 @@ export default function MovieMode() {
       sx={{
         position: 'relative',
         width: '100%',
-        height: { xs: 500, md: 500, lg: 600 }, // Fixed md height typo
+        height: { xs: 400, md: 500, lg: 600 }, // Reduced mobile height to prevent scrolling
         overflow: 'hidden',
         borderRadius: 2,
       }}
     >
       {/* Roku device background image */}
       <Box
-        sx={{
+        sx={(theme: Theme) => ({
           position: 'absolute',
           top: 0,
           left: 0,
@@ -62,10 +62,10 @@ export default function MovieMode() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          opacity: appIcon ? 0.4 : 0.25,
+          opacity: appIcon ? (theme.palette.mode === 'dark' ? 0.5 : 0.45) : 0.25,
           pointerEvents: 'none',
           transition: 'all 0.5s ease-in-out',
-        }}
+        })}
       >
         <Box
           component='img'
@@ -74,9 +74,12 @@ export default function MovieMode() {
           sx={(theme: Theme) => ({
             width: appIcon ? '100%' : '85%',
             height: appIcon ? '100%' : '85%',
-            objectFit: appIcon ? 'cover' : 'contain',
+            objectFit: 'contain',
+            objectPosition: 'center',
             filter: appIcon
-              ? 'none'
+              ? theme.palette.mode === 'dark'
+                ? 'brightness(1.1) contrast(1.05) saturate(1.1) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5))'
+                : 'brightness(0.95) contrast(1.1) saturate(1.05) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))'
               : theme.palette.mode === 'dark'
                 ? 'brightness(0) saturate(100%) invert(74%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(95%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
                 : 'brightness(0) saturate(100%) invert(35%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(85%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
