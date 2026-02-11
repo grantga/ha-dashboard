@@ -38,157 +38,157 @@ export default function MediaPlayerControl({ entityId }: Props) {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
         <IconButton
-            onClick={() => setMuted && setMuted(!(muted ?? false))}
-            disabled={value === 'off' || muted == null}
-            aria-label='mute'
-            title={muted ? 'Unmute' : 'Mute'}
-            sx={(theme: Theme) => ({
-              bgcolor: muted ? 'primary.main' : 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${theme.palette.divider}`,
-              '&:hover': {
-                bgcolor: muted ? 'primary.dark' : 'rgba(255, 255, 255, 0.1)',
-                borderColor: theme.palette.primary.main,
-              },
-              transition: 'all 0.2s',
-              width: 48,
-              height: 48,
-            })}
-          >
-            <VolumeOffIcon color={muted ? 'inherit' : 'inherit'} />
-          </IconButton>
+          onClick={() => setMuted && setMuted(!(muted ?? false))}
+          disabled={value === 'off' || muted == null}
+          aria-label='mute'
+          title={muted ? 'Unmute' : 'Mute'}
+          sx={(theme: Theme) => ({
+            bgcolor: muted ? 'primary.main' : 'rgba(255, 255, 255, 0.05)',
+            border: `1px solid ${theme.palette.divider}`,
+            '&:hover': {
+              bgcolor: muted ? 'primary.dark' : 'rgba(255, 255, 255, 0.1)',
+              borderColor: theme.palette.primary.main,
+            },
+            transition: 'all 0.2s',
+            width: 48,
+            height: 48,
+          })}
+        >
+          <VolumeOffIcon color={muted ? 'inherit' : 'inherit'} />
+        </IconButton>
 
-          <IconButton
-            onClick={() => volumeDown()}
-            disabled={disabled}
-            aria-label='volume down'
-            sx={(theme: Theme) => ({
-              bgcolor: 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${theme.palette.divider}`,
-              '&:hover': {
-                bgcolor: 'rgba(255, 255, 255, 0.1)',
-                borderColor: theme.palette.primary.main,
-              },
-              width: 48,
-              height: 48,
-            })}
-          >
-            <VolumeDownIcon color={muted || disabled ? 'inherit' : 'primary'} />
-          </IconButton>
+        <IconButton
+          onClick={() => volumeDown()}
+          disabled={disabled}
+          aria-label='volume down'
+          sx={(theme: Theme) => ({
+            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            border: `1px solid ${theme.palette.divider}`,
+            '&:hover': {
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              borderColor: theme.palette.primary.main,
+            },
+            width: 48,
+            height: 48,
+          })}
+        >
+          <VolumeDownIcon color={muted || disabled ? 'inherit' : 'primary'} />
+        </IconButton>
 
+        <Box
+          sx={(theme: Theme) => ({
+            flex: 1,
+            position: 'relative',
+            height: 48,
+            borderRadius: 1,
+            overflow: 'hidden',
+            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            border: `1px solid ${theme.palette.divider}`,
+          })}
+        >
+          {/* Volume fill bar */}
           <Box
             sx={(theme: Theme) => ({
-              flex: 1,
-              position: 'relative',
-              height: 48,
-              borderRadius: 1,
-              overflow: 'hidden',
-              bgcolor: 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${theme.palette.divider}`,
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              bottom: 0,
+              width: `${muted ? 0 : Math.round((volume ?? 0) * 100)}%`,
+              bgcolor: muted ? 'transparent' : theme.palette.primary.main,
+              opacity: disabled ? 0.3 : 0.6,
+              transition: 'width 0.2s ease-out',
             })}
+          />
+          {/* Text overlay */}
+          <Box
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            {/* Volume fill bar */}
-            <Box
-              sx={(theme: Theme) => ({
-                position: 'absolute',
-                left: 0,
-                top: 0,
-                bottom: 0,
-                width: `${muted ? 0 : Math.round((volume ?? 0) * 100)}%`,
-                bgcolor: muted ? 'transparent' : theme.palette.primary.main,
-                opacity: disabled ? 0.3 : 0.6,
-                transition: 'width 0.2s ease-out',
-              })}
-            />
-            {/* Text overlay */}
-            <Box
-              sx={{
-                position: 'absolute',
-                inset: 0,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              {muted ? (
+            {muted ? (
+              <Typography
+                variant='h6'
+                sx={{
+                  fontWeight: 'bold',
+                  color: 'text.disabled',
+                  fontFamily: 'monospace',
+                  whiteSpace: 'nowrap',
+                  fontSize: '1.1rem',
+                }}
+              >
+                Muted
+              </Typography>
+            ) : (
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
                 <Typography
                   variant='h6'
                   sx={{
                     fontWeight: 'bold',
-                    color: 'text.disabled',
+                    color: disabled ? 'text.disabled' : 'text.primary',
                     fontFamily: 'monospace',
                     whiteSpace: 'nowrap',
-                    fontSize: '1.1rem',
+                    fontSize: '1.25rem',
+                    lineHeight: 1.2,
                   }}
                 >
-                  Muted
+                  {volume !== null ? `${Math.round(volume * 100)}%` : '--%'}
                 </Typography>
-              ) : (
-                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 }}>
-                  <Typography
-                    variant='h6'
-                    sx={{
-                      fontWeight: 'bold',
-                      color: disabled ? 'text.disabled' : 'text.primary',
-                      fontFamily: 'monospace',
-                      whiteSpace: 'nowrap',
-                      fontSize: '1.25rem',
-                      lineHeight: 1.2,
-                    }}
-                  >
-                    {volume !== null ? `${Math.round(volume * 100)}%` : '--%'}
-                  </Typography>
-                  <Typography
-                    variant='caption'
-                    sx={{
-                      color: 'text.secondary',
-                      fontFamily: 'monospace',
-                      whiteSpace: 'nowrap',
-                      fontSize: '0.7rem',
-                    }}
-                  >
-                    {formatDb(volume)}
-                  </Typography>
-                </Box>
-              )}
-            </Box>
+                <Typography
+                  variant='caption'
+                  sx={{
+                    color: 'text.secondary',
+                    fontFamily: 'monospace',
+                    whiteSpace: 'nowrap',
+                    fontSize: '0.7rem',
+                  }}
+                >
+                  {formatDb(volume)}
+                </Typography>
+              </Box>
+            )}
           </Box>
+        </Box>
 
-          <IconButton
-            onClick={() => volumeUp()}
-            disabled={disabled}
-            aria-label='volume up'
-            sx={(theme: Theme) => ({
-              bgcolor: 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${theme.palette.divider}`,
-              '&:hover': {
-                bgcolor: 'rgba(255, 255, 255, 0.1)',
-                borderColor: theme.palette.primary.main,
-              },
-              width: 48,
-              height: 48,
-            })}
-          >
-            <VolumeUpIcon color={muted || disabled ? 'inherit' : 'primary'} />
-          </IconButton>
+        <IconButton
+          onClick={() => volumeUp()}
+          disabled={disabled}
+          aria-label='volume up'
+          sx={(theme: Theme) => ({
+            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            border: `1px solid ${theme.palette.divider}`,
+            '&:hover': {
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              borderColor: theme.palette.primary.main,
+            },
+            width: 48,
+            height: 48,
+          })}
+        >
+          <VolumeUpIcon color={muted || disabled ? 'inherit' : 'primary'} />
+        </IconButton>
 
-          <IconButton
-            onClick={() => setInputModalOpen(true)}
-            disabled={!sources || value === 'off'}
-            aria-label='select input'
-            title={currentSource ?? 'Select input'}
-            sx={(theme: Theme) => ({
-              ml: 'auto',
-              bgcolor: 'rgba(255, 255, 255, 0.05)',
-              border: `1px solid ${theme.palette.divider}`,
-              '&:hover': {
-                bgcolor: 'rgba(255, 255, 255, 0.1)',
-                borderColor: theme.palette.primary.main,
-              },
-              width: 48,
-              height: 48,
-            })}
-          >
-            <InputIcon color={value === 'off' ? 'inherit' : 'primary'} />
+        <IconButton
+          onClick={() => setInputModalOpen(true)}
+          disabled={!sources || value === 'off'}
+          aria-label='select input'
+          title={currentSource ?? 'Select input'}
+          sx={(theme: Theme) => ({
+            ml: 'auto',
+            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            border: `1px solid ${theme.palette.divider}`,
+            '&:hover': {
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              borderColor: theme.palette.primary.main,
+            },
+            width: 48,
+            height: 48,
+          })}
+        >
+          <InputIcon color={value === 'off' ? 'inherit' : 'primary'} />
         </IconButton>
       </Box>
 

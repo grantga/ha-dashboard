@@ -1,6 +1,5 @@
 import { Box, IconButton, type Theme } from '@mui/material';
 import { useState } from 'react';
-import rokuImg from '../resources/images/roku.svg';
 import remoteImg from '../resources/images/remote.svg';
 import RokuRemoteModal from './RokuRemoteModal';
 import { useEntity, type EntityName } from '@hakit/core';
@@ -39,10 +38,6 @@ export default function MovieMode() {
     rokuRemote.service.sendCommand({
       serviceData: { device: rokuRemote.entity_id, command: value, num_repeats: 1, delay_secs: 0, hold_secs: 0 },
     });
-  };
-
-  const sendRokuLaunchApp = (command: string) => () => {
-    rokuMedia.service.selectSource({ serviceData: { source: command } });
   };
 
   return (
