@@ -1,10 +1,15 @@
-import { Box, Skeleton, Typography, type Theme } from '@mui/material';
+import { Box, Skeleton, Typography, type Theme, useMediaQuery, useTheme } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import HDMIInput from './HDMIInput';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 
 export default function MultiViewLayout({ mode, loading }: { mode: string | null; loading: boolean }) {
-  const previewHeight = 280;
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.down('md'));
+
+  // Responsive height: smaller on mobile
+  const previewHeight = isMobile ? 200 : isTablet ? 240 : 280;
   const {
     value: audioSource,
     loadingValue: loadingAudioSource,
@@ -65,7 +70,15 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
               />
             </Grid>
           </Grid>
-          <Box sx={{ position: 'absolute', right: 24, bottom: 24, width: 180, height: 140 }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              right: { xs: 12, sm: 24 },
+              bottom: { xs: 12, sm: 24 },
+              width: { xs: 120, sm: 150, md: 180 },
+              height: { xs: 90, sm: 110, md: 140 },
+            }}
+          >
             <HDMIInput windowIndex={2} audioSource={audioSource} loadingAudioSource={loadingAudioSource} setAudioSource={setAudioSource} />
           </Box>
         </Box>

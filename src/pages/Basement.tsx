@@ -1,5 +1,5 @@
 import { Box, Stack, Fade, Grid } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import useMediaPlayer from '../hooks/useMediaPlayer';
 import ModeSelector from '../components/ModeSelector';
@@ -23,11 +23,24 @@ export default function BasementPage() {
   const { value: pbpMode, setValue: setPbpMode, loadingValue: loadingPbp } = useSelectEntityMode('select.orei_uhd_401mv_pbp_mode');
 
   // Receiver control for input switching
-  const { setSource, value: receiverState } = useMediaPlayer('media_player.rx_v6a_bf8066');
+  const { setSource, value: receiverState, currentSource } = useMediaPlayer('media_player.rx_v6a_bf8066');
 
   // Movie vs Multiview mode state
   const [appMode, setAppMode] = useState<'movie' | 'multiview'>('multiview');
   const [modeLoading, setModeLoading] = useState(false);
+  const initializedRef = useRef(false);
+
+  // Initialize app mode based on receiver's current source
+  useEffect(() => {
+    if (!initializedRef.current && currentSource) {
+      initializedRef.current = true;
+      if (currentSource === 'Movie Room') {
+        setAppMode('movie');
+      } else {
+        setAppMode('multiview');
+      }
+    }
+  }, [currentSource]);
 
   const handleModeChange = async (newMode: 'movie' | 'multiview') => {
     setModeLoading(true);
@@ -64,19 +77,23 @@ export default function BasementPage() {
         position: 'relative',
         // Support for iOS safe areas (status bar, home indicator, notches)
         pt: {
-          xs: 'calc(16px + env(safe-area-inset-top))',
+          xs: 'calc(12px + env(safe-area-inset-top))',
+          sm: 'calc(16px + env(safe-area-inset-top))',
           md: 'calc(32px + env(safe-area-inset-top))',
         },
         pb: {
-          xs: 'calc(16px + env(safe-area-inset-bottom))',
+          xs: 'calc(12px + env(safe-area-inset-bottom))',
+          sm: 'calc(16px + env(safe-area-inset-bottom))',
           md: 'calc(32px + env(safe-area-inset-bottom))',
         },
         pl: {
-          xs: 'calc(16px + env(safe-area-inset-left))',
+          xs: 'calc(12px + env(safe-area-inset-left))',
+          sm: 'calc(16px + env(safe-area-inset-left))',
           md: 'calc(32px + env(safe-area-inset-left))',
         },
         pr: {
-          xs: 'calc(16px + env(safe-area-inset-right))',
+          xs: 'calc(12px + env(safe-area-inset-right))',
+          sm: 'calc(16px + env(safe-area-inset-right))',
           md: 'calc(32px + env(safe-area-inset-right))',
         },
       }}
@@ -95,30 +112,27 @@ export default function BasementPage() {
 
       <Box sx={{ maxWidth: 1400, width: '100%' }}>
         <Fade in timeout={500}>
-          <Grid container spacing={4}>
-            {/* Left Column: Controls (Power, Media, Lights) */}
+          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+            {/* Controls Column - Shows first on mobile */}
             <Grid item xs={12} lg={4}>
-              <Stack spacing={3}>
+              <Stack spacing={{ xs: 2, sm: 3 }}>
+                <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
                 <DashboardCard>
-                  <Stack spacing={3}>
-                    <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
+                  <Stack spacing={{ xs: 2, sm: 3 }}>
                     <DevicePower currentMode={appMode} />
+                    <LightEntityControl
+                      entityId='light.h600b'
+                      controlEntityIds={['light.h600b', 'light.h600b_2', 'light.h600b_3', 'light.h6046']}
+                    />
                     {receiverState !== 'off' && receiverState !== 'unknown' && <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />}
                   </Stack>
-                </DashboardCard>
-
-                <DashboardCard>
-                  <LightEntityControl
-                    entityId='light.h600b'
-                    controlEntityIds={['light.h600b', 'light.h600b_2', 'light.h600b_3', 'light.h6046']}
-                  />
                 </DashboardCard>
               </Stack>
             </Grid>
 
-            {/* Right Column: Main Multiview Interface */}
+            {/* Main Content */}
             <Grid item xs={12} lg={8}>
-              <DashboardCard contentPadding={appMode === 'multiview' ? 3 : 0} noPadding={appMode === 'movie'}>
+              <DashboardCard contentPadding={appMode === 'multiview' ? { xs: 2, sm: 3 } : 0} noPadding={appMode === 'movie'}>
                 {appMode === 'multiview' ? (
                   <>
                     <ModeSelector
@@ -129,7 +143,7 @@ export default function BasementPage() {
                       setPbpMode={setPbpMode}
                       loading={loadingAny}
                     />
-                    <Box sx={{ mt: 3 }}>
+                    <Box sx={{ mt: { xs: 2, sm: 3 } }}>
                       <MultiViewLayout mode={detailedMode} loading={loadingAny} />
                     </Box>
                   </>

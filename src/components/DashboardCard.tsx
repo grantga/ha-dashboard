@@ -1,27 +1,20 @@
 import { Card, CardContent, type CardProps, styled } from '@mui/material';
 import type { ReactNode } from 'react';
+import type { ResponsiveStyleValue } from '@mui/system';
 
 interface DashboardCardProps extends CardProps {
   children: ReactNode;
-  contentPadding?: number;
+  contentPadding?: ResponsiveStyleValue<number | string>;
   noPadding?: boolean;
 }
 
 const StyledCard = styled(Card)(({ theme }) => ({
   background: theme.palette.custom.cardBackgroundGradient,
   backdropFilter: 'blur(16px)',
-  border: `1px solid ${theme.palette.custom.border}`, // Using the updated border color
+  border: `1px solid ${theme.palette.custom.border}`,
   borderRadius: theme.shape.borderRadius,
-  overflow: 'visible', // Allow glows to bleed out if we add them later
+  overflow: 'visible',
   position: 'relative',
-  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-
-  '&:hover': {
-    background: theme.palette.custom.cardBackgroundGradientHover,
-    border: `1px solid ${theme.palette.custom.borderHover}`,
-    transform: 'translateY(-2px)',
-    boxShadow: theme.palette.custom.shadowPrimaryHover,
-  },
 
   // subtle inner highlight
   '&::before': {

@@ -1,8 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useLightEntity from '../hooks/useLightEntity';
 import type { EntityName } from '@hakit/core';
-import { Box, Button, Divider, type Theme } from '@mui/material';
+import { Box, Button, type Theme } from '@mui/material';
 import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import PaletteIcon from '@mui/icons-material/Palette';
+import ColorPickerModal from './ColorPickerModal';
 
 interface LightEntityControlProps {
   /** status entity id to read attributes from */
@@ -16,7 +18,7 @@ function hslToRgb(h: number, s: number, l: number) {
   h = h / 360;
   let r: number, g: number, b: number;
   if (s === 0) {
-    r = g = b = l; // achromatic
+    r = g = b = l;
   } else {
     const hue2rgb = (p: number, q: number, t: number) => {
       if (t < 0) t += 1;
@@ -35,13 +37,7 @@ function hslToRgb(h: number, s: number, l: number) {
   return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
 }
 
-const WHITE_COLOR = { r: 255, g: 255, b: 255 };
 const WHITE_COLOR_TEMP = 310;
-
-const rgbEquals = (a: { r: number; g: number; b: number } | null | undefined, b: { r: number; g: number; b: number }) => {
-  if (!a) return false;
-  return a.r === b.r && a.g === b.g && a.b === b.b;
-};
 
 const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, controlEntityIds }) => {
   const { value, brightness, color, colorTemp, turnOn, turnOff, setBrightness, setColor, setColorTemp } = useLightEntity(
@@ -50,19 +46,16 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
   );
 
   const [pendingBrightness, setPendingBrightness] = useState<number | null>(brightness);
-  const [pickerHue, setPickerHue] = useState<number | null>(null); // 0..360
-  const [isPicking, setIsPicking] = useState(false);
-  const gradientRef = useRef<HTMLDivElement | null>(null);
+  const [pickerHue, setPickerHue] = useState<number | null>(null);
+  const [colorPickerOpen, setColorPickerOpen] = useState(false);
 
   useEffect(() => setPendingBrightness(brightness), [brightness]);
   useEffect(() => {
     if (color) {
-      // if the color equals the configured white color, treat as white selection
       if (colorTemp === WHITE_COLOR_TEMP) {
         setPickerHue(null);
         return;
       }
-      // convert rgb to hue approximation by converting to hsl and taking hue
       const r = color.r / 255;
       const g = color.g / 255;
       const b = color.b / 255;
@@ -95,8 +88,12 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
     if (pendingBrightness !== null) setBrightness(pendingBrightness);
   };
 
-  // compute the color used for fills (preference: explicit color, else pickerHue)
+  // Check if we're in white/color temp mode
+  const isWhiteMode = colorTemp === WHITE_COLOR_TEMP || pickerHue === null;
+
+  // compute the color used for fills
   const computedFillColor = (() => {
+    if (isWhiteMode) return 'rgb(255, 255, 255)';
     if (color) return `rgb(${color.r}, ${color.g}, ${color.b})`;
     if (pickerHue !== null) {
       const c = hslToRgb(pickerHue, 1, 0.5);
@@ -105,11 +102,10 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
     return 'rgb(200,200,200)';
   })();
 
-  // compute a slightly darker background color for the filled portion of the brightness track
+  // compute a darker background color for unfilled portion
   const computedFillColorBackground = (() => {
-    // derive a base RGB from explicit color or picker hue
+    if (isWhiteMode) return 'rgb(128, 128, 128)';
     const base = color ?? (pickerHue !== null ? hslToRgb(pickerHue, 1, 0.5) : { r: 200, g: 200, b: 200 });
-    // darken by factor (0..1) — lower = darker
     const factor = 0.5;
     const r = Math.max(0, Math.min(255, Math.round(base.r * factor)));
     const g = Math.max(0, Math.min(255, Math.round(base.g * factor)));
@@ -119,43 +115,18 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
 
   const fillPercent = Math.max(0, Math.min(100, pendingBrightness ?? 0));
 
-  // handle picking on the hue gradient
-  const handlePointer = (clientX: number) => {
-    const el = gradientRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
-    const ratio = x / rect.width;
-    const hue = Math.round(ratio * 360);
-    setPickerHue(hue);
-    // map hue to rgb with full saturation and 50% lightness for vivid color
-    const rgb = hslToRgb(hue, 1, 0.5);
+  const handleColorChange = (rgb: { r: number; g: number; b: number }) => {
     setColor(rgb);
   };
 
-  const onPointerDown = (e: React.PointerEvent) => {
-    (e.target as Element).setPointerCapture?.(e.pointerId);
-    setIsPicking(true);
-    handlePointer(e.clientX);
-  };
-
-  const onPointerMove = (e: React.PointerEvent) => {
-    if (!isPicking) return;
-    handlePointer(e.clientX);
-  };
-
-  const onPointerUp = (e: React.PointerEvent) => {
-    try {
-      (e.target as Element).releasePointerCapture?.(e.pointerId);
-    } catch {
-      // ignore pointer release errors
-    }
-    setIsPicking(false);
+  const handleColorTempChange = (temp: number) => {
+    setColorTemp(temp);
+    setPickerHue(null);
   };
 
   return (
-    <div style={{ width: '100%' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 1.5 } }}>
         <Button
           variant={value === 'on' ? 'contained' : 'outlined'}
           size='large'
@@ -173,10 +144,10 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
           }}
         >
           <Box component='span' sx={{ display: 'block' }}>
-            {value === 'on' ? 'Lights On' : 'Lights Off'}
+            Lights
           </Box>
         </Button>
-        <Divider />
+
         {/* hide default circular thumb for brightness slider */}
         <style>{`
         .brightness-range { -webkit-appearance: none; appearance: none; }
@@ -185,98 +156,74 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
         .brightness-range::-ms-thumb { width: 0; height: 0; background: transparent; border: none; }
       `}</style>
 
-        <input
+        <Box
+          component='input'
           className='brightness-range'
           type='range'
           min={0}
           max={100}
           value={pendingBrightness ?? 0}
-          onChange={e => setPendingBrightness(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPendingBrightness(Number(e.target.value))}
           onMouseUp={commitBrightness}
           onTouchEnd={commitBrightness}
           disabled={value !== 'on'}
           aria-disabled={value !== 'on'}
-          style={{
+          sx={{
             flex: 1,
-            height: 40,
-            marginLeft: 12,
-            borderRadius: 8,
-            // background is dynamic per current color/fill
+            height: { xs: 36, sm: 40 },
+            borderRadius: 1,
             background: `linear-gradient(90deg, ${computedFillColor} ${fillPercent}%, ${computedFillColorBackground} ${fillPercent}%)`,
             opacity: value === 'on' ? 1 : 0.45,
             cursor: value === 'on' ? 'pointer' : 'not-allowed',
           }}
         />
+
+        {/* Color picker button */}
+        <Box
+          onClick={() => value === 'on' && setColorPickerOpen(true)}
+          role='button'
+          aria-label='Open color picker'
+          sx={(theme: Theme) => ({
+            width: { xs: 36, sm: 40 },
+            height: { xs: 36, sm: 40 },
+            borderRadius: 1,
+            background: computedFillColor,
+            border: `2px solid ${theme.palette.custom.border}`,
+            cursor: value === 'on' ? 'pointer' : 'not-allowed',
+            opacity: value === 'on' ? 1 : 0.45,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            transition: 'all 0.2s ease-in-out',
+            '&:hover':
+              value === 'on'
+                ? {
+                    borderColor: theme.palette.primary.main,
+                    transform: 'scale(1.05)',
+                  }
+                : {},
+          })}
+        >
+          <PaletteIcon
+            sx={(theme: Theme) => ({
+              fontSize: { xs: 18, sm: 20 },
+              color: theme.palette.mode === 'dark' ? 'rgba(0,0,0,0.6)' : 'rgba(255,255,255,0.9)',
+              filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.3))',
+            })}
+          />
+        </Box>
       </Box>
 
-      <div style={{ marginTop: 12, display: 'flex', flexDirection: 'column', flex: 1, minHeight: 0, justifyContent: 'space-between' }}>
-        <label style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div
-            style={{
-              display: 'flex',
-              gap: 8,
-              alignItems: 'center',
-              flex: 1,
-              minWidth: 0,
-              opacity: value === 'on' ? 1 : 0.5,
-              pointerEvents: value === 'on' ? 'auto' : 'none',
-            }}
-            aria-disabled={value !== 'on'}
-          >
-            {/* white preset box */}
-            <div
-              onClick={() => {
-                setColorTemp(WHITE_COLOR_TEMP);
-                setPickerHue(null);
-              }}
-              role='button'
-              aria-label='Select white preset'
-              style={{
-                width: 60,
-                height: 40,
-                borderRadius: 8,
-                border: rgbEquals(color, WHITE_COLOR) ? '2px solid #1f6feb' : '1px solid #aaa',
-                background: `rgb(${WHITE_COLOR.r}, ${WHITE_COLOR.g}, ${WHITE_COLOR.b})`,
-                cursor: value === 'on' ? 'pointer' : 'not-allowed',
-                boxShadow: value === 'on' && rgbEquals(color, WHITE_COLOR) ? '0 0 0 6px rgba(31,111,235,0.08)' : 'none',
-              }}
-            />
-            <div
-              ref={gradientRef}
-              onPointerDown={onPointerDown}
-              onPointerMove={onPointerMove}
-              onPointerUp={onPointerUp}
-              style={{
-                height: 40,
-                borderRadius: 8,
-                background: 'linear-gradient(to right, red, yellow, lime, cyan, blue, magenta, red)',
-                position: 'relative',
-                touchAction: 'none',
-                cursor: 'pointer',
-                flex: 1,
-                minWidth: 0,
-              }}
-            >
-              {/* indicator */}
-              {pickerHue !== null && (
-                <div
-                  style={{
-                    position: 'absolute',
-                    left: `calc(${(pickerHue / 360) * 100}% - 8px)`,
-                    top: -4,
-                    width: 12,
-                    height: 48,
-                    borderRadius: 6,
-                    boxShadow: '0 0 0 2px rgba(255,255,255,0.8), 0 0 2px rgba(0,0,0,0.3)',
-                    border: '1px solid rgba(0,0,0,0.25)',
-                  }}
-                />
-              )}
-            </div>
-          </div>
-        </label>
-      </div>
-    </div>
+      <ColorPickerModal
+        open={colorPickerOpen}
+        onClose={() => setColorPickerOpen(false)}
+        currentHue={pickerHue}
+        currentColorTemp={colorTemp}
+        onColorChange={handleColorChange}
+        onColorTempChange={handleColorTempChange}
+      />
+    </Box>
   );
 };
 
