@@ -56,7 +56,7 @@ export default function ModeSelector({
           gap: { xs: 0.5, sm: 1 },
           width: 'max-content',
           minWidth: '100%',
-          justifyContent: 'flex-start',
+          justifyContent: 'center',
           '& .MuiToggleButtonGroup-grouped': {
             border: 'none',
             '&:not(:first-of-type)': {

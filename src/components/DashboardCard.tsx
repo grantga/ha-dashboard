@@ -31,7 +31,7 @@ const StyledCard = styled(Card)(({ theme }) => ({
   },
 }));
 
-export default function DashboardCard({ children, contentPadding = 3, noPadding = false, sx, ...props }: DashboardCardProps) {
+export default function DashboardCard({ children, contentPadding = 2, noPadding = false, sx, ...props }: DashboardCardProps) {
   return (
     <StyledCard elevation={0} sx={sx} {...props}>
       {noPadding ? children : <CardContent sx={{ p: contentPadding, '&:last-child': { pb: contentPadding } }}>{children}</CardContent>}

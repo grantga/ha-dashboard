@@ -26,7 +26,7 @@ export default function BasementPage() {
   const { setSource, value: receiverState, currentSource } = useMediaPlayer('media_player.rx_v6a_bf8066');
 
   // Movie vs Multiview mode state
-  const [appMode, setAppMode] = useState<'movie' | 'multiview'>('multiview');
+  const [appMode, setAppMode] = useState<'movie' | 'multiview'>('movie');
   const [modeLoading, setModeLoading] = useState(false);
   const initializedRef = useRef(false);
 
@@ -112,7 +112,7 @@ export default function BasementPage() {
 
       <Box sx={{ maxWidth: 1400, width: '100%' }}>
         <Fade in timeout={500}>
-          <Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+          <Grid container spacing={{ xs: 2, sm: 3 }}>
             {/* Controls Column - Shows first on mobile */}
             <Grid item xs={12} lg={4}>
               <Stack spacing={{ xs: 2, sm: 3 }}>
@@ -132,25 +132,23 @@ export default function BasementPage() {
 
             {/* Main Content */}
             <Grid item xs={12} lg={8}>
-              <DashboardCard contentPadding={appMode === 'multiview' ? { xs: 2, sm: 3 } : 0} noPadding={appMode === 'movie'}>
-                {appMode === 'multiview' ? (
-                  <>
-                    <ModeSelector
-                      mode={detailedMode}
-                      setMode={setMode}
-                      setTripleMode={setTripleMode}
-                      setQuadMode={setQuadMode}
-                      setPbpMode={setPbpMode}
-                      loading={loadingAny}
-                    />
-                    <Box sx={{ mt: { xs: 2, sm: 3 } }}>
-                      <MultiViewLayout mode={detailedMode} loading={loadingAny} />
-                    </Box>
-                  </>
-                ) : (
-                  <MovieMode />
-                )}
-              </DashboardCard>
+              {appMode === 'multiview' ? (
+                <DashboardCard contentPadding={appMode === 'multiview' ? { xs: 2, sm: 3 } : 0} noPadding={appMode === 'movie'}>
+                  <ModeSelector
+                    mode={detailedMode}
+                    setMode={setMode}
+                    setTripleMode={setTripleMode}
+                    setQuadMode={setQuadMode}
+                    setPbpMode={setPbpMode}
+                    loading={loadingAny}
+                  />
+                  <Box sx={{ mt: { xs: 2, sm: 3 } }}>
+                    <MultiViewLayout mode={detailedMode} loading={loadingAny} />
+                  </Box>
+                </DashboardCard>
+              ) : (
+                <MovieMode />
+              )}
             </Grid>
           </Grid>
         </Fade>
