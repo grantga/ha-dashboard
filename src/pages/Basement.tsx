@@ -133,7 +133,7 @@ export default function BasementPage() {
             {/* Main Content */}
             <Grid item xs={12} lg={8}>
               {appMode === 'multiview' ? (
-                <DashboardCard contentPadding={appMode === 'multiview' ? { xs: 2, sm: 3 } : 0} noPadding={appMode === 'movie'}>
+                <DashboardCard contentPadding={{ xs: 2, sm: 3 }} noPadding={false}>
                   <ModeSelector
                     mode={detailedMode}
                     setMode={setMode}

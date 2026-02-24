@@ -5,16 +5,7 @@ type AppLaunchCardProps = {
 };
 
 export default function AppLaunchCard({ onLaunchApp }: AppLaunchCardProps) {
-  const apps = [
-    'ESPN',
-    'Xfinity Stream',
-    'Disney Plus',
-    'Netflix',
-    'FOX Sports',
-    'Prime Video',
-    'YouTube TV',
-    'Apple TV',
-  ];
+  const apps = ['ESPN', 'Xfinity Stream', 'Disney Plus', 'Netflix', 'FOX Sports', 'Prime Video', 'YouTube TV', 'Apple TV'];
 
   const appDisplayNames: Record<string, string> = {
     'Xfinity Stream': 'Xfinity',
@@ -37,7 +28,7 @@ export default function AppLaunchCard({ onLaunchApp }: AppLaunchCardProps) {
         border: `1px solid ${theme.palette.custom.border}`,
       })}
     >
-      {apps.map((app) => (
+      {apps.map(app => (
         <IconButton
           key={app}
           onClick={() => onLaunchApp(app)}

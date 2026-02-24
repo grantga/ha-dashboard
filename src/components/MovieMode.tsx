@@ -61,248 +61,248 @@ export default function MovieMode() {
             padding: 0,
           }}
         >
-        {/* Left side - D-Pad Remote (50%) */}
-        <Box
-          sx={{
-            width: '50%',
-            display: 'flex',
-            justifyContent: 'center',
-          }}
-        >
-          {/* D-Pad Remote using flexbox layout */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: { xs: 160, sm: 200 }, m: { xs: 2, sm: 3 } }}>
-            {/* Row 1: Home, Up, Back */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <IconButton
-                disableRipple
-                onClick={sendRokuCommand('home')}
-                sx={(theme: Theme) => ({
-                  width: { xs: 40, sm: 48 },
-                  height: { xs: 40, sm: 48 },
-                  background: theme.palette.custom.buttonBackground,
-                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  color: theme.palette.custom.iconColor,
-                  backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    background: theme.palette.custom.buttonBackgroundHover,
-                    borderColor: 'primary.main',
-                    transform: 'scale(1.1)',
-                    boxShadow: theme.palette.custom.shadowPrimaryHover,
-                  },
-                  '&:focus, &:focus-visible, &.Mui-focusVisible': {
-                    outline: 'none',
+          {/* Left side - D-Pad Remote (50%) */}
+          <Box
+            sx={{
+              width: '50%',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            {/* D-Pad Remote using flexbox layout */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: { xs: 160, sm: 200 }, m: { xs: 2, sm: 3 } }}>
+              {/* Row 1: Home, Up, Back */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <IconButton
+                  disableRipple
+                  onClick={sendRokuCommand('home')}
+                  sx={(theme: Theme) => ({
+                    width: { xs: 40, sm: 48 },
+                    height: { xs: 40, sm: 48 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  },
-                })}
-              >
-                <HomeIcon sx={{ fontSize: '1.25rem' }} />
-              </IconButton>
+                    color: theme.palette.custom.iconColor,
+                    backdropFilter: 'blur(8px)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      background: theme.palette.custom.buttonBackgroundHover,
+                      borderColor: 'primary.main',
+                      transform: 'scale(1.1)',
+                      boxShadow: theme.palette.custom.shadowPrimaryHover,
+                    },
+                    '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                      outline: 'none',
+                      background: theme.palette.custom.buttonBackground,
+                      border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                    },
+                  })}
+                >
+                  <HomeIcon sx={{ fontSize: '1.25rem' }} />
+                </IconButton>
 
-              <IconButton
-                disableRipple
-                onClick={sendRokuCommand('up')}
-                sx={(theme: Theme) => ({
-                  width: { xs: 44, sm: 56 },
-                  height: { xs: 44, sm: 56 },
-                  background: theme.palette.custom.buttonBackground,
-                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  color: theme.palette.custom.iconColor,
-                  backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    background: theme.palette.custom.buttonBackgroundHover,
-                    borderColor: 'primary.main',
-                    transform: 'scale(1.1)',
-                    boxShadow: theme.palette.custom.shadowPrimaryHover,
-                  },
-                  '&:focus, &:focus-visible, &.Mui-focusVisible': {
-                    outline: 'none',
+                <IconButton
+                  disableRipple
+                  onClick={sendRokuCommand('up')}
+                  sx={(theme: Theme) => ({
+                    width: { xs: 44, sm: 56 },
+                    height: { xs: 44, sm: 56 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  },
-                })}
-              >
-                <ArrowUpwardIcon />
-              </IconButton>
+                    color: theme.palette.custom.iconColor,
+                    backdropFilter: 'blur(8px)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      background: theme.palette.custom.buttonBackgroundHover,
+                      borderColor: 'primary.main',
+                      transform: 'scale(1.1)',
+                      boxShadow: theme.palette.custom.shadowPrimaryHover,
+                    },
+                    '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                      outline: 'none',
+                      background: theme.palette.custom.buttonBackground,
+                      border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                    },
+                  })}
+                >
+                  <ArrowUpwardIcon />
+                </IconButton>
 
-              <IconButton
-                disableRipple
-                onClick={sendRokuCommand('back')}
-                sx={(theme: Theme) => ({
-                  width: { xs: 40, sm: 48 },
-                  height: { xs: 40, sm: 48 },
-                  background: theme.palette.custom.buttonBackground,
-                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  color: theme.palette.custom.iconColor,
-                  backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    background: theme.palette.custom.buttonBackgroundHover,
-                    borderColor: 'primary.main',
-                    transform: 'scale(1.1)',
-                    boxShadow: theme.palette.custom.shadowPrimaryHover,
-                  },
-                  '&:focus, &:focus-visible, &.Mui-focusVisible': {
-                    outline: 'none',
+                <IconButton
+                  disableRipple
+                  onClick={sendRokuCommand('back')}
+                  sx={(theme: Theme) => ({
+                    width: { xs: 40, sm: 48 },
+                    height: { xs: 40, sm: 48 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  },
-                })}
-              >
-                <BackIcon sx={{ fontSize: '1.25rem' }} />
-              </IconButton>
-            </Box>
+                    color: theme.palette.custom.iconColor,
+                    backdropFilter: 'blur(8px)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      background: theme.palette.custom.buttonBackgroundHover,
+                      borderColor: 'primary.main',
+                      transform: 'scale(1.1)',
+                      boxShadow: theme.palette.custom.shadowPrimaryHover,
+                    },
+                    '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                      outline: 'none',
+                      background: theme.palette.custom.buttonBackground,
+                      border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                    },
+                  })}
+                >
+                  <BackIcon sx={{ fontSize: '1.25rem' }} />
+                </IconButton>
+              </Box>
 
-            {/* Row 2: Left, OK, Right */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <IconButton
-                disableRipple
-                onClick={sendRokuCommand('left')}
-                sx={(theme: Theme) => ({
-                  width: { xs: 44, sm: 56 },
-                  height: { xs: 44, sm: 56 },
-                  background: theme.palette.custom.buttonBackground,
-                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  color: theme.palette.custom.iconColor,
-                  backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    background: theme.palette.custom.buttonBackgroundHover,
-                    borderColor: 'primary.main',
-                    transform: 'scale(1.1)',
-                    boxShadow: theme.palette.custom.shadowPrimaryHover,
-                  },
-                  '&:focus, &:focus-visible, &.Mui-focusVisible': {
-                    outline: 'none',
+              {/* Row 2: Left, OK, Right */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <IconButton
+                  disableRipple
+                  onClick={sendRokuCommand('left')}
+                  sx={(theme: Theme) => ({
+                    width: { xs: 44, sm: 56 },
+                    height: { xs: 44, sm: 56 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  },
-                })}
-              >
-                <ArrowBackIcon />
-              </IconButton>
+                    color: theme.palette.custom.iconColor,
+                    backdropFilter: 'blur(8px)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      background: theme.palette.custom.buttonBackgroundHover,
+                      borderColor: 'primary.main',
+                      transform: 'scale(1.1)',
+                      boxShadow: theme.palette.custom.shadowPrimaryHover,
+                    },
+                    '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                      outline: 'none',
+                      background: theme.palette.custom.buttonBackground,
+                      border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                    },
+                  })}
+                >
+                  <ArrowBackIcon />
+                </IconButton>
 
-              <IconButton
-                disableRipple
-                onClick={sendRokuCommand('select')}
-                sx={(theme: Theme) => ({
-                  width: { xs: 52, sm: 64 },
-                  height: { xs: 52, sm: 64 },
-                  background: theme.palette.custom.cardBackgroundGradient,
-                  border: `2px solid ${theme.palette.primary.main}`,
-                  color: 'white',
-                  fontSize: '1rem',
-                  fontWeight: 800,
-                  backdropFilter: 'blur(12px)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.1)',
-                    boxShadow: theme.palette.custom.shadowPrimaryHover,
-                    filter: 'brightness(1.2)',
-                  },
-                  '&:focus, &:focus-visible, &.Mui-focusVisible': {
-                    outline: 'none',
+                <IconButton
+                  disableRipple
+                  onClick={sendRokuCommand('select')}
+                  sx={(theme: Theme) => ({
+                    width: { xs: 52, sm: 64 },
+                    height: { xs: 52, sm: 64 },
                     background: theme.palette.custom.cardBackgroundGradient,
                     border: `2px solid ${theme.palette.primary.main}`,
-                  },
-                })}
-              >
-                OK
-              </IconButton>
+                    color: 'white',
+                    fontSize: '1rem',
+                    fontWeight: 800,
+                    backdropFilter: 'blur(12px)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      transform: 'scale(1.1)',
+                      boxShadow: theme.palette.custom.shadowPrimaryHover,
+                      filter: 'brightness(1.2)',
+                    },
+                    '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                      outline: 'none',
+                      background: theme.palette.custom.cardBackgroundGradient,
+                      border: `2px solid ${theme.palette.primary.main}`,
+                    },
+                  })}
+                >
+                  OK
+                </IconButton>
 
-              <IconButton
-                disableRipple
-                onClick={sendRokuCommand('right')}
-                sx={(theme: Theme) => ({
-                  width: { xs: 44, sm: 56 },
-                  height: { xs: 44, sm: 56 },
-                  background: theme.palette.custom.buttonBackground,
-                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  color: theme.palette.custom.iconColor,
-                  backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    background: theme.palette.custom.buttonBackgroundHover,
-                    borderColor: 'primary.main',
-                    transform: 'scale(1.1)',
-                    boxShadow: theme.palette.custom.shadowPrimaryHover,
-                  },
-                  '&:focus, &:focus-visible, &.Mui-focusVisible': {
-                    outline: 'none',
+                <IconButton
+                  disableRipple
+                  onClick={sendRokuCommand('right')}
+                  sx={(theme: Theme) => ({
+                    width: { xs: 44, sm: 56 },
+                    height: { xs: 44, sm: 56 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  },
-                })}
-              >
-                <ArrowForwardIcon />
-              </IconButton>
-            </Box>
+                    color: theme.palette.custom.iconColor,
+                    backdropFilter: 'blur(8px)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      background: theme.palette.custom.buttonBackgroundHover,
+                      borderColor: 'primary.main',
+                      transform: 'scale(1.1)',
+                      boxShadow: theme.palette.custom.shadowPrimaryHover,
+                    },
+                    '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                      outline: 'none',
+                      background: theme.palette.custom.buttonBackground,
+                      border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                    },
+                  })}
+                >
+                  <ArrowForwardIcon />
+                </IconButton>
+              </Box>
 
-            {/* Row 3: Empty, Down, Remote button */}
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Box sx={{ width: { xs: 40, sm: 48 } }} />
+              {/* Row 3: Empty, Down, Remote button */}
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Box sx={{ width: { xs: 40, sm: 48 } }} />
 
-              <IconButton
-                disableRipple
-                onClick={sendRokuCommand('down')}
-                sx={(theme: Theme) => ({
-                  width: { xs: 44, sm: 56 },
-                  height: { xs: 44, sm: 56 },
-                  background: theme.palette.custom.buttonBackground,
-                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  color: theme.palette.custom.iconColor,
-                  backdropFilter: 'blur(8px)',
-                  transition: 'all 0.2s ease-in-out',
-                  '&:hover': {
-                    background: theme.palette.custom.buttonBackgroundHover,
-                    borderColor: 'primary.main',
-                    transform: 'scale(1.1)',
-                    boxShadow: theme.palette.custom.shadowPrimaryHover,
-                  },
-                  '&:focus, &:focus-visible, &.Mui-focusVisible': {
-                    outline: 'none',
+                <IconButton
+                  disableRipple
+                  onClick={sendRokuCommand('down')}
+                  sx={(theme: Theme) => ({
+                    width: { xs: 44, sm: 56 },
+                    height: { xs: 44, sm: 56 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
-                  },
-                })}
-              >
-                <ArrowDownwardIcon />
-              </IconButton>
+                    color: theme.palette.custom.iconColor,
+                    backdropFilter: 'blur(8px)',
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      background: theme.palette.custom.buttonBackgroundHover,
+                      borderColor: 'primary.main',
+                      transform: 'scale(1.1)',
+                      boxShadow: theme.palette.custom.shadowPrimaryHover,
+                    },
+                    '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                      outline: 'none',
+                      background: theme.palette.custom.buttonBackground,
+                      border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                    },
+                  })}
+                >
+                  <ArrowDownwardIcon />
+                </IconButton>
 
-              <Box sx={{ width: { xs: 40, sm: 48 } }} />
+                <Box sx={{ width: { xs: 40, sm: 48 } }} />
+              </Box>
             </Box>
           </Box>
-        </Box>
 
-        {/* Right side - App Icon (50%) */}
-        <Box
-          sx={{
-            width: '50%',
-            display: 'flex',
-            justifyContent: 'center',
-            overflow: 'hidden',
-          }}
-        >
-          {appIcon && (
-            <Box
-              component='img'
-              src={appIcon}
-              alt='Current App'
-              sx={{
-                maxWidth: '100%',
-                objectFit: 'contain',
-                borderRadius: 2,
-              }}
-            />
-          )}
-        </Box>
-      </CardContent>
+          {/* Right side - App Icon (50%) */}
+          <Box
+            sx={{
+              width: '50%',
+              display: 'flex',
+              justifyContent: 'center',
+              overflow: 'hidden',
+            }}
+          >
+            {appIcon && (
+              <Box
+                component='img'
+                src={appIcon}
+                alt='Current App'
+                sx={{
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  borderRadius: 2,
+                }}
+              />
+            )}
+          </Box>
+        </CardContent>
       </Card>
 
       {/* Bottom section - App Launch Icons */}
-      <AppLaunchCard onLaunchApp={(app) => sendRokuLaunchApp(app)()} />
+      <AppLaunchCard onLaunchApp={app => sendRokuLaunchApp(app)()} />
     </Box>
   );
 }
