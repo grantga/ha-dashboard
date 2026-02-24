@@ -7,9 +7,8 @@ import useSelectEntityMode from '../hooks/useSelectEntityMode';
 import { useEntity, type EntityName } from '@hakit/core';
 import DevicePickerModal from './DevicePickerModal';
 import type { DeviceType as PickerDeviceType } from './DevicePickerModal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import RokuRemoteModal from './RokuRemoteModal';
-import { getAppIcon } from '../resources/appIcons';
 
 type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default';
 
@@ -28,6 +27,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
   } = useSelectEntityMode(`select.orei_uhd_401mv_window_${windowIndex}_input`);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [remoteOpen, setRemoteOpen] = useState(false);
+  const [xboxImageFailed, setXboxImageFailed] = useState(false);
 
   const inferDevice = (val: unknown): DeviceType => {
     // Try to extract the HDMI/input number first
@@ -65,21 +65,33 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
       ? ((device === 'roku1' ? 'media_player.roku_basement_1' : 'media_player.roku_basement_2') as EntityName)
       : ('media_player.roku_basement_1' as EntityName);
 
-  const activeAppEntity =
-    device === 'roku1' || device === 'roku2'
-      ? ((device === 'roku1' ? 'sensor.roku_basement_1_active_app' : 'sensor.roku_basement_2_active_app') as EntityName)
-      : ('sensor.roku_basement_1_active_app' as EntityName);
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const rokuMedia = useEntity(mediaPlayerEntity as any) as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const activeAppSensor = useEntity(activeAppEntity as any) as any;
+  const xboxImage = useEntity('image.gstar00_now_playing' as any) as any;
+  const xboxEntityPicture = xboxImage?.attributes?.entity_picture;
 
-  const currentAppName =
-    device === 'roku1' || device === 'roku2'
-      ? activeAppSensor?.state || rokuMedia?.attributes?.app_name || rokuMedia?.attributes?.source
-      : null;
-  const appIcon = getAppIcon(currentAppName);
+  // Reset xbox image failed state when the entity_picture URL changes
+  useEffect(() => {
+    setXboxImageFailed(false);
+  }, [xboxEntityPicture]);
+
+  // Get app icon from Home Assistant media player entity_picture
+  let appIcon: string | null = null;
+  if (device === 'roku1' || device === 'roku2') {
+    appIcon = rokuMedia?.attributes?.entity_picture ?? null;
+  } else if (device === 'xbox' && !xboxImageFailed) {
+    // Only show Xbox now playing if the entity is available and image hasn't failed
+    const xboxState = xboxImage?.state;
+    if (xboxState && xboxState !== 'unavailable' && xboxState !== 'unknown') {
+      appIcon = xboxEntityPicture ?? null;
+    }
+  }
+
+  // If the entity_picture is a relative URL, prepend the HA URL
+  if (appIcon && appIcon.startsWith('/')) {
+    appIcon = `${import.meta.env.VITE_HA_URL}${appIcon}`;
+  }
 
   const handleSelectAudio = async () => {
     if (pickerOpen || remoteOpen) return;
@@ -161,20 +173,32 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
         animation: isFlashingAudio ? 'flashBorder 1s ease-in-out infinite' : 'none',
       })}
     >
-      {/* Full-bleed SVG background */}
+      {/* Background image - positioned right for devices with app icon, centered for others */}
       <Box
-        sx={{
+        sx={(theme: Theme) => ({
           position: 'absolute',
           top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          // For devices with app icon: align to right. For others: center
+          ...(appIcon
+            ? {
+                right: 0,
+                width: '75%',
+                justifyContent: 'flex-end',
+              }
+            : {
+                left: '50%',
+                transform: 'translateX(-50%)',
+                justifyContent: 'center',
+              }),
+          height: '100%',
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          opacity: appIcon ? 0.4 : 0.25,
+          opacity: appIcon ? (theme.palette.mode === 'dark' ? 0.5 : 0.45) : 0.25,
           pointerEvents: 'none',
           transition: 'all 0.5s ease-in-out',
+          // Gradient mask only for devices with app icons
+          maskImage: appIcon ? 'linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.3) 15%, rgba(0, 0, 0, 1) 33%)' : 'none',
+          WebkitMaskImage: appIcon ? 'linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.3) 15%, rgba(0, 0, 0, 1) 33%)' : 'none',
           // animate the full image area's opacity when a device update is in-flight
           '@keyframes flashDeviceImg': {
             '0%': { opacity: 0.25, transform: 'scale(1)' },
@@ -182,21 +206,28 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
             '100%': { opacity: 0.25, transform: 'scale(1)' },
           },
           animation: isFlashingDevice ? 'flashDeviceImg 900ms ease-in-out infinite' : 'none',
-        }}
+        })}
       >
         <Box
           component='img'
           src={appIcon || (device === 'roku1' || device === 'roku2' ? rokuImg : device === 'switch' ? switchImg : xboxImg)}
           alt={String(device)}
+          onError={() => {
+            if (device === 'xbox') setXboxImageFailed(true);
+          }}
           sx={(theme: Theme) => ({
-            width: appIcon ? '100%' : '85%',
-            height: appIcon ? '100%' : '85%',
+            width: appIcon ? '100%' : '70%',
+            height: appIcon ? '100%' : '70%',
             objectFit: appIcon ? 'cover' : 'contain',
-            // Apply theme color using filter - converts to indigo/slate color scheme
+            // With app icon: align right, others: center
+            objectPosition: appIcon ? 'center right' : 'center',
+            // Apply theme color using filter - converts to blue/slate color scheme
             filter: appIcon
-              ? 'none'
+              ? theme.palette.mode === 'dark'
+                ? 'brightness(1.1) contrast(1.05) saturate(1.1) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.5))'
+                : 'brightness(0.95) contrast(1.1) saturate(1.05) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25))'
               : isCurrentAudioSrc()
-                ? 'brightness(0) saturate(100%) invert(53%) sepia(98%) saturate(3283%) hue-rotate(225deg) brightness(102%) contrast(92%) drop-shadow(0 4px 12px rgba(99, 102, 241, 0.6))'
+                ? 'brightness(0) saturate(100%) invert(60%) sepia(50%) saturate(1000%) hue-rotate(190deg) brightness(100%) contrast(95%) drop-shadow(0 4px 12px rgba(96, 165, 250, 0.5))'
                 : theme.palette.mode === 'dark'
                   ? 'brightness(0) saturate(100%) invert(74%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(95%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
                   : 'brightness(0) saturate(100%) invert(35%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(85%) contrast(87%) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2))',
@@ -216,28 +247,26 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
           }
           setPickerOpen(true);
         }}
-        sx={(theme: Theme) => ({
+        sx={{
           position: 'absolute',
           bottom: 0,
           left: 0,
           right: 0,
-          background: theme.palette.custom.overlayGradient,
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'flex-end',
           alignItems: 'flex-start',
-          pb: 2,
-          px: 2,
+          pb: { xs: 1.5, sm: 2 },
+          px: { xs: 1.5, sm: 2 },
           cursor: 'pointer',
           transition: 'all 0.2s ease-in-out',
           '&:hover': {
-            background: theme.palette.custom.overlayGradientHover,
             '& .device-name': {
               color: 'primary.main',
               transform: 'translateX(4px)',
             },
           },
-        })}
+        }}
       >
         <Typography
           className='device-name'
@@ -246,7 +275,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
             color: theme.palette.mode === 'dark' ? 'white' : theme.palette.text.secondary,
             textAlign: 'left',
             textShadow: theme.palette.mode === 'dark' ? '0 2px 8px rgba(0, 0, 0, 0.9)' : '0 2px 8px rgba(255, 255, 255, 0.8)',
-            fontSize: { xs: '1.5rem', sm: '2rem' },
+            fontSize: { xs: '1.25rem', sm: '2rem' },
             fontWeight: 700,
             letterSpacing: '-0.01em',
             transition: 'all 0.2s ease-in-out',
@@ -270,10 +299,10 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
           }}
           sx={(theme: Theme) => ({
             position: 'absolute',
-            top: 16,
-            right: 16,
-            width: 48,
-            height: 48,
+            top: { xs: 12, sm: 16 },
+            right: { xs: 12, sm: 16 },
+            width: { xs: 40, sm: 48 },
+            height: { xs: 40, sm: 48 },
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -293,8 +322,8 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
               '& img': {
                 filter:
                   theme.palette.mode === 'dark'
-                    ? 'brightness(0) saturate(100%) invert(53%) sepia(98%) saturate(3283%) hue-rotate(225deg) brightness(102%) contrast(92%)'
-                    : 'brightness(0) saturate(100%) invert(44%) sepia(98%) saturate(1613%) hue-rotate(194deg) brightness(98%) contrast(91%)',
+                    ? 'brightness(0) saturate(100%) invert(60%) sepia(50%) saturate(1000%) hue-rotate(190deg) brightness(100%) contrast(95%)'
+                    : 'brightness(0) saturate(100%) invert(45%) sepia(70%) saturate(800%) hue-rotate(190deg) brightness(95%) contrast(90%)',
               },
             },
             '&:active': {
@@ -306,8 +335,8 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
             component='img'
             src={remoteImg}
             sx={(theme: Theme) => ({
-              height: 28,
-              width: 28,
+              height: { xs: 24, sm: 28 },
+              width: { xs: 24, sm: 28 },
               filter:
                 theme.palette.mode === 'dark'
                   ? 'brightness(0) saturate(100%) invert(74%) sepia(12%) saturate(896%) hue-rotate(185deg) brightness(95%) contrast(87%)'
