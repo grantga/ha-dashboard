@@ -1,5 +1,4 @@
 import { Box, ToggleButton, ToggleButtonGroup, Tooltip, Skeleton, type Theme } from '@mui/material';
-import Grid from '@mui/material/Grid2';
 import { IconSingle, IconPIP, IconPBP, IconPBPAlt, IconTripleA, IconTripleB, IconQuadA, IconQuadB } from './MultiviewIcons';
 
 const MODES = [
@@ -32,7 +31,18 @@ export default function ModeSelector({
     return null;
   }
   return (
-    <Box {...(loading ? { 'aria-busy': true } : {})}>
+    <Box
+      {...(loading ? { 'aria-busy': true } : {})}
+      sx={{
+        overflowX: 'auto',
+        overflowY: 'hidden',
+        WebkitOverflowScrolling: 'touch',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': { display: 'none' },
+        mx: { xs: -2, sm: -3 },
+        px: { xs: 2, sm: 3 },
+      }}
+    >
       <ToggleButtonGroup
         value={mode}
         exclusive
@@ -40,93 +50,90 @@ export default function ModeSelector({
           setSelectedMode(v);
         }}
         aria-label='display mode'
-        sx={{ width: '100%', justifyContent: 'center' }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: { xs: 0.5, sm: 1 },
+          width: 'max-content',
+          minWidth: '100%',
+          justifyContent: 'center',
+          '& .MuiToggleButtonGroup-grouped': {
+            border: 'none',
+            '&:not(:first-of-type)': {
+              borderLeft: 'none',
+              marginLeft: 0,
+            },
+          },
+        }}
       >
-        <Grid container spacing={1} sx={{ p: 0, justifyContent: 'center' }}>
-          {MODES.map(m => {
-            const IconComp = m.Icon;
-            return (
-              <Grid key={m.key}>
-                {loading ? (
-                  <Skeleton
-                    variant='rectangular'
-                    sx={(theme: Theme) => ({
-                      minWidth: 60,
-                      height: 60,
-                      display: 'flex',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      px: 1,
-                      borderRadius: 2,
-                      background: theme.palette.custom.shimmerGradient,
-                      backgroundSize: '200% 100%',
-                      animation: 'shimmer 6s infinite',
-                      '@keyframes shimmer': {
-                        '0%': {
-                          backgroundPosition: '200% 0',
-                        },
-                        '100%': {
-                          backgroundPosition: '-200% 0',
-                        },
-                      },
-                    })}
-                  />
-                ) : (
-                  <Tooltip title={m.label} placement='top' arrow>
-                    <ToggleButton
-                      value={m.key}
-                      sx={(theme: Theme) => ({
-                        minWidth: 60,
-                        px: 1,
-                        py: 1,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        border: `1px solid ${theme.palette.custom.border}`,
-                        backgroundColor: 'transparent',
-                        '&:hover': {
-                          transform: 'translateY(-2px)',
-                          backgroundColor: theme.palette.custom.buttonBackgroundHover,
-                          borderColor: theme.palette.custom.buttonBorderHover,
-                          boxShadow: theme.palette.custom.shadowPrimaryHover,
-                          '& .mode-icon': {
-                            color: theme.palette.custom.iconColorHover,
-                          },
-                        },
-                        '&.Mui-selected': {
-                          transform: 'scale(1.05)',
-                          backgroundColor: theme.palette.custom.buttonBackgroundHover,
-                          borderColor: theme.palette.primary.main,
-                          boxShadow: `0 0 20px ${theme.palette.primary.main}40`,
-                          '& .mode-icon': {
-                            color: theme.palette.primary.main,
-                          },
-                          '&:hover': {
-                            backgroundColor: theme.palette.custom.buttonBackgroundHover,
-                          },
-                        },
-                      })}
-                    >
-                      <Box
-                        className='mode-icon'
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          color: 'text.secondary',
-                          transition: 'color 0.2s',
-                        }}
-                      >
-                        <IconComp />
-                      </Box>
-                    </ToggleButton>
-                  </Tooltip>
-                )}
-              </Grid>
-            );
-          })}
-        </Grid>
+        {MODES.map(m => {
+          const IconComp = m.Icon;
+          return loading ? (
+            <Skeleton
+              key={m.key}
+              variant='rectangular'
+              sx={(theme: Theme) => ({
+                minWidth: { xs: 48, sm: 60 },
+                minHeight: { xs: 48, sm: 60 },
+                flexShrink: 0,
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                borderRadius: 2,
+                background: theme.palette.custom.shimmerGradient,
+                backgroundSize: '200% 100%',
+                animation: 'shimmer 6s infinite',
+                '@keyframes shimmer': {
+                  '0%': { backgroundPosition: '200% 0' },
+                  '100%': { backgroundPosition: '-200% 0' },
+                },
+              })}
+            />
+          ) : (
+            <Tooltip key={m.key} title={m.label} placement='top' arrow>
+              <ToggleButton
+                value={m.key}
+                sx={(theme: Theme) => ({
+                  minWidth: { xs: 48, sm: 60 },
+                  minHeight: { xs: 48, sm: 60 },
+                  flexShrink: 0,
+                  px: { xs: 0.5, sm: 1 },
+                  py: { xs: 0.5, sm: 1 },
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  border: 'none',
+                  backgroundColor: 'transparent',
+                  '&:hover': {
+                    backgroundColor: 'transparent',
+                  },
+                  '&.Mui-selected': {
+                    backgroundColor: 'transparent',
+                    '& .mode-icon': {
+                      color: theme.palette.primary.main,
+                    },
+                    '&:hover': {
+                      backgroundColor: 'transparent',
+                    },
+                  },
+                })}
+              >
+                <Box
+                  className='mode-icon'
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'text.secondary',
+                    transition: 'color 0.2s',
+                  }}
+                >
+                  <IconComp />
+                </Box>
+              </ToggleButton>
+            </Tooltip>
+          );
+        })}
       </ToggleButtonGroup>
     </Box>
   );

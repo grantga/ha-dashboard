@@ -88,6 +88,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
           {/* Top row: Home and Back */}
           <Box sx={{ display: 'flex', gap: 2 }}>
             <IconButton
+              disableRipple
               onClick={sendRokuCommand('home')}
               sx={(theme: Theme) => ({
                 width: 56,
@@ -105,11 +106,17 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                 '&:active': {
                   transform: 'scale(0.95)',
                 },
+                '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                  outline: 'none',
+                  background: theme.palette.custom.buttonBackground,
+                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                },
               })}
             >
               <HomeIcon />
             </IconButton>
             <IconButton
+              disableRipple
               onClick={sendRokuCommand('back')}
               sx={(theme: Theme) => ({
                 width: 56,
@@ -126,6 +133,11 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                 },
                 '&:active': {
                   transform: 'scale(0.95)',
+                },
+                '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                  outline: 'none',
+                  background: theme.palette.custom.buttonBackground,
+                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
                 },
               })}
             >
@@ -146,6 +158,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
           >
             {/* Up */}
             <IconButton
+              disableRipple
               onClick={sendRokuCommand('up')}
               sx={(theme: Theme) => ({
                 position: 'absolute',
@@ -167,6 +180,11 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                 '&:active': {
                   transform: 'translateX(-50%) scale(0.95)',
                 },
+                '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                  outline: 'none',
+                  background: theme.palette.custom.buttonBackground,
+                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                },
               })}
             >
               <ArrowUpwardIcon />
@@ -174,6 +192,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
 
             {/* Left */}
             <IconButton
+              disableRipple
               onClick={sendRokuCommand('left')}
               sx={(theme: Theme) => ({
                 position: 'absolute',
@@ -195,6 +214,11 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                 '&:active': {
                   transform: 'translateY(-50%) scale(0.95)',
                 },
+                '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                  outline: 'none',
+                  background: theme.palette.custom.buttonBackground,
+                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                },
               })}
             >
               <ArrowBackIcon2 />
@@ -202,6 +226,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
 
             {/* OK button in center */}
             <IconButton
+              disableRipple
               onClick={sendRokuCommand('select')}
               sx={(theme: Theme) => ({
                 width: 64,
@@ -222,6 +247,11 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                 '&:active': {
                   transform: 'scale(0.95)',
                 },
+                '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                  outline: 'none',
+                  background: theme.palette.custom.cardBackgroundGradient,
+                  border: `2px solid ${theme.palette.custom.buttonBorderHover}`,
+                },
               })}
             >
               OK
@@ -229,6 +259,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
 
             {/* Right */}
             <IconButton
+              disableRipple
               onClick={sendRokuCommand('right')}
               sx={(theme: Theme) => ({
                 position: 'absolute',
@@ -250,6 +281,11 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                 '&:active': {
                   transform: 'translateY(-50%) scale(0.95)',
                 },
+                '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                  outline: 'none',
+                  background: theme.palette.custom.buttonBackground,
+                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
+                },
               })}
             >
               <ArrowForwardIcon />
@@ -257,6 +293,7 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
 
             {/* Down */}
             <IconButton
+              disableRipple
               onClick={sendRokuCommand('down')}
               sx={(theme: Theme) => ({
                 position: 'absolute',
@@ -277,6 +314,11 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
                 },
                 '&:active': {
                   transform: 'translateX(-50%) scale(0.95)',
+                },
+                '&:focus, &:focus-visible, &.Mui-focusVisible': {
+                  outline: 'none',
+                  background: theme.palette.custom.buttonBackground,
+                  border: `2px solid ${theme.palette.custom.buttonBorder}`,
                 },
               })}
             >
