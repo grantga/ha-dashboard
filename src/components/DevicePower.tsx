@@ -58,22 +58,12 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
   ];
 
   const handleClick = (device: (typeof devices)[number]) => {
-    // Toggle local on/off state for the button and log the new state
     if (device.id === 'all') {
-      // if all devices are  on, turn them all off
-      if (devices.every(d => d.isOn)) {
-        devices.forEach(d => {
-          if (d.togglePower && d.isOn && d.visible) {
-            d.togglePower();
-          }
-        });
+      const visibleDevices = devices.filter(d => d.id !== 'all' && d.visible);
+      if (visibleDevices.every(d => d.isOn)) {
+        visibleDevices.forEach(d => d.togglePower?.());
       } else {
-        //turn on any device that is off
-        devices.forEach(d => {
-          if (d.togglePower && !d.isOn && d.visible) {
-            d.togglePower();
-          }
-        });
+        visibleDevices.filter(d => !d.isOn).forEach(d => d.togglePower?.());
       }
     } else {
       device.togglePower?.();

@@ -72,8 +72,9 @@ export default function BasementPage() {
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'flex-start',
-        minHeight: '100vh',
+        alignItems: { xs: 'flex-start', md: 'stretch' },
+        minHeight: '100dvh',
+        height: { md: '100dvh' },
         position: 'relative',
         // Support for iOS safe areas (status bar, home indicator, notches)
         pt: {
@@ -110,14 +111,14 @@ export default function BasementPage() {
         <ThemeToggle />
       </Box>
 
-      <Box sx={{ maxWidth: 1400, width: '100%' }}>
+      <Box sx={{ maxWidth: 1400, width: '100%', height: { md: '100%' }, display: { md: 'flex' }, flexDirection: { md: 'column' } }}>
         <Fade in timeout={500}>
-          <Grid container spacing={{ xs: 2, sm: 3 }}>
+          <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ flex: { md: 1 }, minHeight: 0 }}>
             {/* Controls Column - Shows first on mobile */}
-            <Grid item xs={12} lg={4}>
-              <Stack spacing={{ xs: 2, sm: 3 }}>
+            <Grid item xs={12} md={4} sx={{ display: { md: 'flex' }, flexDirection: { md: 'column' } }}>
+              <Stack spacing={{ xs: 2, sm: 3 }} sx={{ height: { md: '100%' } }}>
                 <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
-                <DashboardCard>
+                <DashboardCard sx={{ flex: { md: 1 }, minHeight: 0, overflow: { md: 'auto' } }}>
                   <Stack spacing={{ xs: 2, sm: 3 }}>
                     <DevicePower currentMode={appMode} />
                     <LightEntityControl
@@ -131,9 +132,24 @@ export default function BasementPage() {
             </Grid>
 
             {/* Main Content */}
-            <Grid item xs={12} lg={8}>
+            <Grid item xs={12} md={8} sx={{ display: { md: 'flex' }, flexDirection: { md: 'column' } }}>
               {appMode === 'multiview' ? (
-                <DashboardCard contentPadding={{ xs: 2, sm: 3 }} noPadding={false}>
+                <DashboardCard
+                  contentPadding={{ xs: 2, sm: 3 }}
+                  noPadding={false}
+                  sx={{
+                    flex: { md: 1 },
+                    minHeight: 0,
+                    display: { md: 'flex' },
+                    flexDirection: { md: 'column' },
+                    '& .MuiCardContent-root': {
+                      display: { md: 'flex' },
+                      flexDirection: { md: 'column' },
+                      flex: { md: 1 },
+                      minHeight: 0,
+                    },
+                  }}
+                >
                   <ModeSelector
                     mode={detailedMode}
                     setMode={setMode}
@@ -142,7 +158,7 @@ export default function BasementPage() {
                     setPbpMode={setPbpMode}
                     loading={loadingAny}
                   />
-                  <Box sx={{ mt: { xs: 2, sm: 3 } }}>
+                  <Box sx={{ mt: { xs: 2, sm: 3 }, flex: { md: 1 }, minHeight: 0, display: { md: 'flex' }, flexDirection: { md: 'column' } }}>
                     <MultiViewLayout mode={detailedMode} loading={loadingAny} />
                   </Box>
                 </DashboardCard>
