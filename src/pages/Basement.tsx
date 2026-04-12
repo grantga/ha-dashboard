@@ -121,11 +121,11 @@ export default function BasementPage() {
                 <DashboardCard sx={{ flex: { md: 1 }, minHeight: 0, overflow: { md: 'auto' } }}>
                   <Stack spacing={{ xs: 2, sm: 3 }}>
                     <DevicePower currentMode={appMode} />
+                    {receiverState !== 'off' && receiverState !== 'unknown' && <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />}
                     <LightEntityControl
                       entityId='light.h600b'
                       controlEntityIds={['light.h600b', 'light.h600b_2', 'light.h600b_3', 'light.h6046']}
                     />
-                    {receiverState !== 'off' && receiverState !== 'unknown' && <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />}
                   </Stack>
                 </DashboardCard>
               </Stack>
