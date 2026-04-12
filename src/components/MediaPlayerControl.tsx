@@ -24,7 +24,9 @@ export default function MediaPlayerControl({ entityId }: Props) {
   const volumeAtSendRef = useRef<number | null>(null);
   const volumeBarRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => { if (!waitingRef.current) setPendingVolume(volume); }, [volume]);
+  useEffect(() => {
+    if (!waitingRef.current) setPendingVolume(volume);
+  }, [volume]);
 
   // Unblock once HA reports a volume different from what it was when we sent the command
   useEffect(() => {

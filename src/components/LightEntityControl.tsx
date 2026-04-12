@@ -75,9 +75,15 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
         const d = max - min;
         let h = 0;
         switch (max) {
-          case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-          case g: h = (b - r) / d + 2; break;
-          case b: h = (r - g) / d + 4; break;
+          case r:
+            h = (g - b) / d + (g < b ? 6 : 0);
+            break;
+          case g:
+            h = (b - r) / d + 2;
+            break;
+          case b:
+            h = (r - g) / d + 4;
+            break;
         }
         setPickerHue(Math.round(h * 60));
       } else {
@@ -90,10 +96,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
   useEffect(() => {
     if (!colorAtSendRef.current || !color) return;
     const baseline = colorAtSendRef.current;
-    const changed =
-      Math.abs(color.r - baseline.r) > 5 ||
-      Math.abs(color.g - baseline.g) > 5 ||
-      Math.abs(color.b - baseline.b) > 5;
+    const changed = Math.abs(color.r - baseline.r) > 5 || Math.abs(color.g - baseline.g) > 5 || Math.abs(color.b - baseline.b) > 5;
     if (changed) {
       colorAtSendRef.current = null;
       waitingRef.current = false;
@@ -145,7 +148,11 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
   };
 
   const onPointerUp = (e: React.PointerEvent) => {
-    try { (e.target as Element).releasePointerCapture(e.pointerId); } catch { /* ignore */ }
+    try {
+      (e.target as Element).releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
     setIsPicking(false);
   };
 
@@ -199,7 +206,9 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
           <Box
             sx={(theme: Theme) => ({
               position: 'absolute',
-              left: 0, top: 0, bottom: 0,
+              left: 0,
+              top: 0,
+              bottom: 0,
               width: `${fillPercent}%`,
               bgcolor: theme.palette.primary.main,
               opacity: 0.6,
@@ -229,7 +238,9 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             }}
           />
           {/* Percent text overlay */}
-          <Box sx={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}>
+          <Box
+            sx={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', pointerEvents: 'none' }}
+          >
             <Typography sx={{ fontWeight: 'bold', fontFamily: 'monospace', fontSize: '1.25rem', color: 'text.primary' }}>
               {fillPercent}%
             </Typography>
@@ -249,9 +260,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             height: { xs: 120, sm: 160 },
             borderRadius: 1.5,
             background: 'white',
-            border: isWhiteMode
-              ? `3px solid ${theme.palette.primary.main}`
-              : `2px solid ${theme.palette.custom.border}`,
+            border: isWhiteMode ? `3px solid ${theme.palette.primary.main}` : `2px solid ${theme.palette.custom.border}`,
             cursor: value === 'on' ? 'pointer' : 'not-allowed',
             flexShrink: 0,
             display: 'flex',
@@ -261,12 +270,16 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
           })}
         >
           {isWhiteMode && (
-            <Box sx={{
-              width: 10, height: 10, borderRadius: '50%',
-              background: 'rgba(0,0,0,0.4)',
-              boxShadow: '0 0 0 2px rgba(255,255,255,0.8)',
-              pointerEvents: 'none',
-            }} />
+            <Box
+              sx={{
+                width: 10,
+                height: 10,
+                borderRadius: '50%',
+                background: 'rgba(0,0,0,0.4)',
+                boxShadow: '0 0 0 2px rgba(255,255,255,0.8)',
+                pointerEvents: 'none',
+              }}
+            />
           )}
         </Box>
 
@@ -276,7 +289,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
-          sx={(theme: Theme) => ({
+          sx={{
             flex: 1,
             height: { xs: 120, sm: 160 },
             borderRadius: 1.5,
@@ -291,7 +304,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             pointerEvents: waitingForColor ? 'none' : 'auto',
             transition: 'opacity 0.15s',
             opacity: waitingForColor ? 0.5 : 1,
-          })}
+          }}
         >
           {!isWhiteMode && pickerHue !== null && (
             <Box
@@ -302,7 +315,10 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
                 width: 20,
                 height: 20,
                 borderRadius: '50%',
-                background: (() => { const c = hslToRgb(pickerHue, 1, pickerLightness); return `rgb(${c.r},${c.g},${c.b})`; })(),
+                background: (() => {
+                  const c = hslToRgb(pickerHue, 1, pickerLightness);
+                  return `rgb(${c.r},${c.g},${c.b})`;
+                })(),
                 boxShadow: '0 0 0 3px rgba(255,255,255,0.9), 0 0 8px rgba(0,0,0,0.4)',
                 border: '2px solid rgba(0,0,0,0.2)',
                 pointerEvents: 'none',

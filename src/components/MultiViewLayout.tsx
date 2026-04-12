@@ -18,7 +18,15 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
   } = useSelectEntityMode('select.orei_uhd_401mv_audio_output_source');
   if (loading) {
     return (
-      <Box sx={{ height: { xs: previewHeight, md: '100%' }, minHeight: previewHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box
+        sx={{
+          height: { xs: previewHeight, md: '100%' },
+          minHeight: previewHeight,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <Skeleton
           variant='rectangular'
           width='60%'

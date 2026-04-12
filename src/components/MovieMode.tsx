@@ -301,10 +301,7 @@ export default function MovieMode() {
                 }}
               />
             ) : (
-              <Typography
-                variant='body2'
-                sx={{ color: 'text.disabled', userSelect: 'none' }}
-              >
+              <Typography variant='body2' sx={{ color: 'text.disabled', userSelect: 'none' }}>
                 No app playing
               </Typography>
             )}

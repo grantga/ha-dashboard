@@ -158,7 +158,9 @@ export default function BasementPage() {
                     setPbpMode={setPbpMode}
                     loading={loadingAny}
                   />
-                  <Box sx={{ mt: { xs: 2, sm: 3 }, flex: { md: 1 }, minHeight: 0, display: { md: 'flex' }, flexDirection: { md: 'column' } }}>
+                  <Box
+                    sx={{ mt: { xs: 2, sm: 3 }, flex: { md: 1 }, minHeight: 0, display: { md: 'flex' }, flexDirection: { md: 'column' } }}
+                  >
                     <MultiViewLayout mode={detailedMode} loading={loadingAny} />
                   </Box>
                 </DashboardCard>
