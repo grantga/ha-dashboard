@@ -190,7 +190,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             height: 48,
             borderRadius: 1,
             overflow: 'hidden',
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             opacity: value === 'on' ? 1 : 0.45,
           })}
@@ -238,7 +238,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
       </Box>
 
       {/* Inline color palette */}
-      <Box sx={{ display: 'flex', gap: 1, mt: 1, opacity: value === 'on' ? 1 : 0.45 }}>
+      <Box sx={{ display: 'flex', gap: 1, mt: 1.5, opacity: value === 'on' ? 1 : 0.45 }}>
         {/* White swatch */}
         <Box
           onClick={() => value === 'on' && handleColorTempChange(WHITE_COLOR_TEMP)}
@@ -246,7 +246,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
           aria-label='Select white'
           sx={(theme: Theme) => ({
             width: 48,
-            height: 160,
+            height: { xs: 120, sm: 160 },
             borderRadius: 1.5,
             background: 'white',
             border: isWhiteMode
@@ -278,7 +278,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
           onPointerUp={onPointerUp}
           sx={(theme: Theme) => ({
             flex: 1,
-            height: 160,
+            height: { xs: 120, sm: 160 },
             borderRadius: 1.5,
             // X=hue, Y=lightness: white at top, pure colors in middle, black at bottom
             background: [

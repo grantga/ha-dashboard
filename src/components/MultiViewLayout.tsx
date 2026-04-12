@@ -18,7 +18,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
   } = useSelectEntityMode('select.orei_uhd_401mv_audio_output_source');
   if (loading) {
     return (
-      <Box sx={{ height: '100%', minHeight: previewHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Box sx={{ height: { xs: previewHeight, md: '100%' }, minHeight: previewHeight, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Skeleton
           variant='rectangular'
           width='60%'
@@ -45,7 +45,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
   switch (mode) {
     case 'Single':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight }}>
+        <Box sx={{ height: { xs: previewHeight, md: '100%' } }}>
           <Grid container sx={{ height: '100%' }}>
             <Grid size={12}>
               <HDMIInput
@@ -60,7 +60,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'PIP':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight, position: 'relative' }}>
+        <Box sx={{ height: { xs: previewHeight, md: '100%' }, position: 'relative' }}>
           <Grid container sx={{ height: '100%' }}>
             <Grid size={12}>
               <HDMIInput
@@ -86,7 +86,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'PBP':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight }}>
+        <Box sx={{ height: { xs: previewHeight, md: '100%' } }}>
           <Grid container sx={{ height: '100%' }} spacing={2}>
             <Grid size={6}>
               <HDMIInput
@@ -109,7 +109,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'PBP2':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight, width: '100%' }}>
+        <Box sx={{ height: { xs: previewHeight, md: '100%' }, width: '100%' }}>
           <Grid container sx={{ height: '100%', justifyContent: 'center' }} spacing={2}>
             <Grid size={6}>
               <HDMIInput
@@ -132,7 +132,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'Triple':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight }}>
+        <Box sx={{ height: { xs: previewHeight, md: '100%' } }}>
           <Grid container sx={{ height: '100%', justifyContent: 'center' }} spacing={2}>
             <Grid size={5} sx={{ display: 'flex', alignItems: 'center' }}>
               <Grid container sx={{ height: '60%', width: '100%' }} spacing={1} direction='column' justifyContent='center'>
@@ -169,7 +169,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'Triple2':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight }}>
+        <Box sx={{ height: { xs: previewHeight, md: '100%' } }}>
           <Grid container sx={{ height: '100%' }} spacing={2}>
             <Grid size={7}>
               <HDMIInput
@@ -204,7 +204,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'Quad':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight }}>
+        <Box sx={{ height: { xs: previewHeight * 2, md: '100%' } }}>
           <Grid container sx={{ height: '100%', alignContent: 'stretch' }} spacing={2}>
             <Grid size={6}>
               <HDMIInput
@@ -243,7 +243,7 @@ export default function MultiViewLayout({ mode, loading }: { mode: string | null
       );
     case 'Quad2':
       return (
-        <Box sx={{ height: '100%', minHeight: previewHeight }}>
+        <Box sx={{ height: { xs: previewHeight * 2, md: '100%' } }}>
           <Grid container sx={{ height: '100%' }} spacing={2}>
             <Grid size={7}>
               <HDMIInput

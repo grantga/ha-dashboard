@@ -78,10 +78,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           aria-label='mute'
           title={muted ? 'Unmute' : 'Mute'}
           sx={(theme: Theme) => ({
-            bgcolor: muted ? 'primary.main' : 'rgba(255, 255, 255, 0.05)',
+            bgcolor: muted ? 'primary.main' : theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: muted ? 'primary.dark' : 'rgba(255, 255, 255, 0.1)',
+              bgcolor: muted ? 'primary.dark' : theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             transition: 'all 0.2s',
@@ -97,10 +97,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           disabled={disabled}
           aria-label='volume down'
           sx={(theme: Theme) => ({
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             width: 48,
@@ -119,7 +119,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
             height: 48,
             borderRadius: 1,
             overflow: 'hidden',
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             cursor: disabled || waitingForVolume ? 'not-allowed' : 'pointer',
             opacity: waitingForVolume ? 0.5 : 1,
@@ -183,7 +183,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     color: 'text.secondary',
                     fontFamily: 'monospace',
                     whiteSpace: 'nowrap',
-                    fontSize: '0.7rem',
+                    fontSize: '0.75rem',
                   }}
                 >
                   {formatDb(pendingVolume)}
@@ -198,10 +198,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           disabled={disabled}
           aria-label='volume up'
           sx={(theme: Theme) => ({
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             width: 48,
@@ -218,10 +218,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           title={currentSource ?? 'Select input'}
           sx={(theme: Theme) => ({
             ml: 'auto',
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             width: 48,

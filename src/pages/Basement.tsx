@@ -118,7 +118,7 @@ export default function BasementPage() {
             <Grid item xs={12} md={4} sx={{ display: { md: 'flex' }, flexDirection: { md: 'column' } }}>
               <Stack spacing={{ xs: 2, sm: 3 }} sx={{ height: { md: '100%' } }}>
                 <ModeToggle currentMode={appMode} onModeChange={handleModeChange} loading={modeLoading} />
-                <DashboardCard sx={{ flex: { md: 1 }, minHeight: 0, overflow: { md: 'auto' } }}>
+                <DashboardCard contentPadding={{ xs: 2, sm: 3 }} sx={{ flex: { md: 1 }, minHeight: 0, overflow: { md: 'auto' } }}>
                   <Stack spacing={{ xs: 2, sm: 3 }}>
                     <DevicePower currentMode={appMode} />
                     {receiverState !== 'off' && receiverState !== 'unknown' && <MediaPlayerControl entityId='media_player.rx_v6a_bf8066' />}
