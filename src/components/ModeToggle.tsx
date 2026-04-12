@@ -10,7 +10,7 @@ type ModeToggleProps = {
 
 export default function ModeToggle({ currentMode, onModeChange, loading = false }: ModeToggleProps) {
   return (
-    <Box sx={{ display: 'flex', gap: 1.5, width: '100%' }}>
+    <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
       <Button
         variant={currentMode === 'movie' ? 'contained' : 'outlined'}
         size='large'

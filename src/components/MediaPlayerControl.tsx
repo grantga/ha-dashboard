@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import type { Theme } from '@mui/material';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
@@ -14,12 +14,49 @@ type Props = {
 };
 
 export default function MediaPlayerControl({ entityId }: Props) {
-  const { value, volume, volumeUp, volumeDown, muted, setMuted, sources, currentSource, setSource } = useMediaPlayer(
+  const { value, volume, volumeUp, volumeDown, muted, setMuted, setVolume, sources, currentSource, setSource } = useMediaPlayer(
     entityId as EntityName
   );
   const [inputModalOpen, setInputModalOpen] = useState(false);
+  const [pendingVolume, setPendingVolume] = useState<number | null>(volume);
+  const [waitingForVolume, setWaitingForVolume] = useState(false);
+  const waitingRef = useRef(false);
+  const volumeAtSendRef = useRef<number | null>(null);
+  const volumeBarRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!waitingRef.current) setPendingVolume(volume);
+  }, [volume]);
+
+  // Unblock once HA reports a volume different from what it was when we sent the command
+  useEffect(() => {
+    if (volumeAtSendRef.current === null || volume === null) return;
+    if (Math.abs(volume - volumeAtSendRef.current) > 0.01) {
+      volumeAtSendRef.current = null;
+      waitingRef.current = false;
+      setWaitingForVolume(false);
+    }
+  }, [volume]);
 
   const disabled = value === 'off' || volume == null;
+
+  const handleVolumePointer = (clientX: number) => {
+    const el = volumeBarRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = Math.max(0, Math.min(rect.width, clientX - rect.left));
+    const level = x / rect.width;
+    setPendingVolume(level);
+    volumeAtSendRef.current = volume;
+    waitingRef.current = true;
+    setWaitingForVolume(true);
+    setVolume(level);
+  };
+
+  const onVolumeClick = (e: React.MouseEvent) => {
+    if (disabled || waitingRef.current) return;
+    handleVolumePointer(e.clientX);
+  };
 
   // Helper to format dB value.
   // MusicCast typically uses -80.5 to +16.5 dB.
@@ -43,10 +80,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           aria-label='mute'
           title={muted ? 'Unmute' : 'Mute'}
           sx={(theme: Theme) => ({
-            bgcolor: muted ? 'primary.main' : 'rgba(255, 255, 255, 0.05)',
+            bgcolor: muted ? 'primary.main' : theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: muted ? 'primary.dark' : 'rgba(255, 255, 255, 0.1)',
+              bgcolor: muted ? 'primary.dark' : theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             transition: 'all 0.2s',
@@ -62,10 +99,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           disabled={disabled}
           aria-label='volume down'
           sx={(theme: Theme) => ({
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             width: 48,
@@ -76,14 +113,19 @@ export default function MediaPlayerControl({ entityId }: Props) {
         </IconButton>
 
         <Box
+          ref={volumeBarRef}
+          onClick={onVolumeClick}
           sx={(theme: Theme) => ({
             flex: 1,
             position: 'relative',
             height: 48,
             borderRadius: 1,
             overflow: 'hidden',
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
+            cursor: disabled || waitingForVolume ? 'not-allowed' : 'pointer',
+            opacity: waitingForVolume ? 0.5 : 1,
+            transition: 'opacity 0.15s',
           })}
         >
           {/* Volume fill bar */}
@@ -93,10 +135,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
               left: 0,
               top: 0,
               bottom: 0,
-              width: `${muted ? 0 : Math.round((volume ?? 0) * 100)}%`,
+              width: `${muted ? 0 : Math.round((pendingVolume ?? 0) * 100)}%`,
               bgcolor: muted ? 'transparent' : theme.palette.primary.main,
               opacity: disabled ? 0.3 : 0.6,
-              transition: 'width 0.2s ease-out',
+              transition: 'width 0.1s ease-out',
             })}
           />
           {/* Text overlay */}
@@ -135,7 +177,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     lineHeight: 1.2,
                   }}
                 >
-                  {volume !== null ? `${Math.round(volume * 100)}%` : '--%'}
+                  {pendingVolume !== null ? `${Math.round(pendingVolume * 100)}%` : '--%'}
                 </Typography>
                 <Typography
                   variant='caption'
@@ -143,10 +185,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
                     color: 'text.secondary',
                     fontFamily: 'monospace',
                     whiteSpace: 'nowrap',
-                    fontSize: '0.7rem',
+                    fontSize: '0.75rem',
                   }}
                 >
-                  {formatDb(volume)}
+                  {formatDb(pendingVolume)}
                 </Typography>
               </Box>
             )}
@@ -158,10 +200,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           disabled={disabled}
           aria-label='volume up'
           sx={(theme: Theme) => ({
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             width: 48,
@@ -178,10 +220,10 @@ export default function MediaPlayerControl({ entityId }: Props) {
           title={currentSource ?? 'Select input'}
           sx={(theme: Theme) => ({
             ml: 'auto',
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
+            bgcolor: theme.palette.custom.buttonBackground,
             border: `1px solid ${theme.palette.divider}`,
             '&:hover': {
-              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              bgcolor: theme.palette.custom.buttonBackgroundHover,
               borderColor: theme.palette.primary.main,
             },
             width: 48,
@@ -195,7 +237,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
       <InputSourceModal
         open={inputModalOpen}
         onClose={() => setInputModalOpen(false)}
-        sources={sources}
+        sources={sources?.filter(s => s === 'HDMI1 multi' || s === 'Movie Room') ?? null}
         currentSource={currentSource}
         onSelect={source => setSource && setSource(source)}
       />

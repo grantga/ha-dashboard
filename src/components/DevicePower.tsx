@@ -58,22 +58,12 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
   ];
 
   const handleClick = (device: (typeof devices)[number]) => {
-    // Toggle local on/off state for the button and log the new state
     if (device.id === 'all') {
-      // if all devices are  on, turn them all off
-      if (devices.every(d => d.isOn)) {
-        devices.forEach(d => {
-          if (d.togglePower && d.isOn && d.visible) {
-            d.togglePower();
-          }
-        });
+      const visibleDevices = devices.filter(d => d.id !== 'all' && d.visible);
+      if (visibleDevices.every(d => d.isOn)) {
+        visibleDevices.forEach(d => d.togglePower?.());
       } else {
-        //turn on any device that is off
-        devices.forEach(d => {
-          if (d.togglePower && !d.isOn && d.visible) {
-            d.togglePower();
-          }
-        });
+        visibleDevices.filter(d => !d.isOn).forEach(d => d.togglePower?.());
       }
     } else {
       device.togglePower?.();
@@ -81,58 +71,54 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
   };
 
   return (
-    // container that stretches full width and centers the vertical button stack at the top
-    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 0, width: '100%', maxWidth: '100%' }}>
-        <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap sx={{ width: '100%' }}>
-          {devices
-            .filter(d => d.visible)
-            .map(b => {
-              const Icon = b.icon;
-              return (
-                <Button
-                  key={b.id}
-                  variant={b.isOn ? 'contained' : 'outlined'}
-                  loading={b.loading !== ''}
-                  loadingPosition='start'
-                  size='large'
-                  onClick={() => handleClick(b)}
-                  startIcon={<Icon sx={{ flexShrink: 0 }} />}
+    <Box sx={{ width: '100%', overflow: 'hidden' }}>
+      <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap sx={{ width: '100%' }}>
+        {devices
+          .filter(d => d.visible)
+          .map(b => {
+            const Icon = b.icon;
+            return (
+              <Button
+                key={b.id}
+                variant={b.isOn ? 'contained' : 'outlined'}
+                loading={b.loading !== ''}
+                loadingPosition='start'
+                size='large'
+                onClick={() => handleClick(b)}
+                startIcon={<Icon sx={{ flexShrink: 0 }} />}
+                sx={{
+                  flex: '1 1 auto', // Allow grow and shrink, but auto basis for content adaptation
+                  maxWidth: { xs: '100%', sm: 'none' },
+                  mt: { xs: 1, sm: 0 }, // Add margin top for wrapped items
+                  py: 1.5,
+                  fontWeight: 600,
+                  fontSize: { xs: '0.75rem', sm: '0.9rem' },
+                  boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
+                  overflow: 'hidden',
+                  justifyContent: 'center',
+                  '& .MuiButton-startIcon': {
+                    marginRight: { xs: 0, sm: 1 },
+                  },
+                  '&:hover': {
+                    boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimaryHover : theme.palette.custom.shadowSecondary),
+                  },
+                }}
+              >
+                <Box
+                  component='span'
                   sx={{
-                    flex: '1 1 auto', // Allow grow and shrink, but auto basis for content adaptation
-                    maxWidth: { xs: '100%', sm: 'none' },
-                    mt: { xs: 1, sm: 0 }, // Add margin top for wrapped items
-                    py: 1.5,
-                    fontWeight: 600,
-                    fontSize: { xs: '0.75rem', sm: '0.9rem' },
-                    boxShadow: (theme: Theme) => (b.isOn ? theme.palette.custom.shadowPrimary : 'none'),
                     overflow: 'hidden',
-                    justifyContent: 'center',
-                    '& .MuiButton-startIcon': {
-                      marginRight: { xs: 0, sm: 1 },
-                    },
-                    '&:hover': {
-                      boxShadow: (theme: Theme) =>
-                        b.isOn ? theme.palette.custom.shadowPrimaryHover : theme.palette.custom.shadowSecondary,
-                    },
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    display: { xs: 'none', sm: 'block' },
                   }}
                 >
-                  <Box
-                    component='span'
-                    sx={{
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      display: { xs: 'none', sm: 'block' },
-                    }}
-                  >
-                    {b.label}
-                  </Box>
-                </Button>
-              );
-            })}
-        </Stack>
-      </Box>
+                  {b.label}
+                </Box>
+              </Button>
+            );
+          })}
+      </Stack>
     </Box>
   );
 }

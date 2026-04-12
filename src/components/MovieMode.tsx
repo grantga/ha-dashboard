@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, IconButton, type Theme } from '@mui/material';
+import { Box, Card, CardContent, IconButton, Typography, type Theme } from '@mui/material';
 import { useEntity, type EntityName } from '@hakit/core';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -47,18 +47,21 @@ export default function MovieMode() {
         flexDirection: 'column',
         gap: 2,
         width: '100%',
+        height: '100%',
       }}
     >
       {/* Remote and App Icon Card */}
-      <Card>
+      <Card sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
         <CardContent
           sx={{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
             width: '100%',
+            flex: 1,
             overflow: 'hidden',
             padding: 0,
+            '&:last-child': { paddingBottom: 0 },
           }}
         >
           {/* Left side - D-Pad Remote (50%) */}
@@ -70,15 +73,15 @@ export default function MovieMode() {
             }}
           >
             {/* D-Pad Remote using flexbox layout */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: { xs: 160, sm: 200 }, m: { xs: 2, sm: 3 } }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, width: { xs: 160, sm: 200, md: 240 }, m: { xs: 2, sm: 3 } }}>
               {/* Row 1: Home, Up, Back */}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <IconButton
                   disableRipple
                   onClick={sendRokuCommand('home')}
                   sx={(theme: Theme) => ({
-                    width: { xs: 40, sm: 48 },
-                    height: { xs: 40, sm: 48 },
+                    width: { xs: 40, sm: 48, md: 56 },
+                    height: { xs: 40, sm: 48, md: 56 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
                     color: theme.palette.custom.iconColor,
@@ -104,8 +107,8 @@ export default function MovieMode() {
                   disableRipple
                   onClick={sendRokuCommand('up')}
                   sx={(theme: Theme) => ({
-                    width: { xs: 44, sm: 56 },
-                    height: { xs: 44, sm: 56 },
+                    width: { xs: 44, sm: 56, md: 64 },
+                    height: { xs: 44, sm: 56, md: 64 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
                     color: theme.palette.custom.iconColor,
@@ -131,8 +134,8 @@ export default function MovieMode() {
                   disableRipple
                   onClick={sendRokuCommand('back')}
                   sx={(theme: Theme) => ({
-                    width: { xs: 40, sm: 48 },
-                    height: { xs: 40, sm: 48 },
+                    width: { xs: 40, sm: 48, md: 56 },
+                    height: { xs: 40, sm: 48, md: 56 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
                     color: theme.palette.custom.iconColor,
@@ -161,8 +164,8 @@ export default function MovieMode() {
                   disableRipple
                   onClick={sendRokuCommand('left')}
                   sx={(theme: Theme) => ({
-                    width: { xs: 44, sm: 56 },
-                    height: { xs: 44, sm: 56 },
+                    width: { xs: 44, sm: 56, md: 64 },
+                    height: { xs: 44, sm: 56, md: 64 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
                     color: theme.palette.custom.iconColor,
@@ -188,8 +191,8 @@ export default function MovieMode() {
                   disableRipple
                   onClick={sendRokuCommand('select')}
                   sx={(theme: Theme) => ({
-                    width: { xs: 52, sm: 64 },
-                    height: { xs: 52, sm: 64 },
+                    width: { xs: 52, sm: 64, md: 72 },
+                    height: { xs: 52, sm: 64, md: 72 },
                     background: theme.palette.custom.cardBackgroundGradient,
                     border: `2px solid ${theme.palette.primary.main}`,
                     color: 'white',
@@ -216,8 +219,8 @@ export default function MovieMode() {
                   disableRipple
                   onClick={sendRokuCommand('right')}
                   sx={(theme: Theme) => ({
-                    width: { xs: 44, sm: 56 },
-                    height: { xs: 44, sm: 56 },
+                    width: { xs: 44, sm: 56, md: 64 },
+                    height: { xs: 44, sm: 56, md: 64 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
                     color: theme.palette.custom.iconColor,
@@ -242,14 +245,14 @@ export default function MovieMode() {
 
               {/* Row 3: Empty, Down, Remote button */}
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Box sx={{ width: { xs: 40, sm: 48 } }} />
+                <Box sx={{ width: { xs: 40, sm: 48, md: 56 } }} />
 
                 <IconButton
                   disableRipple
                   onClick={sendRokuCommand('down')}
                   sx={(theme: Theme) => ({
-                    width: { xs: 44, sm: 56 },
-                    height: { xs: 44, sm: 56 },
+                    width: { xs: 44, sm: 56, md: 64 },
+                    height: { xs: 44, sm: 56, md: 64 },
                     background: theme.palette.custom.buttonBackground,
                     border: `2px solid ${theme.palette.custom.buttonBorder}`,
                     color: theme.palette.custom.iconColor,
@@ -271,7 +274,7 @@ export default function MovieMode() {
                   <ArrowDownwardIcon />
                 </IconButton>
 
-                <Box sx={{ width: { xs: 40, sm: 48 } }} />
+                <Box sx={{ width: { xs: 40, sm: 48, md: 56 } }} />
               </Box>
             </Box>
           </Box>
@@ -281,11 +284,12 @@ export default function MovieMode() {
             sx={{
               width: '50%',
               display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
               overflow: 'hidden',
             }}
           >
-            {appIcon && (
+            {appIcon ? (
               <Box
                 component='img'
                 src={appIcon}
@@ -296,6 +300,10 @@ export default function MovieMode() {
                   borderRadius: 2,
                 }}
               />
+            ) : (
+              <Typography variant='body2' sx={{ color: 'text.disabled', userSelect: 'none' }}>
+                No app playing
+              </Typography>
             )}
           </Box>
         </CardContent>
