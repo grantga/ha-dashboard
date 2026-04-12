@@ -71,10 +71,8 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
   };
 
   return (
-    // container that stretches full width and centers the vertical button stack at the top
-    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', overflow: 'hidden' }}>
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', pt: 0, width: '100%', maxWidth: '100%' }}>
-        <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap sx={{ width: '100%' }}>
+    <Box sx={{ width: '100%', overflow: 'hidden' }}>
+      <Stack direction='row' spacing={1} flexWrap='wrap' useFlexGap sx={{ width: '100%' }}>
           {devices
             .filter(d => d.visible)
             .map(b => {
@@ -121,8 +119,7 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
                 </Button>
               );
             })}
-        </Stack>
-      </Box>
+      </Stack>
     </Box>
   );
 }

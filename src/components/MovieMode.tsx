@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, IconButton, type Theme } from '@mui/material';
+import { Box, Card, CardContent, IconButton, Typography, type Theme } from '@mui/material';
 import { useEntity, type EntityName } from '@hakit/core';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -284,11 +284,12 @@ export default function MovieMode() {
             sx={{
               width: '50%',
               display: 'flex',
+              alignItems: 'center',
               justifyContent: 'center',
               overflow: 'hidden',
             }}
           >
-            {appIcon && (
+            {appIcon ? (
               <Box
                 component='img'
                 src={appIcon}
@@ -299,6 +300,13 @@ export default function MovieMode() {
                   borderRadius: 2,
                 }}
               />
+            ) : (
+              <Typography
+                variant='body2'
+                sx={{ color: 'text.disabled', userSelect: 'none' }}
+              >
+                No app playing
+              </Typography>
             )}
           </Box>
         </CardContent>
