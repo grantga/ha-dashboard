@@ -82,29 +82,21 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
   const handleClick = async (device: { id: string }) => {
     if (device.id === 'all') {
       const visibleDevices = devices.filter(d => d.id !== 'all' && d.visible);
-      if (visibleDevices.every(d => d.isOn)) {
-        // Turn everything off, projector first, one awaited call at a
-        // time. The old code fired three un-awaited toggles in the same
-        // tick, so the projector's call could be lost with no error and
-        // no retry. Explicit turnOff calls are deterministic regardless
-        // of cached state, and each one just sends its call and moves
-        // on — nothing waits for a device to report its new state.
-        // A Multiview switch left on from an earlier session still
-        // gets shut down even though it is hidden in Movie mode.
-        const offOrder = ['projector', 'receiver', 'multiview'];
-        for (const id of offOrder) {
-          const d = devices.find(d => d.id === id);
-          if (d && d.isOn) {
-            await d.turnOff?.();
-          }
-        }
+      if (allOn) {
+        // All-off: send turnOff to every component, projector first.
+        // Do not check each device's reported state first — HA can
+        // report a device as 'off' while it is still physically on,
+        // which used to send All down the turn-on path so the
+        // projector never even got a command. Each call is awaited
+        // so they go out one at a time, in order.
+        await turnProjectorOff();
+        await turnReceiverOff();
+        await turnMVOff();
       } else {
-        // Turn on any visible device that is off (never auto-power the
-        // hidden Multiview switch when in Movie mode).
+        // All-on: send turnOn to every visible device (never the
+        // hidden Multiview switch in Movie mode), each awaited.
         for (const d of visibleDevices) {
-          if (!d.isOn) {
-            await d.turnOn?.();
-          }
+          await d.turnOn?.();
         }
       }
       return;
