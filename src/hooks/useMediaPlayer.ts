@@ -5,6 +5,8 @@ type UseMediaPlayer = {
   value: string;
   loadingValue: string;
   togglePower: () => Promise<void>;
+  turnOn: () => Promise<void>;
+  turnOff: () => Promise<void>;
   // volume is 0..1 (Home Assistant)
   volume: number | null;
   setVolume: (level: number) => Promise<void>;
@@ -69,17 +71,41 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
   }, [entity, value]);
 
   const togglePower = useCallback(async () => {
+    const wasOff = value === 'off';
     try {
-      if (value === 'off') {
-        setLoadingValue('on');
-      } else {
-        setLoadingValue('off');
-      }
-      mediaPlayerService.toggle({ target: entityId });
+      setLoadingValue(wasOff ? 'on' : 'off');
+      await mediaPlayerService.toggle({ target: entityId });
     } catch {
       // Ignore service call errors
     }
+    // Clear the spinner once HA has accepted the call. Do not wait for
+    // the entity state to flip: a slow device (the Epson takes a while
+    // to report 'off') would stall everything behind it.
+    setLoadingValue('');
   }, [entityId, mediaPlayerService, value]);
+
+  // Explicit on/off (unlike toggle, these do the right thing even if the
+  // locally cached `value` is stale or 'unknown' when the call is made).
+  // Each one just sends the call and moves on — no waiting, no retry.
+  const turnOn = useCallback(async () => {
+    try {
+      setLoadingValue('on');
+      await mediaPlayerService.turnOn({ target: entityId });
+    } catch {
+      // Ignore service call errors
+    }
+    setLoadingValue('');
+  }, [entityId, mediaPlayerService]);
+
+  const turnOff = useCallback(async () => {
+    try {
+      setLoadingValue('off');
+      await mediaPlayerService.turnOff({ target: entityId });
+    } catch {
+      // Ignore service call errors
+    }
+    setLoadingValue('');
+  }, [entityId, mediaPlayerService]);
 
   const setVolume = useCallback(
     async (level: number) => {
@@ -139,6 +165,8 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
     value,
     loadingValue,
     togglePower,
+    turnOn,
+    turnOff,
     volume,
     setVolume,
     volumeUp,

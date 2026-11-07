@@ -7,6 +7,8 @@ type UseSelectEntityMode = {
   options?: string[];
   setValue: (key: string) => Promise<void>;
   togglePower: () => Promise<void>;
+  turnOn: () => Promise<void>;
+  turnOff: () => Promise<void>;
 };
 
 export default function useSelectEntityMode(entityId: EntityName): UseSelectEntityMode {
@@ -67,11 +69,37 @@ export default function useSelectEntityMode(entityId: EntityName): UseSelectEnti
       } else {
         setLoadingValue('off');
       }
-      powerService.toggle({ target: entityId });
+      await powerService.toggle({ target: entityId });
     } catch {
       // Ignore service call errors
     }
+    // Clear the spinner once HA has accepted the call — do not wait for
+    // the entity state to flip.
+    setLoadingValue('');
   }, [entityId, powerService, value]);
+
+  // Explicit on/off — see useMediaPlayer: deterministic even when the
+  // locally cached `value` is stale or 'unknown'. Each one just sends
+  // the call and moves on — no waiting, no retry.
+  const turnOn = useCallback(async () => {
+    try {
+      setLoadingValue('on');
+      await powerService.turnOn({ target: entityId });
+    } catch {
+      // Ignore service call errors
+    }
+    setLoadingValue('');
+  }, [entityId, powerService]);
+
+  const turnOff = useCallback(async () => {
+    try {
+      setLoadingValue('off');
+      await powerService.turnOff({ target: entityId });
+    } catch {
+      // Ignore service call errors
+    }
+    setLoadingValue('');
+  }, [entityId, powerService]);
 
   return {
     value,
@@ -79,5 +107,7 @@ export default function useSelectEntityMode(entityId: EntityName): UseSelectEnti
     loadingValue,
     setValue,
     togglePower,
+    turnOn,
+    turnOff,
   };
 }

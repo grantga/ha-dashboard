@@ -10,20 +10,36 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
   const {
     value: receiverPower,
     togglePower: setReceiverPower,
+    turnOn: turnReceiverOn,
+    turnOff: turnReceiverOff,
     loadingValue: loadingReceiver,
   } = useMediaPlayer('media_player.rx_v6a_bf8066');
   const {
     value: projectorPower,
     togglePower: setProjectorPower,
+    turnOn: turnProjectorOn,
+    turnOff: turnProjectorOff,
     loadingValue: loadingProjectorPower,
   } = useMediaPlayer('media_player.epson_5050ub');
-  const { value: mvPower, togglePower: setMVPower, loadingValue: loadingMVPower } = useSelectEntityMode('switch.orei_uhd_401mv_power');
+  const {
+    value: mvPower,
+    togglePower: setMVPower,
+    turnOn: turnMVOn,
+    turnOff: turnMVOff,
+    loadingValue: loadingMVPower,
+  } = useSelectEntityMode('switch.orei_uhd_401mv_power');
+
+  // "All" reflects only the devices shown on screen. The Multiview switch
+  // is hidden in Movie mode, so it must not vote here — when it is off
+  // (the normal Movie-mode case) counting it would make All look off
+  // even with the receiver and projector on.
+  const allOn = receiverPower !== 'off' && projectorPower !== 'off' && (currentMode !== 'multiview' || mvPower !== 'off');
 
   const devices = [
     {
       id: 'all',
       label: 'All',
-      isOn: !(receiverPower === 'off' || projectorPower === 'off' || mvPower === 'off'),
+      isOn: allOn,
       loading: loadingReceiver || loadingProjectorPower || loadingMVPower,
       icon: PowerSettingsNewIcon,
       visible: true,
@@ -34,6 +50,8 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
       isOn: receiverPower !== 'off',
       loading: loadingReceiver,
       togglePower: setReceiverPower,
+      turnOn: turnReceiverOn,
+      turnOff: turnReceiverOff,
       icon: SpeakerGroupIcon,
       visible: true,
     },
@@ -43,6 +61,8 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
       isOn: projectorPower !== 'off',
       loading: loadingProjectorPower,
       togglePower: setProjectorPower,
+      turnOn: turnProjectorOn,
+      turnOff: turnProjectorOff,
       icon: VideocamIcon,
       visible: true,
     },
@@ -52,22 +72,46 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
       isOn: mvPower !== 'off',
       loading: loadingMVPower,
       togglePower: setMVPower,
+      turnOn: turnMVOn,
+      turnOff: turnMVOff,
       icon: ViewQuiltIcon,
       visible: currentMode === 'multiview',
     },
   ];
 
-  const handleClick = (device: (typeof devices)[number]) => {
+  const handleClick = async (device: { id: string }) => {
     if (device.id === 'all') {
       const visibleDevices = devices.filter(d => d.id !== 'all' && d.visible);
       if (visibleDevices.every(d => d.isOn)) {
-        visibleDevices.forEach(d => d.togglePower?.());
+        // Turn everything off, projector first, one awaited call at a
+        // time. The old code fired three un-awaited toggles in the same
+        // tick, so the projector's call could be lost with no error and
+        // no retry. Explicit turnOff calls are deterministic regardless
+        // of cached state, and each one just sends its call and moves
+        // on — nothing waits for a device to report its new state.
+        // A Multiview switch left on from an earlier session still
+        // gets shut down even though it is hidden in Movie mode.
+        const offOrder = ['projector', 'receiver', 'multiview'];
+        for (const id of offOrder) {
+          const d = devices.find(d => d.id === id);
+          if (d && d.isOn) {
+            await d.turnOff?.();
+          }
+        }
       } else {
-        visibleDevices.filter(d => !d.isOn).forEach(d => d.togglePower?.());
+        // Turn on any visible device that is off (never auto-power the
+        // hidden Multiview switch when in Movie mode).
+        for (const d of visibleDevices) {
+          if (!d.isOn) {
+            await d.turnOn?.();
+          }
+        }
       }
-    } else {
-      device.togglePower?.();
+      return;
     }
+    // Individual button: direct toggle, exactly as before.
+    const d = devices.find(d => d.id === device.id);
+    await d?.togglePower?.();
   };
 
   return (
