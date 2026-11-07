@@ -10,20 +10,36 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
   const {
     value: receiverPower,
     togglePower: setReceiverPower,
+    turnOn: turnReceiverOn,
+    turnOff: turnReceiverOff,
     loadingValue: loadingReceiver,
   } = useMediaPlayer('media_player.rx_v6a_bf8066');
   const {
     value: projectorPower,
     togglePower: setProjectorPower,
+    turnOn: turnProjectorOn,
+    turnOff: turnProjectorOff,
     loadingValue: loadingProjectorPower,
   } = useMediaPlayer('media_player.epson_5050ub');
-  const { value: mvPower, togglePower: setMVPower, loadingValue: loadingMVPower } = useSelectEntityMode('switch.orei_uhd_401mv_power');
+  const {
+    value: mvPower,
+    togglePower: setMVPower,
+    turnOn: turnMVOn,
+    turnOff: turnMVOff,
+    loadingValue: loadingMVPower,
+  } = useSelectEntityMode('switch.orei_uhd_401mv_power');
+
+  // "All" reflects only the devices shown on screen. The Multiview switch
+  // is hidden in Movie mode, so it must not vote here — when it is off
+  // (the normal Movie-mode case) counting it would make All look off
+  // even with the receiver and projector on.
+  const allOn = receiverPower !== 'off' && projectorPower !== 'off' && (currentMode !== 'multiview' || mvPower !== 'off');
 
   const devices = [
     {
       id: 'all',
       label: 'All',
-      isOn: !(receiverPower === 'off' || projectorPower === 'off' || mvPower === 'off'),
+      isOn: allOn,
       loading: loadingReceiver || loadingProjectorPower || loadingMVPower,
       icon: PowerSettingsNewIcon,
       visible: true,
@@ -34,6 +50,8 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
       isOn: receiverPower !== 'off',
       loading: loadingReceiver,
       togglePower: setReceiverPower,
+      turnOn: turnReceiverOn,
+      turnOff: turnReceiverOff,
       icon: SpeakerGroupIcon,
       visible: true,
     },
@@ -43,6 +61,8 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
       isOn: projectorPower !== 'off',
       loading: loadingProjectorPower,
       togglePower: setProjectorPower,
+      turnOn: turnProjectorOn,
+      turnOff: turnProjectorOff,
       icon: VideocamIcon,
       visible: true,
     },
@@ -52,22 +72,38 @@ export default function DevicePower({ currentMode }: { currentMode: 'movie' | 'm
       isOn: mvPower !== 'off',
       loading: loadingMVPower,
       togglePower: setMVPower,
+      turnOn: turnMVOn,
+      turnOff: turnMVOff,
       icon: ViewQuiltIcon,
       visible: currentMode === 'multiview',
     },
   ];
 
-  const handleClick = (device: (typeof devices)[number]) => {
+  const handleClick = async (device: { id: string }) => {
     if (device.id === 'all') {
       const visibleDevices = devices.filter(d => d.id !== 'all' && d.visible);
-      if (visibleDevices.every(d => d.isOn)) {
-        visibleDevices.forEach(d => d.togglePower?.());
+      if (allOn) {
+        // All-off: send turnOff to every component, projector first.
+        // Do not check each device's reported state first — HA can
+        // report a device as 'off' while it is still physically on,
+        // which used to send All down the turn-on path so the
+        // projector never even got a command. Each call is awaited
+        // so they go out one at a time, in order.
+        await turnProjectorOff();
+        await turnReceiverOff();
+        await turnMVOff();
       } else {
-        visibleDevices.filter(d => !d.isOn).forEach(d => d.togglePower?.());
+        // All-on: send turnOn to every visible device (never the
+        // hidden Multiview switch in Movie mode), each awaited.
+        for (const d of visibleDevices) {
+          await d.turnOn?.();
+        }
       }
-    } else {
-      device.togglePower?.();
+      return;
     }
+    // Individual button: direct toggle, exactly as before.
+    const d = devices.find(d => d.id === device.id);
+    await d?.togglePower?.();
   };
 
   return (

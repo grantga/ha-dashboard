@@ -5,6 +5,8 @@ type UseMediaPlayer = {
   value: string;
   loadingValue: string;
   togglePower: () => Promise<void>;
+  turnOn: () => Promise<void>;
+  turnOff: () => Promise<void>;
   // volume is 0..1 (Home Assistant)
   volume: number | null;
   setVolume: (level: number) => Promise<void>;
@@ -47,8 +49,20 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
     if (entity && entity.state && entity.state !== value) {
       setValueState(entity.state);
     }
-    // Clear loading when entity is available
-    if (entity) {
+    // Clear the spinner once the entity reports the state we asked for
+    // — not when the service call is accepted, or the button falls back
+    // to its old state while the device is still flipping (the Epson
+    // takes a while to report 'off'). The initial 'unknown' loading
+    // clears as soon as the entity exists; a power call that never gets
+    // reported clears on the bounded fallback in the power functions.
+    if (loadingValue === 'unknown' && entity) {
+      setLoadingValue('');
+    } else if (loadingValue === 'off' && entity?.state === 'off') {
+      setLoadingValue('');
+    } else if (loadingValue === 'on' && entity?.state && entity.state !== 'off' && entity.state !== 'unknown') {
+      setLoadingValue('');
+    } else if (entity?.state && entity.state === loadingValue) {
+      // e.g. a select-option call: clear once the entity reports it
       setLoadingValue('');
     }
     // sync volume
@@ -66,20 +80,64 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
       const cs = (entity.attributes.source || entity.attributes.input_source || entity.attributes.input) ?? null;
       setCurrentSource(cs);
     }
-  }, [entity, value]);
+  }, [entity, value, loadingValue]);
+
+  // Fallback so the spinner can never stick forever if a device never
+  // reports its new state (lost command): clear it after 30 s, but only
+  // if it is still showing the same target.
+  const clearLoadingAfterTimeout = useCallback((target: string) => {
+    setTimeout(() => {
+      setLoadingValue(current => (current === target ? '' : current));
+    }, 30000);
+  }, []);
 
   const togglePower = useCallback(async () => {
+    const wasOff = value === 'off';
+    const target = wasOff ? 'on' : 'off';
     try {
-      if (value === 'off') {
-        setLoadingValue('on');
-      } else {
-        setLoadingValue('off');
-      }
-      mediaPlayerService.toggle({ target: entityId });
+      setLoadingValue(target);
+      await mediaPlayerService.toggle({ target: entityId });
     } catch {
       // Ignore service call errors
     }
-  }, [entityId, mediaPlayerService, value]);
+    // Do not clear the spinner here: the button should stay
+    // indeterminate until the entity reports its new state (sync effect
+    // above). The call itself has returned, so a sequence like All-off
+    // still moves straight on to the next device.
+    clearLoadingAfterTimeout(target);
+  }, [entityId, mediaPlayerService, value, clearLoadingAfterTimeout]);
+
+  // Explicit on/off (unlike toggle, these do the right thing even if the
+  // locally cached `value` is stale or 'unknown' when the call is made).
+  // Each one just sends the call and moves on — no waiting, no retry.
+  // The spinner stays on until the entity reports the new state.
+  const turnOn = useCallback(async () => {
+    try {
+      setLoadingValue('on');
+      await mediaPlayerService.turnOn({ target: entityId });
+    } catch {
+      // Ignore service call errors
+    }
+    if (value !== 'off' && value !== 'unknown') {
+      setLoadingValue('');
+    } else {
+      clearLoadingAfterTimeout('on');
+    }
+  }, [entityId, mediaPlayerService, value, clearLoadingAfterTimeout]);
+
+  const turnOff = useCallback(async () => {
+    try {
+      setLoadingValue('off');
+      await mediaPlayerService.turnOff({ target: entityId });
+    } catch {
+      // Ignore service call errors
+    }
+    if (value === 'off') {
+      setLoadingValue('');
+    } else {
+      clearLoadingAfterTimeout('off');
+    }
+  }, [entityId, mediaPlayerService, value, clearLoadingAfterTimeout]);
 
   const setVolume = useCallback(
     async (level: number) => {
@@ -139,6 +197,8 @@ export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
     value,
     loadingValue,
     togglePower,
+    turnOn,
+    turnOff,
     volume,
     setVolume,
     volumeUp,
