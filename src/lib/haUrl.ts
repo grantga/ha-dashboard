@@ -1,12 +1,12 @@
-// The dashboard is served by Home Assistant itself, so in a production build
-// the HA host is always the host that served this page — use the page origin
-// instead of a build-time URL. That way the dashboard keeps working when HA
-// gets a new IP or hostname (e.g. after a router swap), with no rebuild.
+// Home Assistant is reached by its mDNS name, which is the one host that
+// resolves everywhere on the home network (the bare 'homeassistant' name
+// and raw IPs do not survive router swaps). NOTE: http, not https — HA
+// serves plain HTTP on port 8123, TLS is not enabled, so https fails.
 // In dev (vite dev server on gus-pi) fall back to the env var, since the
 // dev server isn't HA.
 export function getHaUrl(): string {
   if (import.meta.env.DEV) {
     return import.meta.env.VITE_HA_URL as string;
   }
-  return window.location.origin;
+  return 'http://homeassistant.local:8123';
 }
