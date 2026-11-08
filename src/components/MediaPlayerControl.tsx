@@ -8,6 +8,7 @@ import InputIcon from '@mui/icons-material/Input';
 import useMediaPlayer from '../hooks/useMediaPlayer';
 import type { EntityName } from '@hakit/core';
 import InputSourceModal from './InputSourceModal';
+import usePressAndHold from '../hooks/usePressAndHold';
 
 type Props = {
   entityId: string;
@@ -39,6 +40,13 @@ export default function MediaPlayerControl({ entityId }: Props) {
   }, [volume]);
 
   const disabled = value === 'off' || volume == null;
+
+  const holdVolumeDown = usePressAndHold(() => {
+    void volumeDown();
+  });
+  const holdVolumeUp = usePressAndHold(() => {
+    void volumeUp();
+  });
 
   const handleVolumePointer = (clientX: number) => {
     const el = volumeBarRef.current;
@@ -95,7 +103,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
         </IconButton>
 
         <IconButton
-          onClick={() => volumeDown()}
+          {...holdVolumeDown}
           disabled={disabled}
           aria-label='volume down'
           sx={(theme: Theme) => ({
@@ -107,6 +115,9 @@ export default function MediaPlayerControl({ entityId }: Props) {
             },
             width: 48,
             height: 48,
+            touchAction: 'none',
+            userSelect: 'none',
+            WebkitTouchCallout: 'none',
           })}
         >
           <VolumeDownIcon color={muted || disabled ? 'inherit' : 'primary'} />
@@ -196,7 +207,7 @@ export default function MediaPlayerControl({ entityId }: Props) {
         </Box>
 
         <IconButton
-          onClick={() => volumeUp()}
+          {...holdVolumeUp}
           disabled={disabled}
           aria-label='volume up'
           sx={(theme: Theme) => ({
@@ -208,6 +219,9 @@ export default function MediaPlayerControl({ entityId }: Props) {
             },
             width: 48,
             height: 48,
+            touchAction: 'none',
+            userSelect: 'none',
+            WebkitTouchCallout: 'none',
           })}
         >
           <VolumeUpIcon color={muted || disabled ? 'inherit' : 'primary'} />

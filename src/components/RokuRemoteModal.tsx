@@ -7,6 +7,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowBackIcon2 from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import usePressAndHold from '../hooks/usePressAndHold';
 
 type Props = {
   open: boolean;
@@ -46,6 +47,19 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
   const sendRokuLaunchApp = (command: string) => () => {
     rokuMediaPlayer.service.selectSource({ serviceData: { source: command } });
   };
+
+  const holdUp = usePressAndHold(() => {
+    sendRokuCommand('up')();
+  });
+  const holdDown = usePressAndHold(() => {
+    sendRokuCommand('down')();
+  });
+  const holdLeft = usePressAndHold(() => {
+    sendRokuCommand('left')();
+  });
+  const holdRight = usePressAndHold(() => {
+    sendRokuCommand('right')();
+  });
 
   return (
     <Dialog
@@ -159,7 +173,8 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Up */}
             <IconButton
               disableRipple
-              onClick={sendRokuCommand('up')}
+              {...holdUp}
+              style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
               sx={(theme: Theme) => ({
                 position: 'absolute',
                 top: 0,
@@ -193,7 +208,8 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Left */}
             <IconButton
               disableRipple
-              onClick={sendRokuCommand('left')}
+              {...holdLeft}
+              style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
               sx={(theme: Theme) => ({
                 position: 'absolute',
                 left: 0,
@@ -260,7 +276,8 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Right */}
             <IconButton
               disableRipple
-              onClick={sendRokuCommand('right')}
+              {...holdRight}
+              style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
               sx={(theme: Theme) => ({
                 position: 'absolute',
                 right: 0,
@@ -294,7 +311,8 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
             {/* Down */}
             <IconButton
               disableRipple
-              onClick={sendRokuCommand('down')}
+              {...holdDown}
+              style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
               sx={(theme: Theme) => ({
                 position: 'absolute',
                 bottom: 0,
