@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_NAME = 'ha-dashboard-v8';
+const CACHE_NAME = 'ha-dashboard-v9';
 const BASE_PATH = new URL('./', self.location).pathname;
 
 const STATIC_ASSETS = ['index.html', 'manifest.json', 'icons/icon-192.png', 'icons/icon-512.png'];
@@ -23,6 +23,13 @@ self.addEventListener('fetch', event => {
   const url = new URL(request.url);
 
   if (request.method !== 'GET' || url.origin !== self.location.origin) return;
+
+  // Only handle requests for the dashboard itself. Everything else
+  // (Home Assistant auth, API, frontend) must reach the network untouched:
+  // intercepting /auth/authorize navigations broke the login redirect.
+  const isDashboardPath =
+    url.pathname === BASE_PATH.slice(0, -1) || url.pathname.startsWith(BASE_PATH);
+  if (!isDashboardPath) return;
 
   const isNavigation = request.mode === 'navigate';
   const isRoot = url.pathname === BASE_PATH || url.pathname === BASE_PATH.slice(0, -1);
