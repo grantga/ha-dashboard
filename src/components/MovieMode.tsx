@@ -19,9 +19,9 @@ export default function MovieMode() {
 
   const selected = ROKU_ENTITIES.movie_room_4k;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuRemote = useEntity(selected.remote as any) as any;
+  const rokuRemote = useEntity(selected.remote as any, { returnNullIfNotFound: true }) as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuMedia = useEntity(selected.media as any) as any;
+  const rokuMedia = useEntity(selected.media as any, { returnNullIfNotFound: true }) as any;
 
   // Get app icon from Home Assistant media player entity_picture
   let appIcon = rokuMedia?.attributes?.entity_picture;

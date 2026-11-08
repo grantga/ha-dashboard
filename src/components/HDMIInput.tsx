@@ -67,9 +67,9 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
       : ('media_player.roku_basement_1' as EntityName);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuMedia = useEntity(mediaPlayerEntity as any) as any;
+  const rokuMedia = useEntity(mediaPlayerEntity as any, { returnNullIfNotFound: true }) as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const xboxImage = useEntity('image.gstar00_now_playing' as any) as any;
+  const xboxImage = useEntity('image.gstar00_now_playing' as any, { returnNullIfNotFound: true }) as any;
   const xboxEntityPicture = xboxImage?.attributes?.entity_picture;
 
   // Reset xbox image failed state when the entity_picture URL changes

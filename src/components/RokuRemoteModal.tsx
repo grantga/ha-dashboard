@@ -33,9 +33,9 @@ export default function RokuRemoteModal({ open, onClose, device }: Props) {
 
   const selected = ROKU_ENTITIES[device as keyof typeof ROKU_ENTITIES] || ROKU_ENTITIES.roku1;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuRemote = useEntity(selected.remote as any) as any;
+  const rokuRemote = useEntity(selected.remote as any, { returnNullIfNotFound: true }) as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuMediaPlayer = useEntity(selected.media as any) as any;
+  const rokuMediaPlayer = useEntity(selected.media as any, { returnNullIfNotFound: true }) as any;
 
   const sendRokuCommand = (value: string) => () => {
     rokuRemote.service.sendCommand({
