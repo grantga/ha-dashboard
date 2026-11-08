@@ -7,6 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import HomeIcon from '@mui/icons-material/Home';
 import BackIcon from '@mui/icons-material/ArrowBack';
 import AppLaunchCard from './AppLaunchCard';
+import usePressAndHold from '../hooks/usePressAndHold';
 
 export default function MovieMode() {
   const ROKU_ENTITIES: Record<string, { remote: EntityName; media: EntityName }> = {
@@ -39,6 +40,19 @@ export default function MovieMode() {
   const sendRokuLaunchApp = (command: string) => () => {
     rokuMedia.service.selectSource({ serviceData: { source: command } });
   };
+
+  const holdUp = usePressAndHold(() => {
+    sendRokuCommand('up')();
+  });
+  const holdDown = usePressAndHold(() => {
+    sendRokuCommand('down')();
+  });
+  const holdLeft = usePressAndHold(() => {
+    sendRokuCommand('left')();
+  });
+  const holdRight = usePressAndHold(() => {
+    sendRokuCommand('right')();
+  });
 
   return (
     <Box
@@ -105,7 +119,8 @@ export default function MovieMode() {
 
                 <IconButton
                   disableRipple
-                  onClick={sendRokuCommand('up')}
+                  {...holdUp}
+                  style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
                   sx={(theme: Theme) => ({
                     width: { xs: 44, sm: 56, md: 64 },
                     height: { xs: 44, sm: 56, md: 64 },
@@ -162,7 +177,8 @@ export default function MovieMode() {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <IconButton
                   disableRipple
-                  onClick={sendRokuCommand('left')}
+                  {...holdLeft}
+                  style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
                   sx={(theme: Theme) => ({
                     width: { xs: 44, sm: 56, md: 64 },
                     height: { xs: 44, sm: 56, md: 64 },
@@ -217,7 +233,8 @@ export default function MovieMode() {
 
                 <IconButton
                   disableRipple
-                  onClick={sendRokuCommand('right')}
+                  {...holdRight}
+                  style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
                   sx={(theme: Theme) => ({
                     width: { xs: 44, sm: 56, md: 64 },
                     height: { xs: 44, sm: 56, md: 64 },
@@ -249,7 +266,8 @@ export default function MovieMode() {
 
                 <IconButton
                   disableRipple
-                  onClick={sendRokuCommand('down')}
+                  {...holdDown}
+                  style={{ touchAction: 'none', userSelect: 'none', WebkitTouchCallout: 'none' }}
                   sx={(theme: Theme) => ({
                     width: { xs: 44, sm: 56, md: 64 },
                     height: { xs: 44, sm: 56, md: 64 },

@@ -47,17 +47,24 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
   const [pickerHue, setPickerHue] = useState<number | null>(null);
   const [pickerLightness, setPickerLightness] = useState<number>(0.5);
   const [isPicking, setIsPicking] = useState(false);
-  const [waitingForColor, setWaitingForColor] = useState(false);
-  // Ref mirrors waitingForColor but is synchronously readable in event handlers (no stale closure)
-  const waitingRef = useRef(false);
-  // Color reported by HA at the moment we sent the command — unblock when it changes from this
-  const colorAtSendRef = useRef<{ r: number; g: number; b: number } | null>(null);
   const gradientRef = useRef<HTMLDivElement | null>(null);
+  // Debounced light sends: the sliders update locally on every move, and the
+  // service call goes out at most every ~150 ms plus once on release, so a
+  // drag never waits on Home Assistant to report back.
+  const colorSendTimerRef = useRef<number | null>(null);
+  const pendingColorRef = useRef<{ r: number; g: number; b: number } | null>(null);
+  const brightnessSendTimerRef = useRef<number | null>(null);
+  const pendingBrightnessRef = useRef<number | null>(null);
+  const draggingBrightnessRef = useRef(false);
 
-  useEffect(() => setPendingBrightness(brightness), [brightness]);
-
-  // Sync picker state from HA color
+  // Don't snap the slider back to the reported value mid-drag; HA reports lag the finger.
   useEffect(() => {
+    if (!draggingBrightnessRef.current) setPendingBrightness(brightness);
+  }, [brightness]);
+
+  // Sync picker state from HA color (not while dragging — the picker follows the finger)
+  useEffect(() => {
+    if (isPicking) return;
     if (color) {
       if (colorTemp === WHITE_COLOR_TEMP) {
         setPickerHue(null);
@@ -90,22 +97,49 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
         setPickerHue(0);
       }
     }
-  }, [color, colorTemp]);
+  }, [color, colorTemp, isPicking]);
 
-  // Unblock once HA reports a color different from what it was when we sent the command
-  useEffect(() => {
-    if (!colorAtSendRef.current || !color) return;
-    const baseline = colorAtSendRef.current;
-    const changed = Math.abs(color.r - baseline.r) > 5 || Math.abs(color.g - baseline.g) > 5 || Math.abs(color.b - baseline.b) > 5;
-    if (changed) {
-      colorAtSendRef.current = null;
-      waitingRef.current = false;
-      setWaitingForColor(false);
-    }
-  }, [color]);
+  // Clear any pending debounced sends if the component unmounts mid-drag.
+  useEffect(
+    () => () => {
+      if (colorSendTimerRef.current !== null) window.clearTimeout(colorSendTimerRef.current);
+      if (brightnessSendTimerRef.current !== null) window.clearTimeout(brightnessSendTimerRef.current);
+    },
+    []
+  );
 
-  const commitBrightness = () => {
-    if (pendingBrightness !== null) setBrightness(pendingBrightness);
+  const scheduleBrightnessSend = (value: number) => {
+    pendingBrightnessRef.current = value;
+    if (brightnessSendTimerRef.current !== null) window.clearTimeout(brightnessSendTimerRef.current);
+    brightnessSendTimerRef.current = window.setTimeout(() => {
+      const pending = pendingBrightnessRef.current;
+      pendingBrightnessRef.current = null;
+      if (pending !== null) setBrightness(pending);
+    }, 150);
+  };
+
+  const flushBrightnessSend = () => {
+    if (brightnessSendTimerRef.current !== null) window.clearTimeout(brightnessSendTimerRef.current);
+    const pending = pendingBrightnessRef.current;
+    pendingBrightnessRef.current = null;
+    if (pending !== null) setBrightness(pending);
+  };
+
+  const scheduleColorSend = (rgb: { r: number; g: number; b: number }) => {
+    pendingColorRef.current = rgb;
+    if (colorSendTimerRef.current !== null) window.clearTimeout(colorSendTimerRef.current);
+    colorSendTimerRef.current = window.setTimeout(() => {
+      const pending = pendingColorRef.current;
+      pendingColorRef.current = null;
+      if (pending) setColor(pending);
+    }, 120);
+  };
+
+  const flushColorSend = () => {
+    if (colorSendTimerRef.current !== null) window.clearTimeout(colorSendTimerRef.current);
+    const pending = pendingColorRef.current;
+    pendingColorRef.current = null;
+    if (pending) setColor(pending);
   };
 
   const isWhiteMode = colorTemp === WHITE_COLOR_TEMP || pickerHue === null;
@@ -117,7 +151,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
     setPickerHue(null);
   };
 
-  const handleGradientPointer = (clientX: number, clientY: number) => {
+  const handleGradientPointer = (clientX: number, clientY: number, immediate = false) => {
     const el = gradientRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
@@ -128,22 +162,26 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
     setPickerHue(hue);
     setPickerLightness(lightness);
     const rgb = hslToRgb(hue, 1, lightness);
-    // Snapshot the current reported color so we know what "changed" means
-    colorAtSendRef.current = color ? { r: color.r, g: color.g, b: color.b } : { r: -999, g: -999, b: -999 };
-    waitingRef.current = true;
-    setWaitingForColor(true);
-    setColor(rgb);
+    // The picker follows the finger immediately; the light catches up via a
+    // debounced send, so a drag is never blocked waiting on HA.
+    if (immediate) {
+      if (colorSendTimerRef.current !== null) window.clearTimeout(colorSendTimerRef.current);
+      pendingColorRef.current = null;
+      setColor(rgb);
+    } else {
+      scheduleColorSend(rgb);
+    }
   };
 
   const onPointerDown = (e: React.PointerEvent) => {
-    if (value !== 'on' || waitingRef.current) return;
+    if (value !== 'on') return;
     (e.target as Element).setPointerCapture(e.pointerId);
     setIsPicking(true);
-    handleGradientPointer(e.clientX, e.clientY);
+    handleGradientPointer(e.clientX, e.clientY, true);
   };
 
   const onPointerMove = (e: React.PointerEvent) => {
-    if (!isPicking || waitingRef.current) return;
+    if (!isPicking) return;
     handleGradientPointer(e.clientX, e.clientY);
   };
 
@@ -153,10 +191,21 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
     } catch {
       /* ignore */
     }
+    flushColorSend();
     setIsPicking(false);
   };
 
-  const pickerDisabled = value !== 'on' || waitingForColor;
+  const onPointerCancel = (e: React.PointerEvent) => {
+    try {
+      (e.target as Element).releasePointerCapture(e.pointerId);
+    } catch {
+      /* ignore */
+    }
+    flushColorSend();
+    setIsPicking(false);
+  };
+
+  const pickerDisabled = value !== 'on';
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -223,9 +272,29 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             min={0}
             max={100}
             value={pendingBrightness ?? 0}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPendingBrightness(Number(e.target.value))}
-            onMouseUp={commitBrightness}
-            onTouchEnd={commitBrightness}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              const next = Number(e.target.value);
+              setPendingBrightness(next);
+              scheduleBrightnessSend(next);
+            }}
+            onPointerDown={() => {
+              draggingBrightnessRef.current = true;
+            }}
+            onPointerUp={() => {
+              draggingBrightnessRef.current = false;
+              flushBrightnessSend();
+            }}
+            onPointerCancel={() => {
+              draggingBrightnessRef.current = false;
+              flushBrightnessSend();
+            }}
+            onPointerLeave={() => {
+              flushBrightnessSend();
+            }}
+            onBlur={() => {
+              draggingBrightnessRef.current = false;
+              flushBrightnessSend();
+            }}
             disabled={value !== 'on'}
             aria-disabled={value !== 'on'}
             sx={{
@@ -289,6 +358,7 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
           onPointerDown={onPointerDown}
           onPointerMove={onPointerMove}
           onPointerUp={onPointerUp}
+          onPointerCancel={onPointerCancel}
           sx={{
             flex: 1,
             height: { xs: 120, sm: 160 },
@@ -301,9 +371,6 @@ const LightEntityControl: React.FC<LightEntityControlProps> = ({ entityId, contr
             position: 'relative',
             touchAction: 'none',
             cursor: pickerDisabled ? 'not-allowed' : 'crosshair',
-            pointerEvents: waitingForColor ? 'none' : 'auto',
-            transition: 'opacity 0.15s',
-            opacity: waitingForColor ? 0.5 : 1,
           }}
         >
           {!isWhiteMode && pickerHue !== null && (
