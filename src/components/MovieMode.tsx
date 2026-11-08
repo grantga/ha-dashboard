@@ -7,6 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import HomeIcon from '@mui/icons-material/Home';
 import BackIcon from '@mui/icons-material/ArrowBack';
 import AppLaunchCard from './AppLaunchCard';
+import { getHaUrl } from '../lib/haUrl';
 
 export default function MovieMode() {
   const ROKU_ENTITIES: Record<string, { remote: EntityName; media: EntityName }> = {
@@ -27,7 +28,7 @@ export default function MovieMode() {
 
   // If the entity_picture is a relative URL, prepend the HA URL
   if (appIcon && appIcon.startsWith('/')) {
-    appIcon = `${import.meta.env.VITE_HA_URL}${appIcon}`;
+    appIcon = `${getHaUrl()}${appIcon}`;
   }
 
   const sendRokuCommand = (value: string) => () => {

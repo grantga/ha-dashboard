@@ -9,6 +9,7 @@ import DevicePickerModal from './DevicePickerModal';
 import type { DeviceType as PickerDeviceType } from './DevicePickerModal';
 import { useState, useEffect } from 'react';
 import RokuRemoteModal from './RokuRemoteModal';
+import { getHaUrl } from '../lib/haUrl';
 
 type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default';
 
@@ -90,7 +91,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
 
   // If the entity_picture is a relative URL, prepend the HA URL
   if (appIcon && appIcon.startsWith('/')) {
-    appIcon = `${import.meta.env.VITE_HA_URL}${appIcon}`;
+    appIcon = `${getHaUrl()}${appIcon}`;
   }
 
   const handleSelectAudio = async () => {
