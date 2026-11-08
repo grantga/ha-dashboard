@@ -24,7 +24,7 @@ type UseMediaPlayer = {
 
 export default function useMediaPlayer(entityId: EntityName): UseMediaPlayer {
   // `useEntity` subscribes to entity updates from Home Assistant
-  const entity = useEntity(entityId);
+  const entity = useEntity(entityId, { returnNullIfNotFound: true });
   // service used to send power on/off commands. many integrations expose power_on/power_off
   const mediaPlayerService = useService('media_player');
 

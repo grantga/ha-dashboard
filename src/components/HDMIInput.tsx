@@ -9,6 +9,7 @@ import DevicePickerModal from './DevicePickerModal';
 import type { DeviceType as PickerDeviceType } from './DevicePickerModal';
 import { useState, useEffect } from 'react';
 import RokuRemoteModal from './RokuRemoteModal';
+import { getHaUrl } from '../lib/haUrl';
 
 type DeviceType = 'roku1' | 'roku2' | 'switch' | 'xbox' | 'default';
 
@@ -66,9 +67,9 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
       : ('media_player.roku_basement_1' as EntityName);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuMedia = useEntity(mediaPlayerEntity as any) as any;
+  const rokuMedia = useEntity(mediaPlayerEntity as any, { returnNullIfNotFound: true }) as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const xboxImage = useEntity('image.gstar00_now_playing' as any) as any;
+  const xboxImage = useEntity('image.gstar00_now_playing' as any, { returnNullIfNotFound: true }) as any;
   const xboxEntityPicture = xboxImage?.attributes?.entity_picture;
 
   // Reset xbox image failed state when the entity_picture URL changes
@@ -90,7 +91,7 @@ export default function HDMIInput({ windowIndex, audioSource, loadingAudioSource
 
   // If the entity_picture is a relative URL, prepend the HA URL
   if (appIcon && appIcon.startsWith('/')) {
-    appIcon = `${import.meta.env.VITE_HA_URL}${appIcon}`;
+    appIcon = `${getHaUrl()}${appIcon}`;
   }
 
   const handleSelectAudio = async () => {

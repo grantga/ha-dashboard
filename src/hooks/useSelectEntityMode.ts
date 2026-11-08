@@ -13,7 +13,7 @@ type UseSelectEntityMode = {
 
 export default function useSelectEntityMode(entityId: EntityName): UseSelectEntityMode {
   // `useEntity` subscribes to entity updates from Home Assistant
-  const entity = useEntity(entityId);
+  const entity = useEntity(entityId, { returnNullIfNotFound: true });
   const selectService = useService('select');
   const powerService = useService('switch');
 

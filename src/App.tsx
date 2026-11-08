@@ -3,6 +3,7 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 import { HassConnect } from '@hakit/core';
 import BasementPage from './pages/Basement';
+import { getHaUrl } from './lib/haUrl';
 import { darkTheme, lightTheme } from './theme';
 import { useState, useMemo, useCallback } from 'react';
 import { ThemeContext, type ThemeMode } from './contexts/ThemeContext';
@@ -53,7 +54,7 @@ function App() {
   const renderError = useCallback(() => <ReconnectionStatus />, []);
 
   return (
-    <HassConnect hassUrl={import.meta.env.VITE_HA_URL} options={{ renderError }}>
+    <HassConnect hassUrl={getHaUrl()} options={{ renderError }}>
       <ThemeContext.Provider value={{ mode, toggleTheme }}>
         <ThemeProvider theme={theme}>
           <CssBaseline />

@@ -7,6 +7,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import HomeIcon from '@mui/icons-material/Home';
 import BackIcon from '@mui/icons-material/ArrowBack';
 import AppLaunchCard from './AppLaunchCard';
+import { getHaUrl } from '../lib/haUrl';
 
 export default function MovieMode() {
   const ROKU_ENTITIES: Record<string, { remote: EntityName; media: EntityName }> = {
@@ -18,16 +19,16 @@ export default function MovieMode() {
 
   const selected = ROKU_ENTITIES.movie_room_4k;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuRemote = useEntity(selected.remote as any) as any;
+  const rokuRemote = useEntity(selected.remote as any, { returnNullIfNotFound: true }) as any;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const rokuMedia = useEntity(selected.media as any) as any;
+  const rokuMedia = useEntity(selected.media as any, { returnNullIfNotFound: true }) as any;
 
   // Get app icon from Home Assistant media player entity_picture
   let appIcon = rokuMedia?.attributes?.entity_picture;
 
   // If the entity_picture is a relative URL, prepend the HA URL
   if (appIcon && appIcon.startsWith('/')) {
-    appIcon = `${import.meta.env.VITE_HA_URL}${appIcon}`;
+    appIcon = `${getHaUrl()}${appIcon}`;
   }
 
   const sendRokuCommand = (value: string) => () => {
